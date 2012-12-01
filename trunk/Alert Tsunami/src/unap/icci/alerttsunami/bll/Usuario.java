@@ -17,8 +17,8 @@ public class Usuario {
 	//Constructores
 	public Usuario(){
 		dispositivos = new ArrayList<Dispositivo>();
-		comentarios = new ArrayList<>();
-		invitaciones = new ArrayList<>();
+		comentarios = new ArrayList<Comentario>();
+		invitaciones = new ArrayList<Invitacion>();
 	}
 	
 	public void finalize() throws Throwable {
