@@ -6,7 +6,7 @@ public class Comentario {
 
 	private String contenido;
 	private Date fecha;
-	private Usuario usuario;
+	private Usuario remitente;
 
 	//constructor
 	public Comentario(String contenido, Usuario usuario){
@@ -31,11 +31,11 @@ public class Comentario {
 	
 	//get y set usuario
 	public Usuario getUsuario() {
-		return usuario;
+		return remitente;
 	}
 	
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
+	public void setUsuario(Usuario remitente) {
+		this.remitente = remitente;
 	}
 
 	//destructor
