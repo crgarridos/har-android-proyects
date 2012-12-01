@@ -5,51 +5,56 @@ import java.util.Date;
 public class Invitacion {
 
 	private Date fecha;
-	private Usuario remitente;
 	private Usuario invitado;
+	private Usuario remitente;
 
-	public Invitacion(){
-
+	public Invitacion() {
+		
 	}
 
+	public Invitacion(Usuario invitado, Usuario remitente) {
+		this.fecha = new Date();
+		this.setInvitado(invitado);
+		this.setRemitente(remitente);
+	}
+	
+	public Date getFecha() {
+		return this.fecha;
+	}
+
+	private void setInvitado(Usuario invitado){
+		this.invitado = invitado;
+	}
+	
+	public Usuario getInvitado() {
+		return this.invitado;
+	}
+	
+	private void setRemitente(Usuario remitente){
+		this.remitente = remitente;
+	}
+	
+	public Usuario getRemitente() {
+		return this.remitente;
+	}
+	
 	public void finalize() throws Throwable {
 
 	}
 
-	/**
-	 * 
-	 * @param invitado
-	 * @param remitente
-	 */
-	public Invitacion(Usuario invitado, Usuario remitente){
+	public void eliminar() {
 
 	}
 
-	public void eliminar(){
-
-	}
-
-	public boolean estaAprobada(){
+	public boolean estaAprobada() {
 		return false;
 	}
 
-	public Date getFecha(){
-		return null;
-	}
-
-	public Usuario getInvitado(){
-		return null;
-	}
-
-	public Usuario getRemitente(){
-		return null;
-	}
-
-	public void notificar(){
+	public void notificar() {
 
 	}
 
-	public void persistir(){
+	public void persistir() {
 
 	}
 

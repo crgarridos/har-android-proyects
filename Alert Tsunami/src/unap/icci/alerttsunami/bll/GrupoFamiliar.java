@@ -16,11 +16,13 @@ public class GrupoFamiliar {
 	}
 
 	public GrupoFamiliar(String nombre, PuntoEncuentro puntoEncuentro, Lider lider) {
+		lider.setGrupoFamiliar(this);	
 		comentarios = new ArrayList<Comentario>();
 		integrantes = new ArrayList<Usuario>();
 		this.setNombre(nombre);
 		this.setPuntoEncuentro(puntoEncuentro);
 		this.setLider(lider);
+		
 	}	
 
 	// Setter y getter
@@ -49,8 +51,9 @@ public class GrupoFamiliar {
 		return puntoEncuentro;
 	}
 
-	public void addIntegrantes(Usuario usuario) {
+	public void addIntegrante(Usuario usuario) {
 		this.integrantes.add(usuario);
+		usuario.setGrupoFamiliar(this);
 	}
 
 	public ArrayList<Usuario> getIntegrantes() {
