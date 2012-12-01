@@ -1,3 +1,5 @@
+package unap.icci.alerttsunami.bll;
+
 public class PuntoSeguridad extends Punto {
 
 	public Ciudad ciudad;

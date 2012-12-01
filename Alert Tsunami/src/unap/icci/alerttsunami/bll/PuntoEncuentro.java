@@ -1,3 +1,5 @@
+package unap.icci.alerttsunami.bll;
+
 public class PuntoEncuentro extends Punto {
 
 	public GrupoFamiliar grupoFamiliar;

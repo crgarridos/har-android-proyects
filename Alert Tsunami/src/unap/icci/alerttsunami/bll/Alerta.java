@@ -1,4 +1,6 @@
+package unap.icci.alerttsunami.bll;
 
+import java.util.Date;
 
 /**
  * @author Alert Tsunami
@@ -7,7 +9,7 @@
  */
 public class Alerta {
 
-	private unsigned int categoria;
+	private Integer categoria;
 	private String descripcion;
 	private Date fecha;
 	public IObserverAlerta iObserverAlerta;
@@ -24,7 +26,7 @@ public class Alerta {
 	 * 
 	 * @param ia
 	 */
-	public void addAlertaListener(IAlerta ia){
+	public void addAlertaListener(IObserverAlerta ia){
 
 	}
 
@@ -40,7 +42,7 @@ public class Alerta {
 	 * 
 	 * @param categoria
 	 */
-	public void setCategoria(unsigned int categoria){
+	public void setCategoria(Integer categoria){
 
 	}
 
@@ -56,7 +58,7 @@ public class Alerta {
 	 * 
 	 * @param fechya
 	 */
-	public void setFecha(Date fechya){
+	public void setFecha(Date fecha){
 
 	}
 

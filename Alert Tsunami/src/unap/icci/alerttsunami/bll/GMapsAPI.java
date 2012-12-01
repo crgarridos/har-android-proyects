@@ -1,6 +1,10 @@
+package unap.icci.alerttsunami.bll;
+
+import java.util.ArrayList;
+
 public class GMapsAPI {
 
-	private float zoom;
+	private Float zoom;
 	public Coordenada coordenada;
 
 	public GMapsAPI(){

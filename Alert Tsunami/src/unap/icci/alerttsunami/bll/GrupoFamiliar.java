@@ -1,3 +1,7 @@
+package unap.icci.alerttsunami.bll;
+
+import java.util.ArrayList;
+
 public class GrupoFamiliar {
 
 	private String nombre;

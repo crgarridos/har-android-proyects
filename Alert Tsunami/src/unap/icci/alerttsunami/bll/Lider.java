@@ -1,3 +1,5 @@
+package unap.icci.alerttsunami.bll;
+
 public class Lider extends Usuario {
 
 	public GrupoFamiliar grupoFamiliar;
