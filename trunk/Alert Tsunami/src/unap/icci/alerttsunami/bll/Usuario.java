@@ -1,7 +1,11 @@
+package unap.icci.alerttsunami.bll;
+
+import java.util.ArrayList;
+
 public class Usuario {
 
 	private String email;
-	private boolean estadoDeLlegada;
+	private Boolean estadoDeLlegada;
 	private String nombre;
 	private String nombreUsuario;
 	private String password;
@@ -134,7 +138,7 @@ public class Usuario {
 	 * 
 	 * @param nombreUsuario
 	 */
-	public setNombreCompleto(String nombreUsuario){
+	public void setNombreCompleto(String nombreUsuario){
 
 	}
 

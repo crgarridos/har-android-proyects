@@ -1,3 +1,5 @@
+package unap.icci.alerttsunami.bll;
+
 public class Coordenada {
 
 	private float latitud;
@@ -11,11 +13,11 @@ public class Coordenada {
 
 	}
 
-	public float getLatitud(){
+	public Float getLatitud(){
 		return null;
 	}
 
-	public float getLongitud(){
+	public Float getLongitud(){
 		return null;
 	}
 

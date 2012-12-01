@@ -1,3 +1,5 @@
+package unap.icci.alerttsunami.bll;
+
 public class Punto {
 
 	public static final float radio = 10;

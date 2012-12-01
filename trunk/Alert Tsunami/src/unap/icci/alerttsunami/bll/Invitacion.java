@@ -1,3 +1,7 @@
+package unap.icci.alerttsunami.bll;
+
+import java.util.Date;
+
 public class Invitacion {
 
 	private Date fecha;

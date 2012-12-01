@@ -1,11 +1,14 @@
+package unap.icci.alerttsunami.bll;
+
+import java.util.ArrayList;
+
 public class Ciudad {
 
 	public Dispositivo dispositivo;
 	public Coordenada coordenada;
 	public PuntoSeguridad puntoSeguridad;
-	public AreaInundacion areaInundacion;
+	public ArrayList<Coordenada> areaInundacion;
 	public ArrayList<PuntoRiesgo> puntosRiesgo;
-	public PuntoEnuentro puntoEnuentro;
 	public PuntoEncuentro puntoEncuentro;
 	public GMapsAPI gMapsAPI;
 
@@ -25,7 +28,7 @@ public class Ciudad {
 		return null;
 	}
 
-	public ArrayList<Coordenadas> getAreaInundacion(){
+	public ArrayList<Coordenada> getAreaInundacion(){
 		return null;
 	}
 
@@ -33,7 +36,7 @@ public class Ciudad {
 		return null;
 	}
 
-	public ArrayList<Coordenadas> getLineaSeguridad(){
+	public ArrayList<Coordenada> getLineaSeguridad(){
 		return null;
 	}
 

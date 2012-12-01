@@ -1,6 +1,8 @@
+package unap.icci.alerttsunami.bll;
+
 public class PuntoRiesgo extends Punto {
 
-	private unsigned int categoria;
+	private int categoria;
 	private String descripcion;
 	public Ciudad ciudad;
 

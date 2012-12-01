@@ -1,6 +1,8 @@
+package unap.icci.alerttsunami.bll;
+
 public class Dispositivo {
 
-	private boolean estadoDeRiesgo;
+	private Boolean estadoDeRiesgo;
 	public Ciudad ciudad;
 	public Usuario usuario;
 	public Coordenada coordenada;
@@ -21,7 +23,7 @@ public class Dispositivo {
 
 	}
 
-	public boolean estaEnRiego(){
+	public Boolean estaEnRiego(){
 		return false;
 	}
 
