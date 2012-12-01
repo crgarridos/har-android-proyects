@@ -82,13 +82,11 @@ public class Ciudad {
 		this.gMapsAPI = gMapsAPI;
 	}
 
-
 	//Destructor?
 	public void finalize() throws Throwable {
 
 	}
 
-	
 	//Otros
 	public Punto determinarPuntoSeguridad(Coordenada c){
 		return puntoSeguridad;
