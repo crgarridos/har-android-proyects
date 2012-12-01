@@ -2,11 +2,11 @@ package unap.icci.alerttsunami.bll;
 
 public class Coordenada {
 
-	private float latitud;
-	private float longitud;
+	private Float latitud;
+	private Float longitud;
 
 	//constructor
-	public Coordenada(float latitud, float longitud){
+	public Coordenada(Float latitud, Float longitud){
 		setLatitud(latitud);
 		setLongitud(longitud);
 	}
@@ -16,7 +16,7 @@ public class Coordenada {
 		return latitud;
 	}
 	
-	public void setLatitud(float latitud){
+	public void setLatitud(Float latitud){
 		this.latitud = latitud;
 	}
 	
@@ -25,7 +25,7 @@ public class Coordenada {
 		return longitud;
 	}
 	
-	public void setLongitud(float longitud){
+	public void setLongitud(Float longitud){
 		this.longitud = longitud;
 	}
 	
