@@ -2,8 +2,6 @@ package unap.icci.alerttsunami.bll;
 
 public class Lider extends Usuario {
 
-	public GrupoFamiliar grupoFamiliar;
-
 	public Lider(){
 
 	}
@@ -12,16 +10,16 @@ public class Lider extends Usuario {
 		super.finalize();
 	}
 
-	/**
-	 * 
-	 * @param usuario
-	 */
-	public Lider(Usuario usuario){
-
+	public Lider(Usuario u){
+		super(u.getNombreCompleto(),
+				u.getNombreUsuario(),
+				u.getPassword(),
+				u.getEmail());
 	}
 
+	
+	
 	public void abandonarGrupoFamiliar(){
-
 	}
 
 	public void definirPuntoEncuentro(){

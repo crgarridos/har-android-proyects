@@ -4,15 +4,15 @@ import java.util.ArrayList;
 
 public class Usuario {
 
-	private String email;
-	private Boolean estadoDeLlegada;
-	private String nombreCompleto;
-	private String nombreUsuario;
-	private String password;
-	private ArrayList<Dispositivo> dispositivos;
-	private ArrayList<Comentario> comentarios;
-	private ArrayList<Invitacion> invitaciones;
-	private GrupoFamiliar grupoFamiliar;
+	protected String email;
+	protected Boolean estadoDeLlegada;
+	protected String nombreCompleto;
+	protected String nombreUsuario;
+	protected String password;
+	protected ArrayList<Dispositivo> dispositivos;
+	protected ArrayList<Comentario> comentarios;
+	protected ArrayList<Invitacion> invitaciones;
+	protected GrupoFamiliar grupoFamiliar;
 	
 	//Constructores
 	public Usuario(){
@@ -130,6 +130,13 @@ public class Usuario {
 		return grupoFamiliar;
 	}
 
+	public void setGrupoFamiliar(GrupoFamiliar grupoFamiliar){
+//		if(this.grupoFamiliar!=null){
+//			this.grupoFamiliar = grupoFamiliar;
+//		}
+//		return this.grupoFamiliar!=null;
+	}
+	
 	public ArrayList<Invitacion> getInvitaciones(){
 		return invitaciones;
 	}
@@ -145,4 +152,8 @@ public class Usuario {
 	public void vaciarInvitaciones(){
 	}
 
+	public void responderInvitacion(){
+		
+	}
+	
 }

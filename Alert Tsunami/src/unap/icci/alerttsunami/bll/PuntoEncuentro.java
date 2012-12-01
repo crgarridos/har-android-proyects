@@ -3,18 +3,22 @@ package unap.icci.alerttsunami.bll;
 public class PuntoEncuentro extends Punto {
 
 	public GrupoFamiliar grupoFamiliar;
-	public Ciudad ciudad;
 
 	public PuntoEncuentro(){
-
+		
 	}
 
 	public void finalize() throws Throwable {
 		super.finalize();
+		System.out.println();
 	}
 
 	public GrupoFamiliar getGrupoFamiliar(){
-		return null;
+		return grupoFamiliar;
+	}
+	
+	public void setGrupoFamiliar(GrupoFamiliar grupoFamiliar){
+		this.grupoFamiliar = grupoFamiliar;
 	}
 
 }
