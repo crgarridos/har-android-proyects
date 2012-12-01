@@ -42,7 +42,7 @@ public class Ciudad {
 		return puntoSeguridad;
 	}
 	
-	public void setPuntoSeguridad(PuntoSeguridad puntoSeguridad) {
+	public void setPuntoSeguridad(Punto puntoSeguridad) {
 		this.puntoSeguridad = puntoSeguridad;
 	}
 	
