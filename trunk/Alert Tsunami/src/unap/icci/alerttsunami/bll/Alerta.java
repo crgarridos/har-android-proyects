@@ -2,11 +2,6 @@ package unap.icci.alerttsunami.bll;
 
 import java.util.Date;
 
-/**
- * @author Alert Tsunami
- * @version 1.0
- * @created 01-dic-2012 12:59:35
- */
 public class Alerta {
 
 	private Integer categoria;
@@ -14,18 +9,52 @@ public class Alerta {
 	private Date fecha;
 	public IObserverAlerta iObserverAlerta;
 
-	public Alerta(){
+	//constructor
+	public Alerta(Integer categoria, String descripcion, IObserverAlerta iObserverAlerta){
+		setCategoria(categoria);
+		setDescripcion(descripcion);
+		this.fecha = new Date();
+		setiObserverAlerta(iObserverAlerta);
+	}
+	
+	//get y set categoria
+	public Integer getCategoria() {
+		return categoria;
+	}
+	
+	public void setCategoria(Integer categoria){
 
 	}
+	
+	//get y set descripción
+	public String getDescripcion() {
+		return descripcion;
+	}
+	
+	public void setDescripcion(String desc){
 
+	}
+	
+	//get y set fecha
+	public Date getFecha() {
+		return fecha;
+	}
+	
+	//get y set Interface Observer Alerta
+	public void setiObserverAlerta(IObserverAlerta iObserverAlerta) {
+		this.iObserverAlerta = iObserverAlerta;
+	}
+	
+	public IObserverAlerta getiObserverAlerta() {
+		return iObserverAlerta;
+	}
+		
+	//destructor
 	public void finalize() throws Throwable {
 
 	}
 
-	/**
-	 * 
-	 * @param ia
-	 */
+	//otros
 	public void addAlertaListener(IObserverAlerta ia){
 
 	}
@@ -37,29 +66,4 @@ public class Alerta {
 	public void notificar(){
 
 	}
-
-	/**
-	 * 
-	 * @param categoria
-	 */
-	public void setCategoria(Integer categoria){
-
-	}
-
-	/**
-	 * 
-	 * @param desc
-	 */
-	public void setDescripcion(String desc){
-
-	}
-
-	/**
-	 * 
-	 * @param fechya
-	 */
-	public void setFecha(Date fecha){
-
-	}
-
 }
