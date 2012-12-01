@@ -59,7 +59,7 @@ public class Alerta {
 
 	}
 
-	public void consultarSHOA(){
+	public void consultarSHOA(/*Date fecha, Integer categoria, String descripcion*/){
 
 	}
 
