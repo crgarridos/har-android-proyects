@@ -6,7 +6,7 @@ public class Ciudad {
 
 	public Dispositivo dispositivo;
 	public Coordenada coordenada;
-	public PuntoSeguridad puntoSeguridad;
+	public Punto puntoSeguridad;
 	public ArrayList<Coordenada> areaInundacion;
 	public ArrayList<PuntoRiesgo> puntosRiesgo;
 	public PuntoEncuentro puntoEncuentro;
@@ -24,7 +24,7 @@ public class Ciudad {
 	 * 
 	 * @param c
 	 */
-	public PuntoSeguridad determinarPuntoSeguridad(Coordenada c){
+	public Punto determinarPuntoSeguridad(Coordenada c){
 		return null;
 	}
 
