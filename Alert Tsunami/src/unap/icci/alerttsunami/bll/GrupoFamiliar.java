@@ -5,68 +5,79 @@ import java.util.ArrayList;
 public class GrupoFamiliar {
 
 	private String nombre;
-	public ArrayList<Comentario> comentarios;
-	public PuntoEncuentro puntosEncuentro;
-	public ArrayList<Usuario> usuarios;
-
-	public GrupoFamiliar(){
-
+	private ArrayList<Comentario> comentarios;
+	private PuntoEncuentro puntoEncuentro;
+	private ArrayList<Usuario> integrantes;
+	private Lider lider;
+	
+	public GrupoFamiliar() {
+		comentarios = new ArrayList<Comentario>();
+		integrantes = new ArrayList<Usuario>();
 	}
 
+	public GrupoFamiliar(String nombre, PuntoEncuentro puntoEncuentro, Lider lider) {
+		comentarios = new ArrayList<Comentario>();
+		integrantes = new ArrayList<Usuario>();
+		this.setNombre(nombre);
+		this.setPuntoEncuentro(puntoEncuentro);
+		this.setLider(lider);
+	}	
+
+	// Setter y getter
+	
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+	
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void addComentario(Comentario comentario) {
+		this.comentarios.add(comentario);
+	}
+	
+	public ArrayList<Comentario> getComentarios() {
+		return this.comentarios;
+	}
+	
+	public void setPuntoEncuentro(PuntoEncuentro puntoEncuentro) {
+		this.puntoEncuentro = puntoEncuentro;
+	}
+	
+	public PuntoEncuentro getPuntoEncuentro() {
+		return puntoEncuentro;
+	}
+
+	public void addIntegrantes(Usuario usuario) {
+		this.integrantes.add(usuario);
+	}
+
+	public ArrayList<Usuario> getIntegrantes() {
+		return this.integrantes;
+	}
+
+	public void eliminarIntegrante(Usuario usuario) {
+		this.integrantes.remove(usuario);
+	}
+	
+	private void setLider(Lider lider) {
+		this.lider = lider;
+	}
+	
+	public Lider getLider() {
+		return lider;
+	}
+	
 	public void finalize() throws Throwable {
 
 	}
 
-	/**
-	 * 
-	 * @param nombre
-	 * @param pEncuentro
-	 */
-	public GrupoFamiliar(String nombre, PuntoEncuentro pEncuentro){
+	public void eliminar() {
 
 	}
 
-	/**
-	 * 
-	 * @param c
-	 */
-	public void agregarComentario(Comentario c){
-
-	}
-
-	/**
-	 * 
-	 * @param usuario
-	 */
-	public void agregarMiembro(Usuario usuario){
-
-	}
-
-	public void eliminar(){
-
-	}
-
-	/**
-	 * 
-	 * @param usuario
-	 */
-	public void eliminarMiembro(Usuario usuario){
-
-	}
-
-	public ArrayList<Comentario> getComentarios(){
-		return null;
-	}
-
-	public ArrayList<Usuario> getIntegrantes(){
-		return null;
-	}
-
-	public Lider getLider(){
-		return null;
-	}
-
-	public void persistir(){
+	public void persistir() {
 
 	}
 
