@@ -1,6 +1,9 @@
-package chichi.mapa;
+package cl.at.view;
 
-import clasesauxiliares.*;
+import chichi.mapa.R;
+import cl.at.bussines.Usuario;
+import cl.at.util.*;
+
 import java.util.ArrayList;
 
 import org.apache.http.NameValuePair;
@@ -8,7 +11,6 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import Negocio.Usuario;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;

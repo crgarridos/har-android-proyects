@@ -1,4 +1,4 @@
-package Negocio;
+package cl.at.bussines;
 
 import java.util.ArrayList;
 
