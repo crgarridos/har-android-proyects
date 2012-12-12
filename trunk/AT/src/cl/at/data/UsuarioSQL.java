@@ -1,4 +1,4 @@
-package Datos;
+package cl.at.data;
 
 import java.util.ArrayList;
 
@@ -7,9 +7,9 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import Negocio.Usuario;
 import android.util.Log;
-import clasesauxiliares.Httppostaux;
+import cl.at.bussines.Usuario;
+import cl.at.util.Httppostaux;
 
 public class UsuarioSQL {
 

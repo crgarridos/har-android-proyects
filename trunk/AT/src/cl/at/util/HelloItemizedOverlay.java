@@ -1,4 +1,4 @@
-package clasesauxiliares;
+package cl.at.util;
 
 import java.util.ArrayList;
 

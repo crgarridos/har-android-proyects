@@ -1,9 +1,8 @@
-package chichi.mapa;
+package cl.at.view;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import Negocio.Ciudad;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -14,7 +13,9 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
 import android.widget.Toast;
-import clasesauxiliares.HelloItemizedOverlay;
+import chichi.mapa.R;
+import cl.at.bussines.Ciudad;
+import cl.at.util.*;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
@@ -29,7 +30,6 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import clasesauxiliares.*;
 
 public class MainActivity extends MapActivity {
 

@@ -1,8 +1,9 @@
-package Negocio;
+package cl.at.bussines;
 
 import java.util.ArrayList;
 
-import Datos.UsuarioSQL;
+import cl.at.data.UsuarioSQL;
+
 
 public class Usuario {
 

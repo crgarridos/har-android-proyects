@@ -1,4 +1,4 @@
-package Negocio;
+package cl.at.bussines;
 
 public class Dispositivo {
 
