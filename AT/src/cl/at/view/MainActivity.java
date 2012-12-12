@@ -14,8 +14,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
 import cl.at.bussines.Ciudad;
+import cl.at.data.ConexionHttp;
 import cl.at.util.HelloItemizedOverlay;
-import cl.at.util.Httppostaux;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
@@ -29,7 +29,7 @@ public class MainActivity extends MapActivity {
 
 	private MapController m;
 	String URL_connect="http://acinfo.unap.cl/jvega/Alerttsunami/ciudad.php";
-	Httppostaux post;
+	ConexionHttp post;
 	private ProgressDialog pDialog;
 	public Ciudad c;
 
@@ -71,7 +71,7 @@ public class MainActivity extends MapActivity {
 			ArrayList<NameValuePair> postparameters2send= new ArrayList<NameValuePair>();
 			postparameters2send.add(new BasicNameValuePair("Latitud","-20.213889"));
 			postparameters2send.add(new BasicNameValuePair("Longitud","-70.152500"));
-			JSONArray jdata=post.getserverdata(postparameters2send, URL_connect);
+			JSONArray jdata=post.getServerData(postparameters2send, URL_connect);
 	    	JSONObject json_data;
 			try{
 				json_data = jdata.getJSONObject(0);
