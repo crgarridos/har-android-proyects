@@ -2,6 +2,8 @@ package Negocio;
 
 import java.util.ArrayList;
 
+import Datos.UsuarioSQL;
+
 public class Usuario {
 
 	protected String email;
@@ -13,8 +15,17 @@ public class Usuario {
 	protected ArrayList<Comentario> comentarios;
 	protected ArrayList<Invitacion> invitaciones;
 	protected GrupoFamiliar grupoFamiliar;
+	protected Boolean existeUsuario = false;
 	
 	//Constructores
+	public Usuario(String nombre, String pass){
+		this.nombreUsuario = nombre;
+		this.password = pass;
+		UsuarioSQL uSQL = new UsuarioSQL();
+		existeUsuario = uSQL.cargarUsuario(this);
+		
+	}
+	
 	public Usuario(){
 		dispositivos = new ArrayList<Dispositivo>();
 		comentarios = new ArrayList<Comentario>();
@@ -37,6 +48,14 @@ public class Usuario {
 		return nombreUsuario;
 	}
 
+	public Boolean getExisteUsuario() {
+		return existeUsuario;
+	}
+	
+	public void setExisteUsuario(Boolean existeUsuario) {
+		this.existeUsuario = existeUsuario;
+	}
+	
 	public void setNombreUsuario(String nombreUsuario) {
 		this.nombreUsuario = nombreUsuario;
 	}
@@ -118,9 +137,10 @@ public class Usuario {
 		return false;
 	}
 
-	public Boolean existe(String nombre, String pass){
-		return false;
-	}
+// 	OJO YA NO VA 
+//	public Boolean existe(String nombre, String pass){
+//		return false;
+//	}
 
 	public ArrayList<Comentario> getComentarios(){
 		return comentarios;
@@ -147,7 +167,7 @@ public class Usuario {
 
 	public void persistir(){
 
-	}
+	}	
 
 	public void vaciarInvitaciones(){
 	}
