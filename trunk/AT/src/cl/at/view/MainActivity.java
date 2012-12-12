@@ -3,32 +3,26 @@ package cl.at.view;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.AlertDialog;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.util.Log;
-import android.widget.Toast;
-import chichi.mapa.R;
 import cl.at.bussines.Ciudad;
-import cl.at.util.*;
+import cl.at.util.HelloItemizedOverlay;
+import cl.at.util.Httppostaux;
 
 import com.google.android.maps.GeoPoint;
-import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 
 public class MainActivity extends MapActivity {

@@ -1,28 +1,14 @@
 package cl.at.view;
 
-import chichi.mapa.R;
-import cl.at.bussines.Usuario;
-import cl.at.util.*;
-
-import java.util.ArrayList;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import cl.at.bussines.Usuario;
 
 public class IniciarSesionActivity extends Activity {
 
