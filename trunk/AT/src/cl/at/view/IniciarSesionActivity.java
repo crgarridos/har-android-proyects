@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,8 +30,6 @@ public class IniciarSesionActivity extends Activity {
 		btnSgte.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				if (validarCoherencia()) {
-					u = new Usuario(editTextNombre.getText().toString(),
-							editTextPass.getText().toString());
 					new asynclogin().execute();
 				}
 
@@ -43,7 +42,7 @@ public class IniciarSesionActivity extends Activity {
 		return true;
 	}
 
-	class asynclogin extends AsyncTask<String, String, String> {
+	class asynclogin extends AsyncTask<String, String, Boolean> {
 
 		protected void onPreExecute() {
 			pDialog = new ProgressDialog(IniciarSesionActivity.this);
@@ -53,24 +52,18 @@ public class IniciarSesionActivity extends Activity {
 			pDialog.show();
 		}
 
-		protected String doInBackground(String... params) {
-			if (u.getExisteUsuario()) {
-				return "ok";
-			} else {
-				return "err";
-			}
+		protected Boolean doInBackground(String... params) {
+			SystemClock.sleep(500);
+			u = new Usuario(editTextNombre.getText().toString(), editTextPass.getText().toString());
+			return u.getExisteUsuario();
 		}
 
-		protected void onPostExecute(String result) {
+		protected void onPostExecute(Boolean existe) {
 			pDialog.dismiss();// ocultamos progess dialog.
-			if (result == "ok") {
-				Toast.makeText(getApplicationContext(),
-						"Bienvenido" + u.getNombreCompleto(),
-						Toast.LENGTH_SHORT).show();
+			if (existe) {
+				Toast.makeText(getApplicationContext(), "Bienvenido " + u.getNombreCompleto(), Toast.LENGTH_SHORT).show();
 			} else {
-				Toast.makeText(getApplicationContext(),
-						"Error en los datos ingresados", Toast.LENGTH_SHORT)
-						.show();
+				Toast.makeText(getApplicationContext(), "Error en los datos ingresados", Toast.LENGTH_SHORT).show();
 			}
 		}
 	}
