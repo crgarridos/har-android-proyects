@@ -2,6 +2,8 @@ package cl.at.bussines;
 
 import java.util.ArrayList;
 
+import com.google.android.maps.MapView;
+
 public class Ciudad {
 
 	private Dispositivo dispositivo;
@@ -13,12 +15,21 @@ public class Ciudad {
 	private GMapsAPI gMapsAPI;
 
 	//constructor
-	public Ciudad(){
+//	public Ciudad(){
+//		areaInundacion = new ArrayList<Coordenada>();
+//		puntosRiesgo = new ArrayList<PuntoRiesgo>();
+//	}
+	
+	
+	public Ciudad(MapView mapView) {
+		dispositivo = new Dispositivo(this, null, null);
+		puntoSeguridad = new Punto();
 		areaInundacion = new ArrayList<Coordenada>();
 		puntosRiesgo = new ArrayList<PuntoRiesgo>();
+		gMapsAPI = new GMapsAPI(mapView);
 	}
-	
-	
+
+
 	//get y set Dispositivo
 	public Dispositivo getDispositivo(){
 		return dispositivo;
@@ -91,5 +102,11 @@ public class Ciudad {
 	public Punto determinarPuntoSeguridad(Coordenada c){
 		return puntoSeguridad;
 	}
-	
+
+
+	public void obtenerCiudad() {
+		Coordenada c = dispositivo.getPosicion();
+		Coordenada ciudadCercana = gMapsAPI.determinarCiudad(c);
+		gMapsAPI.desplegarMapa(ciudadCercana);
+	}
 }

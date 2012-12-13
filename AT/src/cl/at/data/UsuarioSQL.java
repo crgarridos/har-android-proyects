@@ -9,6 +9,7 @@ import org.json.JSONObject;
 
 import android.util.Log;
 import cl.at.bussines.Usuario;
+import cl.at.util.Parametros;
 
 public class UsuarioSQL {
 
@@ -22,15 +23,17 @@ public class UsuarioSQL {
 
 	public Boolean cargarUsuario(Usuario u) {
 		try {
-			ArrayList<NameValuePair> postParametersToSend = new ArrayList<NameValuePair>();
-			postParametersToSend.add(new BasicNameValuePair("nombre", u.getNombreUsuario()));
-			postParametersToSend.add(new BasicNameValuePair("pass", u.getPassword()));
+			Parametros postParametersToSend = new Parametros();
+			postParametersToSend.add("nombre", u.getNombreUsuario());
+			postParametersToSend.add("pass", u.getPassword());
+//			ArrayList<NameValuePair> postParametersToSend = new ArrayList<NameValuePair>();
+//			postParametersToSend.add(new BasicNameValuePair("nombre", u.getNombreUsuario()));
+//			postParametersToSend.add(new BasicNameValuePair("pass", u.getPassword()));
 			JSONArray jdata = null;
 			jdata = post.getServerData(postParametersToSend, URL_connect);
 			if (jdata != null) {
 				try {
 					JSONObject json_data = jdata.getJSONObject(0); // Se lee la respuesta
-					Log.d(TAG, json_data.toString());
 					u.setNombreCompleto(json_data.getString("NOMBRE_COMPLETO_USUARIO"));
 					// u.setLatitud(Double.parseDouble(json_data.getString("Latitud")));
 					u.setEmail(json_data.getString("EMAIL"));

@@ -2,6 +2,7 @@ package cl.at.view;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -62,6 +63,8 @@ public class IniciarSesionActivity extends Activity {
 			pDialog.dismiss();// ocultamos progess dialog.
 			if (existe) {
 				Toast.makeText(getApplicationContext(), "Bienvenido " + u.getNombreCompleto(), Toast.LENGTH_SHORT).show();
+				Intent intent = new Intent("cl.at.MAPA");
+				startActivity(intent);
 			} else {
 				Toast.makeText(getApplicationContext(), "Error en los datos ingresados", Toast.LENGTH_SHORT).show();
 			}
