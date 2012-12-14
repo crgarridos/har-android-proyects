@@ -24,9 +24,11 @@ public class GMapsAPI {
 //	}
 //	
 	public GMapsAPI(MapView m, Coordenada centro, float zoom){
-		this(m);
+		this.mapView = m;
+		this.mapView.setBuiltInZoomControls(true);
 		this.centro = new GeoPoint((int)(centro.getLatitud()*1E6),(int) (centro.getLongitud()*1E6));
 		this.zoom = zoom;
+		this.mapController = mapView.getController();
 		mapController.setCenter(this.centro);
 		mapController.setZoom(this.zoom.intValue());
 	}
@@ -36,10 +38,8 @@ public class GMapsAPI {
 	}
 
 	public GMapsAPI(MapView mapView) {
-		this.mapView = mapView;
-		this.mapController = mapView.getController();
-		mapController.setCenter(new GeoPoint(0,0));
-		mapController.setZoom(15);
+		this(mapView,new Coordenada(0, 0),15);
+		
 	}
 
 	public void setZoom(Float zoom) {
