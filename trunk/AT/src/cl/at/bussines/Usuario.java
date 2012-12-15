@@ -24,7 +24,12 @@ public class Usuario {
 		this.password = pass;
 		UsuarioSQL uSQL = new UsuarioSQL();
 		existeUsuario = uSQL.cargarUsuario(this);
-		
+	}
+	
+	public Usuario (String nombre){
+		this.nombreUsuario = nombre;
+		UsuarioSQL uSQL = new UsuarioSQL();
+		existeUsuario = uSQL.cargarUsuarioIniciar(this);
 	}
 	
 	public Usuario(){
@@ -166,8 +171,11 @@ public class Usuario {
 		
 	}
 
-	public void persistir(){
-
+	public void persistir() throws Exception{
+		UsuarioSQL uSQL = new UsuarioSQL();
+		if(!uSQL.persistir(this))
+			throw new Exception("Error");
+		
 	}	
 
 	public void vaciarInvitaciones(){
