@@ -1,36 +1,18 @@
 package cl.at.view;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import android.app.ProgressDialog;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
 import cl.at.bussines.Ciudad;
-import cl.at.data.ConexionHttp;
-import cl.at.util.HelloItemizedOverlay;
 
-import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
-import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
-import com.google.android.maps.Overlay;
-import com.google.android.maps.OverlayItem;
 
 
 public class MainActivity extends MapActivity {
 
-	private MapController m;
 	private MapView mapView;
-	String URL_connect="http://acinfo.unap.cl/jvega/Alerttsunami/ciudad.php";
-	ConexionHttp post;
 	private ProgressDialog pDialog;
 	private Ciudad ciudad;
 
