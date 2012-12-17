@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#FFFFFF" >
+
+    <RelativeLayout
+        android:id="@+id/registrarUsuario_titulo"
+        style="@android:style/ButtonBar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+
+            <Button
+                android:id="@+id/registrarUsuario_btnSgte"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Siguiente" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <ScrollView
+        android:id="@+id/registrarUsuario_ScrollView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/registrarUsuario_titulo"
+        android:layout_below="@+id/registrarUsuario_layoutBtns"
+        android:layout_marginLeft="10dp" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Ingrese nombre completo:"
+                android:textColor="#000000" />
+
+            <EditText
+                android:id="@+id/registrarUsuario_editTextNombreCompleto"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="Ej: Alexis Javier Peralta Silva"
+                android:inputType="textPersonName" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Ingrese nombre de usuario:"
+                android:textColor="#000000" />
+
+            <EditText
+                android:id="@+id/registrarUsuario_editTextNombreUsuario"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="Ej: Chichi"
+                android:inputType="textPersonName" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ingrese su e-mail (opcional):"
+                android:textColor="#000000" />
+
+            <EditText
+                android:id="@+id/registrarUsuario_editTextEmail"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="Ej: user@server.com"
+                android:inputType="textEmailAddress"
+                android:lines="1"
+                android:maxLength="50" >
+            </EditText>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ingrese una contraseña:"
+                android:textColor="#000000" />
+
+            <EditText
+                android:id="@+id/registrarUsuario_editTextPass"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="Contraseña"
+                android:inputType="textPassword"
+                android:lines="1" >
+            </EditText>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Repita la Contraseña:"
+                android:textColor="#000000" />
+
+            <EditText
+                android:id="@+id/registrarUsuario_editTextPass2"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="Misma contraseña"
+                android:inputType="textPassword"
+                android:lines="1" >
+            </EditText>
+        </LinearLayout>
+
+        <requestFocus />
+    </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/registrarUsuario_layoutBtns"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/degradado" >
+
+        <LinearLayout
+            android:id="@+id/registrarUsuario_layout_contenido"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:gravity="center_vertical"
+                android:paddingBottom="10dp"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"
+                android:text="Regístrate"
+                android:textColor="#FFFFFF"
+                android:textSize="17dp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="2dp"
+            android:layout_below="@+id/registrarUsuario_layout_contenido"
+            android:layout_gravity="bottom"
+            android:background="#A9E2F3" />
+    </RelativeLayout>
+
+</RelativeLayout>
