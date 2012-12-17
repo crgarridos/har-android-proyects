@@ -63,7 +63,7 @@ public class IniciarSesionActivity extends Activity {
 			pDialog.dismiss();// ocultamos progess dialog.
 			if (existe) {
 				Toast.makeText(getApplicationContext(), "Bienvenido " + u.getNombreCompleto(), Toast.LENGTH_SHORT).show();
-				Intent intent = new Intent("cl.at.MAPA");
+				Intent intent = new Intent("mapa");
 				startActivity(intent);
 			} else {
 				Toast.makeText(getApplicationContext(), "Error en los datos ingresados", Toast.LENGTH_SHORT).show();
