@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/fondo">
+
+    <RelativeLayout
+        android:id="@+id/bienvenida_layoutBtns"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+            
+            <Button
+                android:id="@+id/bienvenida_btnRegistrar"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Regístrate" />
+            <Button
+                android:id="@+id/bienvenida_btnIniciarSesion"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Iniciar sesión" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_below="@+id/bienvenida_titulo"
+        android:layout_above="@id/bienvenida_layoutBtns"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <requestFocus />
+    </ScrollView>
+    
+    <RelativeLayout
+                android:id="@+id/bienvenida_titulo"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" 
+        		android:layout_alignParentTop="true"
+        		android:paddingTop="10dp">
+
+                <LinearLayout
+                    android:id="@+id/bienvenidaTitulo_layout_contenido"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+				<TextView
+	                android:layout_width="wrap_content"
+	                android:layout_height="fill_parent"
+	                android:text="  Bienvenido a AlertTsunami"
+	                android:shadowColor="#000"
+	                android:textStyle="bold"
+			        android:shadowDx="1"
+			        android:shadowDy="2"
+			        android:shadowRadius="1.8"
+			        android:textColor="#FFFFFF"
+	                android:textSize="22dp"
+	                android:gravity="center_vertical"/>
+                </LinearLayout>
+    </RelativeLayout>
+
+</RelativeLayout>
