@@ -175,7 +175,6 @@ public class Usuario {
 		UsuarioSQL uSQL = new UsuarioSQL();
 		if(!uSQL.persistir(this))
 			throw new Exception("Error");
-		
 	}	
 
 	public void vaciarInvitaciones(){
