@@ -1,11 +1,12 @@
 package cl.at.bussines;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import cl.at.data.UsuarioSQL;
 
 
-public class Usuario {
+public class Usuario implements Serializable{
 
 	protected String email;
 	protected Boolean estadoDeLlegada;
@@ -23,7 +24,7 @@ public class Usuario {
 		this.nombreUsuario = nombre;
 		this.password = pass;
 		UsuarioSQL uSQL = new UsuarioSQL();
-		this.grupoFamiliar = uSQL.obtenerGrupoFamiliar(this);
+		//this.grupoFamiliar = uSQL.obtenerGrupoFamiliar(this);
 		existeUsuario = uSQL.cargarUsuario(this);
 	}
 	
