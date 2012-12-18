@@ -23,6 +23,7 @@ public class Usuario {
 		this.nombreUsuario = nombre;
 		this.password = pass;
 		UsuarioSQL uSQL = new UsuarioSQL();
+		this.grupoFamiliar = uSQL.obtenerGrupoFamiliar(this);
 		existeUsuario = uSQL.cargarUsuario(this);
 	}
 	

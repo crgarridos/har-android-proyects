@@ -1,5 +1,7 @@
 package cl.at.view;
 
+import java.io.Serializable;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -11,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import cl.at.bussines.Usuario;
+import cl.at.util.Util;
 
 public class IniciarSesionActivity extends Activity {
 
@@ -64,7 +67,10 @@ public class IniciarSesionActivity extends Activity {
 			if (existe) {
 				Toast.makeText(getApplicationContext(), "Bienvenido " + u.getNombreCompleto(), Toast.LENGTH_SHORT).show();
 				Intent intent = new Intent("mapa");
+				intent.putExtra("usuario", (Serializable)u);
 				startActivity(intent);
+				Util.guardarUsuario(u,getApplicationContext());
+				
 			} else {
 				Toast.makeText(getApplicationContext(), "Error en los datos ingresados", Toast.LENGTH_SHORT).show();
 			}
