@@ -1,12 +1,10 @@
 package cl.at.view;
 
-import cl.at.bussines.Usuario;
-import cl.at.view.IniciarSesionActivity.asynclogin;
-import android.accounts.Account;
-import android.accounts.AccountManager;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -14,8 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import cl.at.bussines.*;
-import java.util.regex.*;
+import cl.at.bussines.Usuario;
 
 public class ModificarUsuarioActivity extends Activity {
 
@@ -38,12 +35,10 @@ public class ModificarUsuarioActivity extends Activity {
 		editTextPassNueva = (EditText) findViewById(R.id.modificarUsuario_editTextPassNueva);
 		editTextPassNueva2 = (EditText) findViewById(R.id.modificarUsuario_editTextPassNueva2);
 		// TODO Recibir el u real desde el activity anterior
-		u = new Usuario();
-		u.setNombreUsuario("crusier");
-		u.setNombreCompleto("crusier");
-		u.setEmail("negro.chichi@gmail.com");
-		u.setPassword("12");
-		// ////////////////////
+		if(getIntent()!=null && getIntent().getSerializableExtra("usuario")!=null){
+			u = (Usuario)getIntent().getSerializableExtra("usuario");
+		}
+		
 		editTextNombreCompleto.setText(u.getNombreCompleto());
 		editTextEmail.setText(u.getEmail());
 

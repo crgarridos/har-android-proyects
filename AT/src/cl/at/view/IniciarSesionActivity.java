@@ -46,6 +46,7 @@ public class IniciarSesionActivity extends Activity {
 		return true;
 	}
 
+	
 	class asynclogin extends AsyncTask<String, String, Boolean> {
 
 		protected void onPreExecute() {
@@ -63,14 +64,15 @@ public class IniciarSesionActivity extends Activity {
 		}
 
 		protected void onPostExecute(Boolean existe) {
-			pDialog.dismiss();// ocultamos progess dialog.
+			pDialog.dismiss();
 			if (existe) {
 				Toast.makeText(getApplicationContext(), "Bienvenido " + u.getNombreCompleto(), Toast.LENGTH_SHORT).show();
-				Intent intent = new Intent("mapa");
+				Intent intent = new Intent("at.MAPA");
 				intent.putExtra("usuario", (Serializable)u);
 				startActivity(intent);
 				Util.guardarUsuario(u,getApplicationContext());
-				
+				setResult(Activity.RESULT_OK);
+				finish();
 			} else {
 				Toast.makeText(getApplicationContext(), "Error en los datos ingresados", Toast.LENGTH_SHORT).show();
 			}
