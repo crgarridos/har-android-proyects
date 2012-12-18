@@ -31,7 +31,7 @@ public class Usuario implements Serializable{
 	public Usuario (String nombre){
 		this.nombreUsuario = nombre;
 		UsuarioSQL uSQL = new UsuarioSQL();
-		existeUsuario = uSQL.cargarUsuarioIniciar(this);
+		existeUsuario = uSQL.cargarUsuario(this);
 	}
 	
 	public Usuario(){
@@ -53,7 +53,7 @@ public class Usuario implements Serializable{
 	
 	// Setters y getters
 	public String getNombreUsuario() {
-		return nombreUsuario;
+		return nombreUsuario.toUpperCase();
 	}
 
 	public Boolean getExisteUsuario() {

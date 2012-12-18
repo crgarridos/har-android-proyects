@@ -36,4 +36,19 @@ public abstract class Util {
 		}
 	}
 
+	public static String getPreferencia(String preferencia,Context context) {
+		return context.getSharedPreferences("Prefs", Context.MODE_PRIVATE).getString(preferencia, null);
+	}
+	
+
+	public static void reiniciarPreferencias(Context context) {
+		SharedPreferences prefs = context.getSharedPreferences("Prefs", Context.MODE_PRIVATE);
+		SharedPreferences.Editor editar = prefs.edit();
+		final String[] titlePrefs ={"usuario","login"};
+		for(int i=0; i<titlePrefs.length; i++)
+			if(prefs.getString(titlePrefs[i],null)!=null)
+				editar.remove(titlePrefs[i]);
+		editar.commit();
+	}
+
 }

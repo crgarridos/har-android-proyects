@@ -3,6 +3,7 @@ package cl.at.view;
 import java.io.Serializable;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,15 +13,23 @@ import android.view.MenuItem;
 import android.view.SubMenu;
 import android.widget.Toast;
 import cl.at.bussines.Ciudad;
+import cl.at.bussines.Usuario;
+import cl.at.util.Util;
 
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapView;
 
 public class MainActivity extends MapActivity {
+	
+	private static final String TAG = MainActivity.class.getName();
 
 	private MapView mapView;
 	private ProgressDialog pDialog;
 	private Ciudad ciudad;
+	private Usuario u;
+	private boolean traerUsuario = false;
+	private Context context;
+	
 	private static final int MNU_OPC1 = 1;
 	private static final int SMNU_OPC11 = 11;
 	private static final int SMNU_OPC12 = 12;
@@ -46,9 +55,24 @@ public class MainActivity extends MapActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		context = getApplicationContext();
+		
+		Intent intent = getIntent();
+		if(intent!= null && intent.getExtras()!= null){
+			u = (Usuario) intent.getSerializableExtra("usuario");
+		}
+		else if(Util.getPreferencia("usuario",context)!=null){
+			traerUsuario = true;
+		}
+		else{
+			Toast.makeText(context, "Ha ocurrido un error inesperado al iniciar la aplicación", Toast.LENGTH_LONG).show();
+			Util.reiniciarPreferencias(context);
+			finish();
+		}
 		mapView = (MapView) findViewById(R.id.mapview);
 		ciudad = new Ciudad(mapView);
-		new asynclogin().execute();
+		
+		new AsyncLogin().execute();
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -87,14 +111,14 @@ public class MainActivity extends MapActivity {
 		case 21:
 			return true;
 		case 22:
-			Intent intent = new Intent("modificarUsuario");
-			//intent.putExtra("usuario",(Serializable) u);
+			Intent intent = new Intent("at.MODIFICAR_USUARIO");
+			intent.putExtra("usuario",(Serializable) u);
 			startActivity(intent);
 			return true;
 		case 23:
 			return true;
 		case 24:
-			Intent i = new Intent("crearGrupoFamiliar");
+			Intent i = new Intent("at.CREAR_GRUPO_FAMILIAR");
 			startActivity(i);
 			return true;
 		case 25:
@@ -110,27 +134,44 @@ public class MainActivity extends MapActivity {
 		return false;
 	}
 
-	class asynclogin extends AsyncTask<String, String, String> {
+	class AsyncLogin extends AsyncTask<String, String, Boolean> {
 
 		protected void onPreExecute() {
 			pDialog = new ProgressDialog(MainActivity.this);
-			pDialog.setMessage("Determinando ciudad....");
 			pDialog.setIndeterminate(false);
 			pDialog.setCancelable(false);
 			pDialog.show();
 		}
 
-		protected String doInBackground(String... params) {
+		protected Boolean doInBackground(String... params) {
+			if(traerUsuario){
+				pDialog.setMessage("Cargando datos de usuario...");
+				Usuario user = u = new Usuario((String) Util.getPreferencia("usuario",context));
+//				String s1 = (String) Util.getPreferencia("usuario",context);
+//				String s2 = u.getPassword();
+//				String s3 =  Util.encriptaEnMD5(u.getNombreUsuario()+u.getPassword());
+//				String s4 = Util.getPreferencia("login", context);
+//				Log.i(TAG,user.getEmail()+s1+s2+s3+s4);
+				if(!u.getExisteUsuario() || u.getPassword()==null || !Util.encriptaEnMD5(u.getNombreUsuario()+u.getPassword()).equals(Util.getPreferencia("login", context))){
+					Util.reiniciarPreferencias(context);
+					return false;
+					//TODO se debe cambiar el encriptado de login en preferences cuando el usuario cambie la contraseña
+				}
+			}
+			pDialog.setMessage("Determinando ciudad....");
 			ciudad.obtenerCiudad();
 			SystemClock.sleep(300);
-			// if(i == 0) return "ok";
-			return "err";
+			return true;
 		}
 
-		protected void onPostExecute(String result) {
-			// if(result == "ok")
-			pDialog.dismiss();
+		protected void onPostExecute(Boolean result) {
+			if(result) pDialog.dismiss();
+			else {
+				Toast.makeText(context, "Ha ocurrido un error inesperado al iniciar la aplicación", Toast.LENGTH_LONG).show();
+				finish();
+			}
+
 		}
+
 	}
-
 }
