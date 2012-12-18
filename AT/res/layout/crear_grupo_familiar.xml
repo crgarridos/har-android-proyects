@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <RelativeLayout
+        android:id="@+id/iniciarSesion_layoutBtns"
+        style="@android:style/ButtonBar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" >
+
+        <!-- botonera -->
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+
+            <!-- android:id="@+id/plantilla_btnSgte" -->
+
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Siguiente" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@id/iniciarSesion_layoutBtns"
+        android:layout_below="@+id/iniciarSesion_titulo" >
+
+        <requestFocus />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dip"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ingrese un nombre para el grupo familiar" />
+
+            <EditText
+                android:id="@+id/crearGrupoFamiliar_nombreGrupo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Familia Gonzalez Tapia"
+                android:inputType="textPersonName" >
+            </EditText>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="48dip"
+                    android:text="Debe definir un punto de encuentro para la familia:" />
+
+                <ImageView
+                    android:id="@+id/crearGrupoFamiliar_imageEstadoPtoEncuentro"
+                    android:layout_width="48dip"
+                    android:layout_height="48dip"
+                    android:layout_marginLeft="-48dip"
+                    android:layout_marginRight="10dip"
+                    android:src="@drawable/warning" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/crearGrupoFamiliar_btnDefinirPtoEncuentro"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dip"
+                android:text="Definir punto de encuentro" />
+            <!-- <com.google.android.maps.MapView -->
+            <!-- android:id="@+id/crearGrupoFamiliar_mapview" -->
+            <!-- android:layout_width="fill_parent" -->
+            <!-- android:layout_height="300dip" -->
+            <!-- android:layout_margin="10dip" -->
+            <!-- android:apiKey="0NDpcj4-69wkPNQIcANwZ1CgA3Fl7nNCBjsGUzw" -->
+            <!-- android:clickable="true" /> -->
+
+            <Button
+                android:id="@+id/crearGrupoFamiliar_btnInvitar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dip"
+                android:text="Invitar usuarios" />
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>
