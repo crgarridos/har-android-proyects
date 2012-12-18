@@ -72,23 +72,21 @@ public class ModificarUsuarioActivity extends Activity {
 			if (!m1.matches()) {
 				Toast.makeText(getApplicationContext(), "Email no permitido", Toast.LENGTH_SHORT).show();
 				return false;
-			} else {
-				if (!this.editTextPassNueva.getText().toString().equals(this.editTextPassNueva2.getText().toString())) {
-					Toast.makeText(getApplicationContext(), "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show();
-					return false;
-				} else if (!m2.matches()) {
-					Toast.makeText(getApplicationContext(), "Contraseña no permitida", Toast.LENGTH_SHORT).show();
-					return false;
-				} else if (!u.getPassword().equals(this.editTextPassActual.getText().toString())) {
-					Toast.makeText(getApplicationContext(), "Contraseña actual incorrecta", Toast.LENGTH_SHORT).show();
-					return false;
-				}
+			} else if (!this.editTextPassNueva.getText().toString().equals(this.editTextPassNueva2.getText().toString())) {
+				Toast.makeText(getApplicationContext(), "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show();
+				return false;
+			} else if (!m2.matches()) {
+				Toast.makeText(getApplicationContext(), "Contraseña no permitida", Toast.LENGTH_SHORT).show();
+				return false;
+			} else if (!u.getPassword().equals(this.editTextPassActual.getText().toString())) {
+				Toast.makeText(getApplicationContext(), "Contraseña actual incorrecta", Toast.LENGTH_SHORT).show();
+				return false;
 			}
 			return true;
 		}
 	}
 
-	class asynclogin extends AsyncTask<String, String, Boolean> {
+	class asynclogin extends AsyncTask<String, String, String> {
 
 		protected void onPreExecute() {
 			pDialog = new ProgressDialog(ModificarUsuarioActivity.this);
@@ -98,22 +96,22 @@ public class ModificarUsuarioActivity extends Activity {
 			pDialog.show();
 		}
 
-		protected Boolean doInBackground(String... params) {
+		protected String doInBackground(String... params) {
 			SystemClock.sleep(500);
 			u.setNombreCompleto(editTextNombreCompleto.getText().toString());
 			u.setEmail(editTextEmail.getText().toString());
 			u.setPassword(editTextPassNueva.getText().toString());
-			return true;
+			try {
+				u.persistir();
+				return "¡Datos modificados exitosamente!";
+			} catch (Exception w) {
+				return "No se han podido modificar los datos";
+			}
 		}
 
-		protected void onPostExecute(Boolean e) {
+		protected void onPostExecute(String s) {
+			Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
 			pDialog.dismiss();// ocultamos progess dialog.
-				try {
-					u.persistir();
-					Toast.makeText(getApplicationContext(), "¡Datos modificados exitosamente!", Toast.LENGTH_SHORT).show();
-				} catch (Exception w) {
-					Toast.makeText(getApplicationContext(), "No se han podido modificar los datos", Toast.LENGTH_SHORT).show();
-				}
 		}
 	}
 

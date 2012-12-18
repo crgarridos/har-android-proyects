@@ -47,36 +47,31 @@ public class RegistrarUsuarioActivity extends Activity {
 	}
 
 	private Boolean validarCoherencia(String nombreCompleto, String email) {
-		String nombreCompletoRegEx = "[a-z A-Z]{3,20}";
-		String emailRegEx = "([a-z._]{3,64})@([a-z._]{3,255}).(com|cl)";
-		String passRegEx = "[a-zA-Z_.0-9-*]{8,15}";
-		Pattern p = Pattern.compile(nombreCompletoRegEx);
-		Pattern p1 = Pattern.compile(emailRegEx);
-		Pattern p2 = Pattern.compile(passRegEx);
-		Matcher m = p.matcher(nombreCompleto);
-		Matcher m1 = p1.matcher(email);
-		Matcher m2 = p2.matcher(this.editTextPass.getText().toString());
-		if (!m.matches()) {
-			Toast.makeText(getApplicationContext(), "Nombre no permitido", Toast.LENGTH_SHORT).show();
-			return false;
-		} else {
-			if (!m1.matches()) {
-				Toast.makeText(getApplicationContext(), "Email no permitido", Toast.LENGTH_SHORT).show();
-				return false;
-			} else {
-				if(!this.editTextPass.getText().toString().equals(this.editTextPass2.getText().toString())){
-					Toast.makeText(getApplicationContext(), "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show();
-					return false;
-				}else if (!m2.matches()){
-					Toast.makeText(getApplicationContext(), "Contraseña no permitida", Toast.LENGTH_SHORT).show();
-					return false;
-				}
-			}
-			return true;
-		}
+		return true;
+//		
+//		String nombreCompletoRegEx = "[a-z A-Z]{3,20}";
+//		String emailRegEx = "([a-z._]{3,64})@([a-z._]{3,255}).(com|cl)";
+//		String passRegEx = "[^^]{8,15}";
+//		Matcher m = Pattern.compile(nombreCompletoRegEx).matcher(nombreCompleto);
+//		Matcher m1 = Pattern.compile(emailRegEx).matcher(email);
+//		Matcher m2 = Pattern.compile(passRegEx).matcher(this.editTextPass.getText().toString());
+//		
+//		boolean error = !this.editTextPass.getText().toString().equals(this.editTextPass2.getText().toString());
+//		error = !m.matches() || !m1.matches() || !m2.matches() || error;
+//		
+//		if (!m.matches())
+//			Toast.makeText(getApplicationContext(), "Nombre no permitido", Toast.LENGTH_SHORT).show();
+//		else if (!m1.matches())
+//			Toast.makeText(getApplicationContext(), "Email no permitido", Toast.LENGTH_SHORT).show();
+//		else if (!this.editTextPass.getText().toString().equals(this.editTextPass2.getText().toString()))
+//			Toast.makeText(getApplicationContext(), "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show();
+//		else if (!m2.matches())
+//			Toast.makeText(getApplicationContext(), "Contraseña no permitida", Toast.LENGTH_SHORT).show();
+//
+//		return !error;
 	}
 
-	class asynclogin extends AsyncTask<String, String, Boolean> {
+	class asynclogin extends AsyncTask<String, String, String> {
 
 		protected void onPreExecute() {
 			pDialog = new ProgressDialog(RegistrarUsuarioActivity.this);
@@ -86,28 +81,28 @@ public class RegistrarUsuarioActivity extends Activity {
 			pDialog.show();
 		}
 
-		protected Boolean doInBackground(String... params) {
+		protected String doInBackground(String... params) {
 			SystemClock.sleep(500);
 			u = new Usuario(editTextNombreUsuario.getText().toString());
-			return u.getExisteUsuario();
-		}
-
-		protected void onPostExecute(Boolean e) {
-			pDialog.dismiss();// ocultamos progess dialog.
-			if (!e) {
+			if (!u.getExisteUsuario()) {
 				u.setNombreCompleto(editTextNombreCompleto.getText().toString());
 				u.setPassword(editTextPass.getText().toString());
 				u.setEmail(editTextEmail.getText().toString());
 				u.setExisteUsuario(true);
 				try {
 					u.persistir();
-					Toast.makeText(getApplicationContext(), "¡Cuenta creada exitosamente!", Toast.LENGTH_SHORT).show();
+					return "¡Cuenta creada exitosamente!";
 				} catch (Exception w) {
-					Toast.makeText(getApplicationContext(), "No se ha podido crear la cuenta", Toast.LENGTH_SHORT).show();
+					return "No se ha podido crear la cuenta";
 				}
 			} else {
-				Toast.makeText(getApplicationContext(), "Nombre de usuario ya existente en el sistema", Toast.LENGTH_SHORT).show();
+				return "Nombre de usuario ya existente en el sistema";
 			}
+		}
+
+		protected void onPostExecute(String s) {
+			Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
+			pDialog.dismiss();// ocultamos progess dialog.
 		}
 	}
 
