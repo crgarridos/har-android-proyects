@@ -39,7 +39,8 @@
         <activity
             android:name="cl.at.view.IniciarSesionActivity"
             android:label="@string/app_name"
-            android:theme="@android:style/Theme.NoTitleBar" >
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="stateHidden" >
             <intent-filter>
                 <action android:name="iniciarSesion" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -48,9 +49,30 @@
         <activity
             android:name="cl.at.view.RegistrarUsuarioActivity"
             android:label="@string/app_name"
-            android:theme="@android:style/Theme.NoTitleBar" >
+            android:theme="@android:style/Theme.NoTitleBar" 
+            android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="registrarUsuario" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="cl.at.view.ModificarUsuarioActivity"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.NoTitleBar" 
+            android:windowSoftInputMode="stateHidden">
+            <intent-filter>
+                <action android:name="modificarUsuario" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="cl.at.view.CrearGrupoFamiliarActivity"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.NoTitleBar" 
+            android:windowSoftInputMode="stateHidden">
+            <intent-filter>
+                <action android:name="crearGrupoFamiliar" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

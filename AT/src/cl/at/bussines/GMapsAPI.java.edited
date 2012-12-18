@@ -38,7 +38,16 @@ public class GMapsAPI {
 	}
 
 	public GMapsAPI(MapView mapView) {
+<<<<<<< .mine
+		this.mapView = mapView;
+		this.mapView.setBuiltInZoomControls(true);
+		this.mapController = mapView.getController();
+		mapController.setCenter(new GeoPoint(0,0));
+		mapController.setZoom(15);
+=======
 		this(mapView,new Coordenada(0, 0),15);
+		
+>>>>>>> .r60
 	}
 
 	public void setZoom(Float zoom) {

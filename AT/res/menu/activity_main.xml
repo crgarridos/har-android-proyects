@@ -1,8 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <item
-        android:id="@+id/menu_settings"
-        android:orderInCategory="100"
-        android:title="@string/menu_settings"/>
+<!--     <item -->
+<!--         android:id="@+id/activity_main_menuItemCapas" -->
+<!--         android:icon="@drawable/ic_launcher" -->
+<!--         android:title="Capas"> -->
+<!--         <menu> -->
+<!--             <item -->
+<!--                 android:id="@+id/activity_main_menuItemCapas_GrupoFamiliar" -->
+<!--                 android:title="Grupo familiar"/> -->
+<!--             <item -->
+<!--                 android:id="@+id/activity_main_menuItemCapas_PuntoRiesgo" -->
+<!--                 android:title="Puntos de riesgo"/> -->
+<!--         </menu> -->
+<!--     </item> -->
+<!--     <item -->
+<!--         android:id="@+id/activity_main_menuItemUsuario" -->
+<!--         android:icon="@drawable/ic_launcher" -->
+<!--         android:title="Usuario"> -->
+<!--         <menu> -->
+<!--             <item -->
+<!--                 android:id="@+id/activity_main_menuItemUsuario_IngresarPuntoRiesgo" -->
+<!--                 android:title="Ingresar punto de riesgo"/> -->
+<!--             <item -->
+<!--                 android:id="@+id/activity_main_menuItemUsuario_ActualizarDatos" -->
+<!--                 android:title="Actualizar datos"/> -->
+<!--             <item -->
+<!--                 android:id="@+id/activity_main_menuItemUsuario_VerInvitaciones" -->
+<!--                 android:title="Ver invitaciones"/> -->
+<!--             <item -->
+<!--                 android:id="@+id/activity_main_menuItemUsuario_CrearGrupoFamiliar" -->
+<!--                 android:title="Crear grupo familiar"/> -->
+<!--             <item -->
+<!--                 android:id="@+id/activity_main_menuItemUsuario_EliminarCuenta" -->
+<!--                 android:title="Eliminar cuenta"/> -->
+<!--         </menu> -->
+<!--     </item> -->
+<!--     <item -->
+<!--         android:id="@+id/activity_main_menuItemGrupoFamiliar" -->
+<!--         android:icon="@drawable/ic_launcher" -->
+<!--         android:title="Grupo familiar"> -->
+<!--         <menu> -->
+<!--             <item -->
+<!--                 android:id="@+id/activity_main_menuItemGrupoFamiliar_InvitarFamiliar" -->
+<!--                 android:title="Invitar familiar"/> -->
+<!--             <item -->
+<!--                 android:id="@+id/activity_main_menuItemGrupoFamiliar_DefinirPuntoEncuentro" -->
+<!--                 android:title="Definir punto de encuentro"/> -->
+<!--             <item -->
+<!--                 android:id="@+id/activity_main_menuItemGrupoFamiliar_PublicarComentario" -->
+<!--                 android:title="Opcion 3.1"/> -->
+<!--             <item -->
+<!--                 android:id="@+id/activity_main_menuItemGrupoFamiliar_VisualizarComentarios" -->
+<!--                 android:title="Opcion 3.1"/> -->
+<!--             <item -->
+<!--                 android:id="@+id/activity_main_menuItemGrupoFamiliar_AbandonarGrupo" -->
+<!--                 android:title="Opcion 3.1"/> -->
+<!--         </menu> -->
+<!--     </item> -->
+<!--     <item -->
+<!--         android:id="@+id/activity_main_menuItemAjustes" -->
+<!--         android:icon="@drawable/ic_launcher" -->
+<!--         android:title="Ajustes"> -->
+<!--         <menu> -->
+<!--             <item -->
+<!--                 android:id="@+id/activity_main_menuItemAjustes_ConfigurarGeoLoc" -->
+<!--                 android:title="Opcion 3.1"/> -->
+<!--             <item -->
+<!--                 android:id="@+id/activity_main_menuItemAjustes_ActualizarPosicion" -->
+<!--                 android:title="Opcion 3.1"/> -->
+<!--         </menu> -->
+<!--     </item> -->
 
 </menu>
