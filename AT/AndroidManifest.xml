@@ -16,7 +16,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <uses-library android:name="com.google.android.maps" />
-
+ 
        <activity
             android:name="cl.at.view.BienvenidaActivity"
             android:label="@string/app_name" 
