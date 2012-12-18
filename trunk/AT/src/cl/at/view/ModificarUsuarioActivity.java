@@ -5,6 +5,7 @@ import java.util.regex.Pattern;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -13,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import cl.at.bussines.Usuario;
+import cl.at.util.Util;
 
 public class ModificarUsuarioActivity extends Activity {
 
@@ -23,11 +25,14 @@ public class ModificarUsuarioActivity extends Activity {
 	private EditText editTextPassNueva;
 	private EditText editTextPassNueva2;
 	private ProgressDialog pDialog;
-	public Usuario u;
+	private Usuario u;
+	private Context context;
+	
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.modificar_usuario);
+		context = getApplicationContext();
 		btnSgte = (Button) findViewById(R.id.modificarUsuario_btnSgte);
 		editTextNombreCompleto = (EditText) findViewById(R.id.modificarUsuario_editTextNombreCompleto);
 		editTextEmail = (EditText) findViewById(R.id.modificarUsuario_editTextEmail);
@@ -105,6 +110,7 @@ public class ModificarUsuarioActivity extends Activity {
 		}
 
 		protected void onPostExecute(String s) {
+			Util.guardarUsuario(u, context);
 			Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
 			pDialog.dismiss();// ocultamos progess dialog.
 		}
