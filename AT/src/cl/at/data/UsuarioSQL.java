@@ -4,6 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import android.util.Log;
+import cl.at.bussines.GrupoFamiliar;
 import cl.at.bussines.Usuario;
 import cl.at.util.Parametros;
 
@@ -25,8 +26,8 @@ public class UsuarioSQL {
 			JSONArray jdata = null;
 			jdata = post.getServerData(postParametersToSend, URL_connect + "getPersona.php");
 			if (jdata != null) {
+				JSONObject json_data = jdata.getJSONObject(0); // Se lee la respuesta
 				try {
-					JSONObject json_data = jdata.getJSONObject(0); // Se lee la respuesta
 					u.setNombreCompleto(json_data.getString("NOMBRE_COMPLETO_USUARIO"));
 					u.setEmail(json_data.getString("EMAIL"));
 					return true;
@@ -77,5 +78,10 @@ public class UsuarioSQL {
 			Log.e(TAG, "persistir, " + e.toString());
 		}
 		return false;
+	}
+
+	public GrupoFamiliar obtenerGrupoFamiliar(Usuario usuario) {
+		
+		return null;
 	}
 }
