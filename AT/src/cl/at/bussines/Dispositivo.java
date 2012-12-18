@@ -5,7 +5,7 @@ public class Dispositivo {
 	private Boolean estadoDeRiesgo;
 	private Ciudad ciudad;
 	private Usuario usuario;
-	private Coordenada posicion;
+	private Coordenada posicion; 
 	private Integer intervalo;
 
 	public Dispositivo(Ciudad ciudad, Usuario usuario, Coordenada posicion){
@@ -63,7 +63,13 @@ public class Dispositivo {
 	
 	//otros
 	public void actualizarPosicion(Coordenada c){
-
 	}
 
+	public Boolean estaSeguro(){
+		if(this.posicion == this.ciudad.getPuntoSeguridad().coordenada){
+			return true;
+		}
+		else
+			return false;
+	}
 }

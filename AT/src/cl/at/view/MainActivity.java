@@ -1,8 +1,17 @@
 package cl.at.view;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.Serializable;
 
 import android.app.ProgressDialog;
+import android.graphics.drawable.Drawable;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -13,17 +22,26 @@ import android.view.MenuItem;
 import android.view.SubMenu;
 import android.widget.Toast;
 import cl.at.bussines.Ciudad;
+import cl.at.data.ConexionHttp;
+import cl.at.util.HelloItemizedOverlay;
 import cl.at.bussines.Usuario;
 import cl.at.util.Util;
 
+import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
+import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
+import com.google.android.maps.Overlay;
+import com.google.android.maps.OverlayItem;
 
 public class MainActivity extends MapActivity {
 	
 	private static final String TAG = MainActivity.class.getName();
 
+	private MapController m;
 	private MapView mapView;
+	String URL_connect="http://acinfo.unap.cl/jvega/Alerttsunami/ciudad.php";
+	ConexionHttp post;
 	private ProgressDialog pDialog;
 	private Ciudad ciudad;
 	private Usuario u;
@@ -71,6 +89,7 @@ public class MainActivity extends MapActivity {
 		}
 		mapView = (MapView) findViewById(R.id.mapview);
 		ciudad = new Ciudad(mapView);
+		ciudad.obtenerCiudad();
 		
 		new AsyncLogin().execute();
 	}
@@ -133,7 +152,7 @@ public class MainActivity extends MapActivity {
 	protected boolean isRouteDisplayed() {
 		return false;
 	}
-
+	
 	class AsyncLogin extends AsyncTask<String, String, Boolean> {
 
 		protected void onPreExecute() {
@@ -158,8 +177,8 @@ public class MainActivity extends MapActivity {
 					//TODO se debe cambiar el encriptado de login en preferences cuando el usuario cambie la contraseña
 				}
 			}
-			pDialog.setMessage("Determinando ciudad....");
-			ciudad.obtenerCiudad();
+//			pDialog.setMessage("Determinando ciudad....");
+//			ciudad.obtenerCiudad();
 			SystemClock.sleep(300);
 			return true;
 		}

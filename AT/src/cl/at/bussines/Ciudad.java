@@ -2,10 +2,13 @@ package cl.at.bussines;
 
 import java.util.ArrayList;
 
+import android.util.Log;
+
 import com.google.android.maps.MapView;
 
 public class Ciudad {
 
+	private static final String TAG = Ciudad.class.getName();
 	private Dispositivo dispositivo;
 	private Coordenada coordenada;
 	private Punto puntoSeguridad;
