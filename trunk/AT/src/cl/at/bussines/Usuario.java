@@ -26,7 +26,7 @@ public class Usuario implements Serializable{
 		existeUsuario = uSQL.cargarUsuario(this);
 		grupoFamiliar = new GrupoFamiliar(this);
 	}
-	
+	 
 	public Usuario (String nombre){
 		this(nombre,null);
 	}
