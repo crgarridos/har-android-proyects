@@ -13,7 +13,7 @@ public class Usuario implements Serializable{
 	protected String nombreCompleto;
 	protected String nombreUsuario;
 	protected String password;
-	protected ArrayList<Dispositivo> dispositivos;
+	protected Dispositivo dispositivo;
 	protected ArrayList<Comentario> comentarios;
 	protected ArrayList<Invitacion> invitaciones;
 	protected GrupoFamiliar grupoFamiliar;
@@ -21,35 +21,33 @@ public class Usuario implements Serializable{
 	
 	//Constructores
 	public Usuario(String nombre, String pass){
-		this.nombreUsuario = nombre;
-		this.password = pass;
+		this(nombre,null,pass,null);
 		UsuarioSQL uSQL = new UsuarioSQL();
-		//this.grupoFamiliar = uSQL.obtenerGrupoFamiliar(this);
 		existeUsuario = uSQL.cargarUsuario(this);
+		grupoFamiliar = new GrupoFamiliar(this);
 	}
 	
 	public Usuario (String nombre){
-		this.nombreUsuario = nombre;
-		UsuarioSQL uSQL = new UsuarioSQL();
-		existeUsuario = uSQL.cargarUsuario(this);
+		this(nombre,null);
 	}
 	
 	public Usuario(){
-		dispositivos = new ArrayList<Dispositivo>();
+		dispositivo = new Dispositivo(this);
 		comentarios = new ArrayList<Comentario>();
 		invitaciones = new ArrayList<Invitacion>();
 	}
 	
+	private Usuario(String nombreUsuario, String nombreCompleto, String password, String email) {
+		this();
+		this.nombreUsuario = nombreUsuario;
+		this.nombreCompleto = nombreCompleto;
+		this.password = password;
+		this.email = email;
+	}//Fin contructores
+
 	public void finalize() throws Throwable {
 
 	}
-
-	public Usuario(String nombreCompleto, String nombreUsuario, String pass, String email){
-		this.setNombreCompleto(nombreCompleto);
-		this.setNombreUsuario(nombreUsuario);
-		this.setPassword(pass);
-		this.setEmail(email);
-	}//Fin contructores
 	
 	// Setters y getters
 	public String getNombreUsuario() {
@@ -104,13 +102,13 @@ public class Usuario implements Serializable{
 		return estadoDeLlegada;
 	}
 
-	public ArrayList<Dispositivo> getDispositivos() {
-		return dispositivos;
+	public Dispositivo getDispositivo() {
+		return dispositivo;
 	}
 
-	public void addDispositivo(Dispositivo dispositivo) {
-		this.dispositivos.add(dispositivo);
-	}
+//	public void addDispositivo(Dispositivo dispositivo) {
+//		this.dispositivos.add(dispositivo);
+//	}
 	
 	//Fin setters y getters
 	public void abandonarGrupoFamiliar(){
