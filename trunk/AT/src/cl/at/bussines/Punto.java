@@ -1,6 +1,8 @@
 package cl.at.bussines;
 
-public class Punto {
+import java.io.Serializable;
+
+public class Punto implements Serializable{
 
 	public static final float RADIO = 10;
 	public Coordenada coordenada;

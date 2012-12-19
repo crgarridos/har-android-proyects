@@ -1,5 +1,6 @@
 package cl.at.bussines;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +17,7 @@ import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 
-public class GMapsAPI {
+public class GMapsAPI implements Serializable{
 
 	private static final String TAG = GMapsAPI.class.getName();
 	private Float zoom;

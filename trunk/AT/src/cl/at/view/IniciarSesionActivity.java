@@ -47,7 +47,6 @@ public class IniciarSesionActivity extends Activity {
 		// Validar la coherencia
 		return true;
 	}
-
 	
 	class asynclogin extends AsyncTask<String, String, Boolean> {
 
