@@ -24,14 +24,14 @@ public class Ciudad {
 //	}
 	
 	
-	public Ciudad(MapView mapView) {
-		dispositivo = new Dispositivo(this, null, null);
-		puntoSeguridad = new Punto();
-		areaInundacion = new ArrayList<Coordenada>();
-		puntosRiesgo = new ArrayList<PuntoRiesgo>();
+	public Ciudad(MapView mapView, Dispositivo disp, PuntoEncuentro ptoEncuentro) {
+		dispositivo = disp;
+		puntoSeguridad = new Punto();//TODO Calcular punto seguridad???
+		areaInundacion = new ArrayList<Coordenada>();//cargar desde la bd
+		puntosRiesgo = new ArrayList<PuntoRiesgo>();//cargar desde la bd
+		puntoEncuentro = ptoEncuentro;
 		gMapsAPI = new GMapsAPI(mapView);
 	}
-
 
 	//get y set Dispositivo
 	public Dispositivo getDispositivo(){
@@ -87,19 +87,19 @@ public class Ciudad {
 		this.puntoEncuentro = puntoEncuentro;
 	}
 	
-	//get y set GMapsAPI
-	public GMapsAPI getgMapsAPI() {
-		return gMapsAPI;
-	}
-
-	public void setgMapsAPI(GMapsAPI gMapsAPI) {
-		this.gMapsAPI = gMapsAPI;
-	}
-
-	//Destructor?
-	public void finalize() throws Throwable {
-
-	}
+//	//get y set GMapsAPI
+//	public GMapsAPI getgMapsAPI() {
+//		return gMapsAPI;
+//	}
+//
+//	public void setgMapsAPI(GMapsAPI gMapsAPI) {
+//		this.gMapsAPI = gMapsAPI;
+//	}
+//
+//	//Destructor?
+//	public void finalize() throws Throwable {
+//
+//	}
 
 	//Otros
 	public Punto determinarPuntoSeguridad(Coordenada c){
