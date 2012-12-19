@@ -3,16 +3,18 @@ package cl.at.bussines;
 public class Dispositivo {
 
 	private Boolean estadoDeRiesgo;
-	private Ciudad ciudad;
+//	private Ciudad ciudad;
 	private Usuario usuario;
-	private Coordenada posicion; 
+	private Coordenada posicion;
 	private Integer intervalo;
 
-	public Dispositivo(Ciudad ciudad, Usuario usuario, Coordenada posicion){
-		this.estadoDeRiesgo = null;
-		setCiudad(ciudad);
+	public Dispositivo(Usuario usuario){
+		
+		this.estadoDeRiesgo = false;//TODO Calcular la posicion e indicar si hay estado de riesgo
+		this.intervalo = 3600000;//? en milisegundos??
+//		setCiudad(ciudad);
 		setUsuario(usuario);
-		setPosicion(posicion);
+		//actualizar posicion//setPosicion(null);//TODO calcular
 	}
 	
 	//get estado de riesgo
@@ -21,14 +23,7 @@ public class Dispositivo {
 	}
 	
 	//get y set ciudad
-	public Ciudad getCiudad(){
-		return ciudad;
-	}
-	
-	public void setCiudad(Ciudad ciudad){
-		this.ciudad = ciudad;
-	}
-	
+
 	//get y set usuario
 	public Usuario getUsuario(){
 		return usuario;
@@ -66,10 +61,12 @@ public class Dispositivo {
 	}
 
 	public Boolean estaSeguro(){
-		if(this.posicion == this.ciudad.getPuntoSeguridad().coordenada){
-			return true;
-		}
-		else
-			return false;
+		return estadoDeRiesgo; //podria tener un setter para que la ciudad lo haga cambiar de estado, asi evitarnos la relacion.
+								// creo que para eso estaba :S, la relacion...
+//		if(this.posicion == this.ciudad.getPuntoSeguridad().coordenada){
+//			return true;
+//		}
+//		else
+//			return false;
 	}
 }
