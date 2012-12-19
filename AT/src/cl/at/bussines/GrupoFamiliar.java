@@ -1,5 +1,6 @@
 package cl.at.bussines;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import cl.at.data.ComentarioSQL;
@@ -8,7 +9,7 @@ import cl.at.data.LiderSQL;
 import cl.at.data.PuntoEncuentroSQL;
 import cl.at.data.UsuarioSQL;
 
-public class GrupoFamiliar {
+public class GrupoFamiliar implements Serializable{
 
 	private Integer id;
 	private String nombre;
@@ -36,8 +37,7 @@ public class GrupoFamiliar {
 
 	public GrupoFamiliar(Usuario usuario) {
 		GrupoFamiliarSQL gfSQL = new GrupoFamiliarSQL();
-		boolean flag = gfSQL.cargarGrupoFamiliar(this, usuario);
-		if (flag) {
+		if (gfSQL.cargarGrupoFamiliar(this, usuario)) {
 			PuntoEncuentroSQL ptoEncuentro = new PuntoEncuentroSQL();
 			puntoEncuentro = ptoEncuentro.cargarPtoEncuentro(this);
 			UsuarioSQL uSQL = new UsuarioSQL();

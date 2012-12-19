@@ -37,9 +37,9 @@ public class ComentarioSQL {
 				ArrayList<Comentario> comentarios = new ArrayList<Comentario>();
 				for (int i = 0; i < jdata.length(); i++) {
 					JSONObject jsonData = jdata.getJSONObject(i);
-					Comentario com = new Comentario(new Usuario(jsonData.getString(CAMPO_FK_NOMBRE_USUARIO)));
+					Comentario com = new Comentario(new Usuario(jsonData.getString(CAMPO_FK_NOMBRE_USUARIO),true));
 					com.setContenido(jsonData.getString(CAMPO_CONTENIDO));
-					com.setFecha(Util.StringToDate(jsonData.getString(CAMPO_FECHA)));
+					com.setFecha(Util.StringDBToDate(jsonData.getString(CAMPO_FECHA)));
 					comentarios.add(com);
 				}
 				return comentarios;

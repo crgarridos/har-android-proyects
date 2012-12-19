@@ -1,8 +1,9 @@
 package cl.at.bussines;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Invitacion {
+public class Invitacion implements Serializable {
 
 	private Date fecha;
 	private Usuario invitado;
