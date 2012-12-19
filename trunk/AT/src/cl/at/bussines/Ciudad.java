@@ -2,6 +2,9 @@ package cl.at.bussines;
 
 import java.util.ArrayList;
 
+import android.location.Location;
+import android.location.LocationListener;
+import android.os.Bundle;
 import android.util.Log;
 
 import com.google.android.maps.MapView;
@@ -16,13 +19,13 @@ public class Ciudad {
 	private ArrayList<PuntoRiesgo> puntosRiesgo;
 	private PuntoEncuentro puntoEncuentro;
 	private GMapsAPI gMapsAPI;
+	private LocationListener locListener;
 
 	//constructor
 //	public Ciudad(){
 //		areaInundacion = new ArrayList<Coordenada>();
 //		puntosRiesgo = new ArrayList<PuntoRiesgo>();
 //	}
-	
 	
 	public Ciudad(MapView mapView, Dispositivo disp, PuntoEncuentro ptoEncuentro) {
 		dispositivo = disp;
@@ -31,6 +34,25 @@ public class Ciudad {
 		puntosRiesgo = new ArrayList<PuntoRiesgo>();//cargar desde la bd
 		puntoEncuentro = ptoEncuentro;
 		gMapsAPI = new GMapsAPI(mapView);
+		locListener = new LocationListener() {
+	    	public void onLocationChanged(Location location) {
+	    		Log.i(TAG, "loc.Lat: "+location.getLatitude()+" - loc.Long:"+location.getLongitude());
+	    		dispositivo.getPosicion().setLatitud(location.getLatitude());
+	    		dispositivo.getPosicion().setLongitud(location.getLongitude());
+	    		Log.i(TAG, "c.Lat: "+dispositivo.getPosicion().getLatitud()+" - c.Lon: "+dispositivo.getPosicion().getLongitud());
+	    		dispositivo.actualizarPosicion();
+	    		gMapsAPI.dibujarPosicion(dispositivo.getPosicion(), Punto.RADIO);
+	    	}
+	    	public void onProviderDisabled(String provider){
+	    		Log.i(TAG, "GPS Status: OFF");
+	    	}
+	    	public void onProviderEnabled(String provider){
+	    		Log.i(TAG, "GPS Status: ON");
+	    	}
+	    	public void onStatusChanged(String provider, int status, Bundle extras){
+	    		Log.i(TAG, "Provider Status: " + status);
+	    	}
+    	};
 	}
 
 	//get y set Dispositivo
@@ -109,7 +131,11 @@ public class Ciudad {
 
 	public void obtenerCiudad() {
 		Coordenada c = dispositivo.getPosicion();
-		Coordenada ciudadCercana = gMapsAPI.determinarCiudad(c);
-		gMapsAPI.desplegarMapa(ciudadCercana);
+		gMapsAPI.determinarCiudad();
+		gMapsAPI.desplegarMapa(c);
+	}
+
+	public LocationListener getLocationListener() {
+		return this.locListener;
 	}
 }

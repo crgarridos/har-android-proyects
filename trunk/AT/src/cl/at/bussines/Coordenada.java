@@ -2,31 +2,36 @@ package cl.at.bussines;
 
 public class Coordenada {
 
-	private double latitud;
-	private double longitud;
+	private Double latitud;
+	private Double longitud;
 
 	//constructor
-	public Coordenada(double d, double e){
+	public Coordenada(){
+		this.latitud = null;
+		this.longitud = null;
+	}
+	
+	public Coordenada(Double d, Double e){
 		setLatitud(d);
 		setLongitud(e);
 	}
 
 
 	//get y set latitud
-	public double getLatitud(){
+	public Double getLatitud(){
 		return latitud;
 	}
 	
-	public void setLatitud(double latitud){
+	public void setLatitud(Double latitud){
 		this.latitud = latitud;
 	}
 	
 	//get y set longitud
-	public double getLongitud(){
+	public Double getLongitud(){
 		return longitud;
 	}
 	
-	public void setLongitud(double longitud){
+	public void setLongitud(Double longitud){
 		this.longitud = longitud;
 	}
 	

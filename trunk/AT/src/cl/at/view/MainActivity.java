@@ -5,9 +5,11 @@ import java.io.Serializable;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
@@ -146,7 +148,7 @@ public class MainActivity extends MapActivity {
 
 		protected Boolean doInBackground(String... params) {
 			if (traerUsuario) {
-				pDialog.setMessage("Cargando datos de usuario...");
+				pDialog.setMessage("Cargando...");
 				usuario = new Usuario((String) Util.getPreferencia("usuario", context));
 				if (!usuario.getExisteUsuario() || usuario.getPassword() == null
 						|| !Util.encriptaEnMD5(usuario.getNombreUsuario() + usuario.getPassword()).equals(Util.getPreferencia("login", context))) {
@@ -159,7 +161,6 @@ public class MainActivity extends MapActivity {
 			}
 			dispositivo = usuario != null ? usuario.getDispositivo() : new Dispositivo(null);
 			gf = usuario != null ? usuario.getGrupoFamiliar() : null;
-			pDialog.setMessage("Determinando ciudad....");
 			ciudad = new Ciudad(mapView, dispositivo, gf != null ? gf.getPuntoEncuentro() : null);
 			ciudad.obtenerCiudad();
 //			SystemClock.sleep(300);
@@ -173,6 +174,7 @@ public class MainActivity extends MapActivity {
 				Toast.makeText(context, "Ha ocurrido un error inesperado al iniciar la aplicación", Toast.LENGTH_LONG).show();
 				finish();
 			}
+		dispositivo.inicializar(ciudad.getLocationListener());
 
 		}
 	}

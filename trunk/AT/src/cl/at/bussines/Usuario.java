@@ -4,10 +4,15 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import cl.at.data.UsuarioSQL;
+import cl.at.util.Util;
 
 
 public class Usuario implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2640096247226986181L;
 	protected String email;
 	protected Boolean estadoDeLlegada;
 	protected String nombreCompleto;
@@ -24,7 +29,7 @@ public class Usuario implements Serializable{
 		this(nombre,null,pass,null);
 		UsuarioSQL uSQL = new UsuarioSQL();
 		existeUsuario = uSQL.cargarUsuario(this);
-		grupoFamiliar = new GrupoFamiliar(this);
+//		grupoFamiliar = new GrupoFamiliar(this);
 	}
 	 
 	public Usuario (String nombre){
@@ -37,7 +42,7 @@ public class Usuario implements Serializable{
 		invitaciones = new ArrayList<Invitacion>();
 	}
 	
-	private Usuario(String nombreUsuario, String nombreCompleto, String password, String email) {
+	protected Usuario(String nombreUsuario, String nombreCompleto, String password, String email) {
 		this();
 		this.nombreUsuario = nombreUsuario;
 		this.nombreCompleto = nombreCompleto;
@@ -105,7 +110,7 @@ public class Usuario implements Serializable{
 	public Dispositivo getDispositivo() {
 		return dispositivo;
 	}
-
+	
 //	public void addDispositivo(Dispositivo dispositivo) {
 //		this.dispositivos.add(dispositivo);
 //	}
