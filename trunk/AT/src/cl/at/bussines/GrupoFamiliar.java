@@ -2,6 +2,7 @@ package cl.at.bussines;
 
 import java.util.ArrayList;
 
+import cl.at.data.ComentarioSQL;
 import cl.at.data.GrupoFamiliarSQL;
 import cl.at.data.LiderSQL;
 import cl.at.data.PuntoEncuentroSQL;
