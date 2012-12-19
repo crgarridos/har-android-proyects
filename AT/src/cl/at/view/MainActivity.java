@@ -1,17 +1,8 @@
 package cl.at.view;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.io.Serializable;
 
 import android.app.ProgressDialog;
-import android.graphics.drawable.Drawable;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -22,32 +13,28 @@ import android.view.MenuItem;
 import android.view.SubMenu;
 import android.widget.Toast;
 import cl.at.bussines.Ciudad;
-import cl.at.data.ConexionHttp;
-import cl.at.util.HelloItemizedOverlay;
+import cl.at.bussines.Dispositivo;
+import cl.at.bussines.GrupoFamiliar;
 import cl.at.bussines.Usuario;
 import cl.at.util.Util;
 
-import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
-import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
-import com.google.android.maps.Overlay;
-import com.google.android.maps.OverlayItem;
 
 public class MainActivity extends MapActivity {
-	
+
 	private static final String TAG = MainActivity.class.getName();
 
-	private MapController m;
 	private MapView mapView;
-	String URL_connect="http://acinfo.unap.cl/jvega/Alerttsunami/ciudad.php";
-	ConexionHttp post;
 	private ProgressDialog pDialog;
-	private Ciudad ciudad;
-	private Usuario u;
-	private boolean traerUsuario = false;
 	private Context context;
-	
+	private boolean traerUsuario = false;
+
+	private Ciudad ciudad;
+	private Usuario usuario;
+	private Dispositivo dispositivo;
+	private GrupoFamiliar gf;
+
 	private static final int MNU_OPC1 = 1;
 	private static final int SMNU_OPC11 = 11;
 	private static final int SMNU_OPC12 = 12;
@@ -65,7 +52,7 @@ public class MainActivity extends MapActivity {
 	private static final int SMNU_OPC33 = 33;
 	private static final int SMNU_OPC34 = 34;
 	private static final int SMNU_OPC35 = 35;
-	
+
 	private static final int MNU_OPC4 = 4;
 	private static final int SMNU_OPC41 = 41;
 	private static final int SMNU_OPC42 = 42;
@@ -74,48 +61,43 @@ public class MainActivity extends MapActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		context = getApplicationContext();
-		
+
 		Intent intent = getIntent();
-		if(intent!= null && intent.getExtras()!= null){
-			u = (Usuario) intent.getSerializableExtra("usuario");
-		}
-		else if(Util.getPreferencia("usuario",context)!=null){
+		if (intent != null && intent.getExtras() != null) {
+			usuario = (Usuario) intent.getSerializableExtra("usuario");
+		} else if (Util.getPreferencia("usuario", context) != null) {
 			traerUsuario = true;
-		}
-		else{
+		} else {
 			Toast.makeText(context, "Ha ocurrido un error inesperado al iniciar la aplicaci髇", Toast.LENGTH_LONG).show();
 			Util.reiniciarPreferencias(context);
 			finish();
 		}
 		mapView = (MapView) findViewById(R.id.mapview);
-		ciudad = new Ciudad(mapView);
-		ciudad.obtenerCiudad();
-		
 		new AsyncLogin().execute();
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
 		SubMenu smnu1 = menu.addSubMenu(Menu.NONE, MNU_OPC1, Menu.NONE, "Capas").setIcon(R.drawable.capas);
-			smnu1.add(Menu.NONE, SMNU_OPC11, Menu.NONE, "Grupo familiar");
-			smnu1.add(Menu.NONE, SMNU_OPC12, Menu.NONE, "Puntos de riesgo");
-			
+		smnu1.add(Menu.NONE, SMNU_OPC11, Menu.NONE, "Grupo familiar");
+		smnu1.add(Menu.NONE, SMNU_OPC12, Menu.NONE, "Puntos de riesgo");
+
 		SubMenu smnu2 = menu.addSubMenu(Menu.NONE, MNU_OPC2, Menu.NONE, "Usuario").setIcon(R.drawable.user);
-			smnu2.add(Menu.NONE, SMNU_OPC21, Menu.NONE, "Ingresar punto de riesgo");
-			smnu2.add(Menu.NONE, SMNU_OPC22, Menu.NONE, "Actualizar datos");
-			smnu2.add(Menu.NONE, SMNU_OPC23, Menu.NONE, "Ver invitaciones");
-			smnu2.add(Menu.NONE, SMNU_OPC24, Menu.NONE, "Crear grupo familiar");
-			smnu2.add(Menu.NONE, SMNU_OPC25, Menu.NONE, "Eliminar cuenta");
-			
+		smnu2.add(Menu.NONE, SMNU_OPC21, Menu.NONE, "Ingresar punto de riesgo");
+		smnu2.add(Menu.NONE, SMNU_OPC22, Menu.NONE, "Actualizar datos");
+		smnu2.add(Menu.NONE, SMNU_OPC23, Menu.NONE, "Ver invitaciones");
+		smnu2.add(Menu.NONE, SMNU_OPC24, Menu.NONE, "Crear grupo familiar");
+		smnu2.add(Menu.NONE, SMNU_OPC25, Menu.NONE, "Eliminar cuenta");
+
 		SubMenu smnu3 = menu.addSubMenu(Menu.NONE, MNU_OPC3, Menu.NONE, "Grupo familiar").setIcon(R.drawable.grupo_familiar);
-			smnu3.add(Menu.NONE, SMNU_OPC31, Menu.NONE, "Invitar familiar");
-			smnu3.add(Menu.NONE, SMNU_OPC32, Menu.NONE, "Definir punto de encuentro");
-			smnu3.add(Menu.NONE, SMNU_OPC33, Menu.NONE, "Publicar comentario");
-			smnu3.add(Menu.NONE, SMNU_OPC34, Menu.NONE, "Visualizar comentarios");
-			smnu3.add(Menu.NONE, SMNU_OPC35, Menu.NONE, "Abandonar grupo");
-			
+		smnu3.add(Menu.NONE, SMNU_OPC31, Menu.NONE, "Invitar familiar");
+		smnu3.add(Menu.NONE, SMNU_OPC32, Menu.NONE, "Definir punto de encuentro");
+		smnu3.add(Menu.NONE, SMNU_OPC33, Menu.NONE, "Publicar comentario");
+		smnu3.add(Menu.NONE, SMNU_OPC34, Menu.NONE, "Visualizar comentarios");
+		smnu3.add(Menu.NONE, SMNU_OPC35, Menu.NONE, "Abandonar grupo");
+
 		SubMenu smnu4 = menu.addSubMenu(Menu.NONE, MNU_OPC4, Menu.NONE, "Ajustes").setIcon(R.drawable.ajustes);
-			smnu4.add(Menu.NONE, SMNU_OPC41, Menu.NONE, "Configurar geolocalizaci贸n");
-			smnu4.add(Menu.NONE, SMNU_OPC42, Menu.NONE, "Actualizar posici贸n");
+		smnu4.add(Menu.NONE, SMNU_OPC41, Menu.NONE, "Configurar geolocalizaci贸n");
+		smnu4.add(Menu.NONE, SMNU_OPC42, Menu.NONE, "Actualizar posici贸n");
 		return true;
 	}
 
@@ -131,7 +113,7 @@ public class MainActivity extends MapActivity {
 			return true;
 		case 22:
 			Intent intent = new Intent("at.MODIFICAR_USUARIO");
-			intent.putExtra("usuario",(Serializable) u);
+			intent.putExtra("usuario", (Serializable) usuario);
 			startActivity(intent);
 			return true;
 		case 23:
@@ -152,7 +134,7 @@ public class MainActivity extends MapActivity {
 	protected boolean isRouteDisplayed() {
 		return false;
 	}
-	
+
 	class AsyncLogin extends AsyncTask<String, String, Boolean> {
 
 		protected void onPreExecute() {
@@ -163,34 +145,35 @@ public class MainActivity extends MapActivity {
 		}
 
 		protected Boolean doInBackground(String... params) {
-			if(traerUsuario){
+			if (traerUsuario) {
 				pDialog.setMessage("Cargando datos de usuario...");
-				Usuario user = u = new Usuario((String) Util.getPreferencia("usuario",context));
-//				String s1 = (String) Util.getPreferencia("usuario",context);
-//				String s2 = u.getPassword();
-//				String s3 =  Util.encriptaEnMD5(u.getNombreUsuario()+u.getPassword());
-//				String s4 = Util.getPreferencia("login", context);
-//				Log.i(TAG,user.getEmail()+s1+s2+s3+s4);
-				if(!u.getExisteUsuario() || u.getPassword()==null || !Util.encriptaEnMD5(u.getNombreUsuario()+u.getPassword()).equals(Util.getPreferencia("login", context))){
+				usuario = new Usuario((String) Util.getPreferencia("usuario", context));
+				if (!usuario.getExisteUsuario() || usuario.getPassword() == null
+						|| !Util.encriptaEnMD5(usuario.getNombreUsuario() + usuario.getPassword()).equals(Util.getPreferencia("login", context))) {
 					Util.reiniciarPreferencias(context);
 					return false;
-					//TODO se debe cambiar el encriptado de login en preferences cuando el usuario cambie la contrase馻
+					// TODO se debe cambiar el encriptado de login en
+					// preferences cuando el usuario cambie la contrase馻
+					// (Util.guardarUsuario(usuario)), se entiende?
 				}
 			}
-//			pDialog.setMessage("Determinando ciudad....");
-//			ciudad.obtenerCiudad();
-			SystemClock.sleep(300);
+			dispositivo = usuario != null ? usuario.getDispositivo() : new Dispositivo(null);
+			gf = usuario != null ? usuario.getGrupoFamiliar() : null;
+			pDialog.setMessage("Determinando ciudad....");
+			ciudad = new Ciudad(mapView, dispositivo, gf != null ? gf.getPuntoEncuentro() : null);
+			ciudad.obtenerCiudad();
+//			SystemClock.sleep(300);
 			return true;
 		}
 
 		protected void onPostExecute(Boolean result) {
-			if(result) pDialog.dismiss();
+			if (result)
+				pDialog.dismiss();
 			else {
 				Toast.makeText(context, "Ha ocurrido un error inesperado al iniciar la aplicaci髇", Toast.LENGTH_LONG).show();
 				finish();
 			}
 
 		}
-
 	}
 }
