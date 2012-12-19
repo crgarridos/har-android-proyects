@@ -2,12 +2,15 @@ package cl.at.bussines;
 
 public class PuntoEncuentro extends Punto {
 
-	public GrupoFamiliar grupoFamiliar;
+	private GrupoFamiliar grupoFamiliar;
+	private String referencia;
 
 	public PuntoEncuentro(){
 		
 	}
-
+	public PuntoEncuentro(GrupoFamiliar grupoFamiliar) {
+		this.grupoFamiliar=grupoFamiliar;
+	}
 	public void finalize() throws Throwable {
 		super.finalize();
 		System.out.println();
@@ -17,8 +20,11 @@ public class PuntoEncuentro extends Punto {
 		return grupoFamiliar;
 	}
 	
-	public void setGrupoFamiliar(GrupoFamiliar grupoFamiliar){
-		this.grupoFamiliar = grupoFamiliar;
+	public String getReferencia() {
+		return referencia;
+	}
+	public void setReferencia(String referencia) {
+		this.referencia = referencia;
 	}
 
 }
