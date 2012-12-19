@@ -23,6 +23,13 @@ public abstract class Util {
 		editar.putString("login", encriptaEnMD5(u.getNombreUsuario()+u.getPassword()));
 		editar.commit();
 	}
+	
+	public static void setIntervalo(Integer intervalo, Context context) {
+		SharedPreferences prefs = context.getSharedPreferences("Prefs", Context.MODE_PRIVATE);
+		SharedPreferences.Editor editar = prefs.edit();
+		editar.putString("intervalo", intervalo.toString());
+		editar.commit();
+	}
 
 	public static String encriptaEnMD5(String stringAEncriptar) {
 		try {
@@ -48,7 +55,7 @@ public abstract class Util {
 	public static void reiniciarPreferencias(Context context) {
 		SharedPreferences prefs = context.getSharedPreferences("Prefs", Context.MODE_PRIVATE);
 		SharedPreferences.Editor editar = prefs.edit();
-		final String[] titlePrefs ={"usuario","login"};
+		final String[] titlePrefs ={"usuario","login","intervalo"};
 		for(int i=0; i<titlePrefs.length; i++)
 			if(prefs.getString(titlePrefs[i],null)!=null)
 				editar.remove(titlePrefs[i]);

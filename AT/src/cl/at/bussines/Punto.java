@@ -6,7 +6,6 @@ public class Punto {
 	public Coordenada coordenada;
 
 	public Punto(){
-
 	}
 	
 	public Punto(Coordenada coordenada){
@@ -14,7 +13,6 @@ public class Punto {
 	}
 
 	public void finalize() throws Throwable {
-
 	}
 
 	public Coordenada getCoordenada(){
