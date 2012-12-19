@@ -19,9 +19,10 @@ import android.util.Log;
 /*CLASE AUXILIAR PARA EL ENVIO DE PETICIONES A NUESTRO SISTEMA Y MANEJO DE RESPUESTA.*/
 public class ConexionHttp {
 
-	private static final String TAG = ConexionHttp.class.getName();
-	InputStream is = null;
-	String result = "";
+	public static final String TAG = ConexionHttp.class.getName();
+	public static final String URL_CONNECT = "http://acinfo.unap.cl/jvega/Alerttsunami/";
+	private InputStream is = null;
+	private String result = "";
 
 	public JSONArray getServerData(ArrayList<NameValuePair> parameters, String urlwebserver) {
 		// conecta via http y envia un post.
