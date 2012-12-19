@@ -15,6 +15,10 @@ public class Comentario {
 		setUsuario(usuario);
 	}
 	
+	public Comentario(Usuario usuario){
+		remitente = usuario;
+	}
+
 	//get y set contenido
 	public String getContenido() {
 		return contenido;
@@ -27,6 +31,10 @@ public class Comentario {
 	//get fecha
 	public Date getFecha() {
 		return fecha;
+	}
+	
+	public void setFecha(Date fecha){
+		this.fecha = fecha;
 	}
 	
 	//get y set usuario

@@ -2,6 +2,11 @@ package cl.at.util;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -40,7 +45,6 @@ public abstract class Util {
 		return context.getSharedPreferences("Prefs", Context.MODE_PRIVATE).getString(preferencia, null);
 	}
 	
-
 	public static void reiniciarPreferencias(Context context) {
 		SharedPreferences prefs = context.getSharedPreferences("Prefs", Context.MODE_PRIVATE);
 		SharedPreferences.Editor editar = prefs.edit();
@@ -51,4 +55,38 @@ public abstract class Util {
 		editar.commit();
 	}
 
+	public static Date StringDBToDate(String date){
+        try{
+            return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date);
+        }catch(ParseException ex){
+            Logger.getLogger(Util.class.getName()).log(Level.SEVERE, "Utils.StringToHour: ", ex);
+            return null;
+        }
+    }   	
+	
+	public static Date StringToDate(String date){
+        try{
+            return new SimpleDateFormat("dd/MM/yyyy").parse(date);
+        }catch(ParseException ex){
+            Logger.getLogger(Util.class.getName()).log(Level.SEVERE, "Utils.StringToHour: ", ex);
+            return null;
+        }
+    }   
+
+    public static String DateToString(Date date){
+        return new SimpleDateFormat("dd/MM/yyyy").format(date);
+    }
+
+    public static String HourToString(Date date){
+        return new SimpleDateFormat("HH:mm").format(date);
+    }
+
+    public static Date StringToHour(String date){
+        try {
+            return new SimpleDateFormat("HH:mm").parse(date);
+        } catch (ParseException ex) {
+            Logger.getLogger(Util.class.getName()).log(Level.SEVERE, "Utils.StringToHour: ", ex);
+            return null;
+        }
+    }
 }
