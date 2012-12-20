@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import cl.at.bussines.Usuario;
+import cl.at.util.Comunicador;
 import cl.at.util.Util;
 
 public class IniciarSesionActivity extends Activity {
@@ -70,9 +71,9 @@ public class IniciarSesionActivity extends Activity {
 			pDialog.dismiss();
 			if (existe) {
 				Toast.makeText(getApplicationContext(), "Bienvenido " + u.getNombreCompleto(), Toast.LENGTH_SHORT).show();
+				Comunicador com = Comunicador.getIntancia();
+				com.setUsuario(u);
 				Intent intent = new Intent("at.MAPA");
-				intent.putExtra("usuario", (Serializable)u);
-				Log.d(TAG, u.getEmail());
 				startActivity(intent);
 				Util.guardarUsuario(u,getApplicationContext());
 				setResult(Activity.RESULT_OK);
