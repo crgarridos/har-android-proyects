@@ -8,7 +8,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
-import cl.at.util.HelloItemizedOverlay;
+import cl.at.view.MarkItemizedOverlay;
 import cl.at.view.R;
 
 import com.google.android.maps.GeoPoint;
@@ -98,7 +98,7 @@ public class GMapsAPI implements Serializable{
 		setCentro(c);
 		this.mapOverlays = mapView.getOverlays();
 		Drawable drawable = mapView.getContext().getResources().getDrawable(R.drawable.icono_persona);
-		HelloItemizedOverlay itemizedoverlay = new HelloItemizedOverlay(drawable, mapView.getContext());
+		MarkItemizedOverlay itemizedoverlay = new MarkItemizedOverlay(drawable, mapView.getContext());
 		
 		OverlayItem overlayitem = new OverlayItem(centro, "Iquique","hola mundo!");
 		Log.i(TAG, "dibujo: "+centro.getLatitudeE6()+" - "+centro.getLongitudeE6());

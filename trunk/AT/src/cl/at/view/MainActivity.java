@@ -18,6 +18,7 @@ import cl.at.bussines.Ciudad;
 import cl.at.bussines.Dispositivo;
 import cl.at.bussines.GrupoFamiliar;
 import cl.at.bussines.Usuario;
+import cl.at.util.Comunicador;
 import cl.at.util.Util;
 
 import com.google.android.maps.MapActivity;
@@ -30,6 +31,7 @@ public class MainActivity extends MapActivity {
 	private MapView mapView;
 	private ProgressDialog pDialog;
 	private Context context;
+	private Comunicador com;
 	private boolean traerUsuario = false;
 
 	private Ciudad ciudad;
@@ -61,12 +63,11 @@ public class MainActivity extends MapActivity {
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		com = Comunicador.getIntancia();
 		setContentView(R.layout.activity_main);
 		context = getApplicationContext();
-
-		Intent intent = getIntent();
-		if (intent != null && intent.getExtras() != null) {
-			usuario = (Usuario) intent.getSerializableExtra("usuario");
+		if(com.getUsuario()!=null){
+			usuario = com.getUsuario();
 		} else if (Util.getPreferencia("usuario", context) != null) {
 			traerUsuario = true;
 		} else {
