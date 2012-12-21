@@ -31,7 +31,7 @@ public class Dispositivo implements Serializable{
 	public Dispositivo(Usuario usuario){
 		this.estadoDeRiesgo = false;//TODO Calcular la posicion e indicar si hay estado de riesgo
 		this.context = AlertTsunamiApplication.getAppContext();
-		this.intervalo = Util.getPreferencia("intervalo", context)!= null?Integer.parseInt(Util.getPreferencia("intervalo", context)):5000;//TODO cambiar tiempo default
+		this.intervalo = Util.getPreferencia("intervalo", context)!= null?Integer.parseInt(Util.getPreferencia("intervalo", context)):20000;//TODO cambiar tiempo default
 		this.posicion = new Coordenada();
 		setUsuario(usuario);
 		this.locManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);

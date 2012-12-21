@@ -34,12 +34,12 @@ public class Ciudad {
 		puntosRiesgo = new ArrayList<PuntoRiesgo>();//cargar desde la bd
 		puntoEncuentro = ptoEncuentro;
 		gMapsAPI = new GMapsAPI(mapView);
+		gMapsAPI.setCentro(disp.getPosicion());
 		locListener = new LocationListener() {
 	    	public void onLocationChanged(Location location) {
-	    		Log.i(TAG, "loc.Lat: "+location.getLatitude()+" - loc.Long:"+location.getLongitude());
 	    		dispositivo.getPosicion().setLatitud(location.getLatitude());
 	    		dispositivo.getPosicion().setLongitud(location.getLongitude());
-	    		Log.i(TAG, "c.Lat: "+dispositivo.getPosicion().getLatitud()+" - c.Lon: "+dispositivo.getPosicion().getLongitud());
+	    		Log.i(TAG, "Localización: "+dispositivo.getPosicion().getLatitud()+" - "+dispositivo.getPosicion().getLongitud());
 	    		dispositivo.actualizarPosicion();
 	    		gMapsAPI.dibujarPosicion(dispositivo.getPosicion(), Punto.RADIO);
 	    	}
