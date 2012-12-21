@@ -95,15 +95,18 @@ public class GMapsAPI implements Serializable{
 	}
 
 	public void dibujarPosicion(Coordenada c, float radio){
-		setCentro(c);
+//		setCentro(c);
+//		mapView.getOverlays().clear();
+		GeoPoint posicion = new GeoPoint((int)(c.getLatitud()*1E6), (int)(c.getLongitud()*1E6));
 		this.mapOverlays = mapView.getOverlays();
-		Drawable drawable = mapView.getContext().getResources().getDrawable(R.drawable.icono_persona);
+		mapOverlays.clear();
+		Drawable drawable = mapView.getContext().getResources().getDrawable(R.drawable.icono_persona_segura);
 		MarkItemizedOverlay itemizedoverlay = new MarkItemizedOverlay(drawable, mapView.getContext());
-		
-		OverlayItem overlayitem = new OverlayItem(centro, "Iquique","hola mundo!");
-		Log.i(TAG, "dibujo: "+centro.getLatitudeE6()+" - "+centro.getLongitudeE6());
-		itemizedoverlay.addOverlay(overlayitem);
+		OverlayItem overlayItem = new OverlayItem(posicion, "hola", "Iquique");
+		Log.i(TAG, "dibujo: "+posicion.getLatitudeE6()*1E6+" - "+posicion.getLongitudeE6()*1E6);
+		itemizedoverlay.addOverlay(overlayItem);
 		mapOverlays.add(itemizedoverlay);
+		this.mapView.postInvalidate();
 	}
 
 	public void dibujarPunto(Coordenada c, int color){
