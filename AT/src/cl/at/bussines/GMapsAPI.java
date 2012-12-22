@@ -35,7 +35,6 @@ public class GMapsAPI implements Serializable{
 	public GMapsAPI(MapView m, Coordenada centro, float zoom){
 		this.mapView = m;
 //		this.mapView.setBuiltInZoomControls(true);
-		Log.i(TAG, "centro: "+Double.toString(centro.getLatitud())+" - "+Double.toString(centro.getLongitud()));
 		this.centro = new GeoPoint((int)(centro.getLatitud()*1E6), (int)(centro.getLongitud()*1E6));
 		this.zoom = zoom;
 		this.mapController = mapView.getController();
@@ -62,9 +61,8 @@ public class GMapsAPI implements Serializable{
 	}
 
 	public void setCentro(Coordenada centro) {
-		Log.i(TAG, "Centro: "+centro.getLatitud()+" - "+centro.getLongitud());
 		this.centro = new GeoPoint((int)(centro.getLatitud()*1E6),(int) (centro.getLongitud()*1E6));
-		mapController.setCenter(this.centro);
+//		mapController.setCenter(this.centro);
 	}
 	
 	public Coordenada getCentro() {
@@ -82,6 +80,7 @@ public class GMapsAPI implements Serializable{
 
 	public void determinarCiudad(){
 		//TODO obtener ciudad desde la BD
+		mapController.setCenter(this.centro);
 //		return getCentro();
 	}
 
@@ -98,22 +97,25 @@ public class GMapsAPI implements Serializable{
 	}
 
 	public void dibujarPosicion(Coordenada c, float radio){
-//		setCentro(c);
-//		mapView.getOverlays().clear();
-//		GeoPoint posicion = new GeoPoint((int)(c.getLatitud()*1E6), (int)(c.getLongitud()*1E6));
-//		this.mapOverlays = mapView.getOverlays();
-//		mapOverlays.clear();
-//		Drawable drawable = mapView.getContext().getResources().getDrawable(R.drawable.icono_persona_segura);
-//		MarkItemizedOverlay itemizedoverlay = new MarkItemizedOverlay(drawable, mapView.getContext());
-//		OverlayItem overlayItem = new OverlayItem(posicion, "hola", "Iquique");
-//		Log.i(TAG, "dibujo: "+posicion.getLatitudeE6()*1E6+" - "+posicion.getLongitudeE6()*1E6);
-//		itemizedoverlay.addOverlay(overlayItem);
-//		mapOverlays.add(itemizedoverlay);
-//		this.mapView.postInvalidate();
+
 	}
 
 	public void dibujarPunto(Coordenada c, int color){
-
+		setCentro(c);
+		GeoPoint posicion = new GeoPoint((int)(c.getLatitud()*1E6), (int)(c.getLongitud()*1E6));
+		this.mapOverlays = mapView.getOverlays();
+		int i = 1;
+		while(i < this.mapOverlays.size()){
+			this.mapOverlays.remove(i);
+			i++;
+		}
+		Drawable drawable = mapView.getContext().getResources().getDrawable(color == 1? R.drawable.icono_persona_segura: R.drawable.icono_persona_riesgo);
+		MarkItemizedOverlay itemizedoverlay = new MarkItemizedOverlay(drawable, mapView.getContext());
+		OverlayItem overlayItem = new OverlayItem(posicion, "hola", "Posicion: "+c.getLatitud().toString()+" / "+c.getLongitud().toString());
+		Log.i(TAG, "dibujo: "+posicion.getLatitudeE6()*1E6+" - "+posicion.getLongitudeE6()*1E6);
+		itemizedoverlay.addOverlay(overlayItem);
+		mapOverlays.add(itemizedoverlay);
+		this.mapView.postInvalidate();
 	}
 
 	public void dibujarPunto(Coordenada c, String titulo, int color){
