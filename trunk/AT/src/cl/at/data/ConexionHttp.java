@@ -72,7 +72,7 @@ public class ConexionHttp {
 			JSONArray jArray = new JSONArray(result);
 			return jArray;
 		} catch (JSONException e) {
-			Log.e(TAG, "getJsonArray(),  data " + e.toString());
+			Log.d(TAG, "getJsonArray(),  data " + e.toString());
 			return null;
 		}
 	}

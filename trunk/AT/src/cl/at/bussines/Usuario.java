@@ -29,7 +29,7 @@ public class Usuario implements Serializable {
 		this(nombre, null, pass, null);
 		UsuarioSQL uSQL = new UsuarioSQL();
 		existeUsuario = uSQL.cargarUsuario(this);
-//		grupoFamiliar = new GrupoFamiliar(this);
+		grupoFamiliar = new GrupoFamiliar(this);
 		externo = false;
 	}
 
@@ -47,7 +47,7 @@ public class Usuario implements Serializable {
 	}
 
 	public Usuario() {
-		if(!externo || true)//TODO cambiar
+		if(externo)
 			dispositivo = new Dispositivo(this);// TODO ,externo); debe cargar de la bd
 		comentarios = new ArrayList<Comentario>();
 		invitaciones = new ArrayList<Invitacion>();
@@ -59,7 +59,16 @@ public class Usuario implements Serializable {
 		this.nombreCompleto = nombreCompleto;
 		this.password = password;
 		this.email = email;
-
+	}
+	
+	protected Usuario(Usuario usuario) {
+		this.nombreUsuario = usuario.getNombreUsuario();
+		this.nombreCompleto = usuario.getNombreCompleto();
+		this.password = usuario.getPassword();
+		this.email = usuario.getEmail();
+		this.dispositivo = usuario.getDispositivo();
+		this.comentarios = usuario.getComentarios();
+		this.invitaciones = usuario.getInvitaciones();
 	}// Fin contructores
 
 	public void finalize() throws Throwable {

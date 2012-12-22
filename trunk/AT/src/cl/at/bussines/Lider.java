@@ -10,11 +10,8 @@ public class Lider extends Usuario {
 		super.finalize();
 	}
 
-	public Lider(Usuario u){
-		super(u.getNombreCompleto(),
-				u.getNombreUsuario(),
-				u.getPassword(),
-				u.getEmail());
+	public Lider(Usuario usuario){
+		super(usuario);
 	}
 
 	

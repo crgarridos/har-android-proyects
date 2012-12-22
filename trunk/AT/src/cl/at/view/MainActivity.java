@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
@@ -14,13 +15,17 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 import cl.at.bussines.Ciudad;
+import cl.at.bussines.Coordenada;
 import cl.at.bussines.Dispositivo;
+import cl.at.bussines.GMapsAPI;
 import cl.at.bussines.GrupoFamiliar;
 import cl.at.bussines.Usuario;
 import cl.at.util.Comunicador;
 import cl.at.util.Util;
 
+import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
+import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.MyLocationOverlay;
 
@@ -34,6 +39,7 @@ public class MainActivity extends MapActivity {
 	private Context context;
 	private Comunicador com;
 	private boolean traerUsuario = false;
+	private MyLocationOverlay myLocationOverlay;
 
 	private Ciudad ciudad;
 	private Usuario usuario;
@@ -78,9 +84,9 @@ public class MainActivity extends MapActivity {
 		}
 		mapView = (MapView) findViewById(R.id.mapview);	
 		btnCentrar = (ImageButton) findViewById(R.id.ActivityMain_btnCentrar);
-		
 		mOverlayLocation = new MyLocationOverlay(mapView.getContext(), mapView);
 		mOverlayLocation.enableMyLocation();
+		mOverlayLocation.enableCompass();
 		mapView.getOverlays().add(mOverlayLocation);
 		mOverlayLocation.runOnFirstFix(new Runnable() {
 			public void run() {
@@ -199,7 +205,6 @@ public class MainActivity extends MapActivity {
 				finish();
 			}
 			dispositivo.inicializar(ciudad.getLocationListener());
-
 		}
 	}
 }

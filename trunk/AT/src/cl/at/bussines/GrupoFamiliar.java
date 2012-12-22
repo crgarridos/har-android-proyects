@@ -3,6 +3,8 @@ package cl.at.bussines;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import android.util.Log;
+
 import cl.at.data.ComentarioSQL;
 import cl.at.data.GrupoFamiliarSQL;
 import cl.at.data.LiderSQL;
@@ -11,6 +13,7 @@ import cl.at.data.UsuarioSQL;
 
 public class GrupoFamiliar implements Serializable{
 
+	private static final String TAG = GrupoFamiliar.class.getName();
 	private Integer id;
 	private String nombre;
 	private ArrayList<Comentario> comentarios;
@@ -43,6 +46,11 @@ public class GrupoFamiliar implements Serializable{
 			UsuarioSQL uSQL = new UsuarioSQL();
 			lider = usuario.esLider() ? new Lider(usuario) : uSQL.cargarLider(this);
 			integrantes = uSQL.cargarIntegrantes(this);
+			int i = 0;
+			while(i < integrantes.size()){
+			Log.e(TAG, integrantes.get(i).getNombreUsuario());
+			i++;
+			}
 			ComentarioSQL cSQL = new ComentarioSQL();
 			comentarios = cSQL.cargarComentarios(this);
 		}

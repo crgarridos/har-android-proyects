@@ -7,10 +7,8 @@ import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.Bundle;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.util.Log;
+import cl.at.data.DispositivoSQL;
 import cl.at.util.Util;
 import cl.at.view.AlertTsunamiApplication;
 
@@ -18,13 +16,11 @@ public class Dispositivo implements Serializable{
 	
 	private static final String TAG = Dispositivo.class.getName();
 	private Boolean estadoDeRiesgo;
-//	private Ciudad ciudad;
 	private Usuario usuario;
 	private Coordenada posicion;
 	private Integer intervalo;
 	private LocationManager locManager;
 	private Location location;
-//	private LocationListener locListener;
 	private Context context;
 	
 
@@ -35,28 +31,7 @@ public class Dispositivo implements Serializable{
 		this.posicion = new Coordenada();
 		setUsuario(usuario);
 		this.locManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
-		actualizarPosicion();
-//		locListener = new LocationListener() {
-//	    	public void onLocationChanged(Location location) {
-//	    		Log.i(TAG, "loc.Lat: "+location.getLatitude()+" - loc.Long:"+location.getLongitude());
-//	    		posicion.setLatitud(location.getLatitude());
-//	    		posicion.setLongitud(location.getLongitude());
-//	    		Log.i(TAG, "c.Lat: "+posicion.getLatitud()+" - c.Lon: "+posicion.getLongitud());
-//	    		actualizarPosicion();
-//	    	}
-//	    	public void onProviderDisabled(String provider){
-//	    		Log.i(TAG, "GPS Status: OFF");
-//	    	}
-//	    	public void onProviderEnabled(String provider){
-//	    		Log.i(TAG, "GPS Status: ON");
-//	    	}
-//	    	public void onStatusChanged(String provider, int status, Bundle extras){
-//	    		Log.i(TAG, "Provider Status: " + status);
-//	    	}
-//    	};
-    	
-		Log.i(TAG, "Fin del constructor...");
-		//actualizar posicion//setPosicion(null);//TODO calcular
+//		actualizarPosicion();
 	}
 	
 	//get estado de riesgo
@@ -73,7 +48,7 @@ public class Dispositivo implements Serializable{
 		this.usuario = usuario;
 	}
 	
-	//get y set posiciï¿½n
+	//get y set posición
 	public Coordenada getPosicion(){
 		return posicion;
 	}
@@ -98,21 +73,24 @@ public class Dispositivo implements Serializable{
 	
 	//otros
 	public void actualizarPosicion(){
-		Double latitud;
-		Double longitud;
+		Integer i = 1;
+		ArrayList<Usuario> grupoFamiliar = new ArrayList<Usuario>();
+		grupoFamiliar = getUsuario().getGrupoFamiliar().getIntegrantes();
 		try{
 			this.location = this.locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-			latitud = this.location.getLatitude();
-			longitud = this.location.getLongitude();
-		}catch(Exception e){
-			Log.e(TAG, e.toString());
-			//TODO obtener ultima posicion desde la base de datos...
-			latitud = -20.213839 * 1E6; longitud = -70.152500 * 1E6;
+			this.posicion.setLatitud(this.location.getLatitude());
+			this.posicion.setLongitud(this.location.getLongitude());
+			DispositivoSQL dSQL = new DispositivoSQL();
+			while(i < grupoFamiliar.size()){
+				dSQL.getUltimaPosicion(grupoFamiliar.get(i), grupoFamiliar.get(i).getDispositivo());
+				i++;
 			}
-		this.posicion.setLatitud(latitud);
-		this.posicion.setLongitud(longitud);
+		}catch(Exception e){
+			DispositivoSQL dSQL = new DispositivoSQL();
+			dSQL.getUltimaPosicion(this.getUsuario(), this);
+			}
 		if(!estaSeguro()){
-			
+			//TODO comprobar estado de dispositivo
 		}
 	}
 

@@ -33,8 +33,7 @@ public class UsuarioSQL {
 			JSONArray jdata = null;
 			jdata = post.getServerData(postParametersToSend, ConexionHttp.URL_CONNECT + "getPersona.php");
 			if (jdata != null) {
-				JSONObject json_data = jdata.getJSONObject(0); // Se lee la
-																// respuesta
+				JSONObject json_data = jdata.getJSONObject(0); // Se lee la respuesta
 				try {
 					u.setNombreCompleto(u.getNombreCompleto() == null ? json_data.getString(CAMPO_NOMBRE_COMPLETO) : u.getNombreCompleto());
 					u.setEmail(u.getEmail() == null ? json_data.getString(CAMPO_EMAIL) : u.getEmail());
