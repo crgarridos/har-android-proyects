@@ -1,11 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.maps.MapView
+<RelativeLayout 
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+<com.google.android.maps.MapView
     android:id="@+id/mapview"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:clickable="true"
-    android:apiKey="0kAv3RXafKopBZ6pRBW7iEea3WQsHL92hC0jRCg"/>
+    android:apiKey="0NDpcj4-69wkPNQIcANwZ1CgA3Fl7nNCBjsGUzw"/>
 <!-- Cristian 0NDpcj4-69wkPNQIcANwZ1CgA3Fl7nNCBjsGUzw"/> -->
 <!-- Juanfra 0PnjzMHY2-8stH9P5ee60Z3PuXmwU3cbbnGeThg"/> -->
 <!-- Damian 0kAv3RXafKopBZ6pRBW7iEea3WQsHL92hC0jRCg -->
+
+<ImageButton
+    android:id="@+id/ActivityMain_btnCentrar"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentRight="true"
+    android:layout_alignParentTop="true"
+    android:layout_margin="5dip"
+    android:src="@drawable/location" />
+
+</RelativeLayout>
