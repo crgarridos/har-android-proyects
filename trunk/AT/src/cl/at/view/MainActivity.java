@@ -5,14 +5,13 @@ import java.io.Serializable;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.SystemClock;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.Toast;
 import cl.at.bussines.Ciudad;
 import cl.at.bussines.Dispositivo;
@@ -23,12 +22,14 @@ import cl.at.util.Util;
 
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapView;
+import com.google.android.maps.MyLocationOverlay;
 
 public class MainActivity extends MapActivity {
 
 	private static final String TAG = MainActivity.class.getName();
-
+	private MyLocationOverlay mOverlayLocation;
 	private MapView mapView;
+	private ImageButton btnCentrar;
 	private ProgressDialog pDialog;
 	private Context context;
 	private Comunicador com;
@@ -66,7 +67,7 @@ public class MainActivity extends MapActivity {
 		com = Comunicador.getIntancia();
 		setContentView(R.layout.activity_main);
 		context = getApplicationContext();
-		if(com.getUsuario()!=null){
+		if (com.getUsuario() != null) {
 			usuario = com.getUsuario();
 		} else if (Util.getPreferencia("usuario", context) != null) {
 			traerUsuario = true;
@@ -75,8 +76,30 @@ public class MainActivity extends MapActivity {
 			Util.reiniciarPreferencias(context);
 			finish();
 		}
-		mapView = (MapView) findViewById(R.id.mapview);
+		mapView = (MapView) findViewById(R.id.mapview);	
+		btnCentrar = (ImageButton) findViewById(R.id.ActivityMain_btnCentrar);
+		
+		mOverlayLocation = new MyLocationOverlay(mapView.getContext(), mapView);
+		mOverlayLocation.enableMyLocation();
+		mapView.getOverlays().add(mOverlayLocation);
+		mOverlayLocation.runOnFirstFix(new Runnable() {
+			public void run() {
+				centrarEnMiPosicion();
+			}
+		});
+		
+		btnCentrar.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				centrarEnMiPosicion();
+			}
+		});
 		new AsyncLogin().execute();
+	}
+
+	protected void centrarEnMiPosicion() {
+		mapView.getController().animateTo(mOverlayLocation.getMyLocation());
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -164,7 +187,7 @@ public class MainActivity extends MapActivity {
 			gf = usuario != null ? usuario.getGrupoFamiliar() : null;
 			ciudad = new Ciudad(mapView, dispositivo, gf != null ? gf.getPuntoEncuentro() : null);
 			ciudad.obtenerCiudad();
-//			SystemClock.sleep(300);
+			// SystemClock.sleep(300);
 			return true;
 		}
 
@@ -175,7 +198,7 @@ public class MainActivity extends MapActivity {
 				Toast.makeText(context, "Ha ocurrido un error inesperado al iniciar la aplicación", Toast.LENGTH_LONG).show();
 				finish();
 			}
-		dispositivo.inicializar(ciudad.getLocationListener());
+			dispositivo.inicializar(ciudad.getLocationListener());
 
 		}
 	}
