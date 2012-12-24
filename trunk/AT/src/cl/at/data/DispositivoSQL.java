@@ -31,8 +31,7 @@ public class DispositivoSQL {
 			if (jdata != null) {
 				JSONObject json_data = jdata.getJSONObject(0); // Se lee la respuesta
 				try {
-					Coordenada coordenada = new Coordenada(json_data.getDouble(CAMPO_ULTIMA_LATITUD), json_data.getDouble(CAMPO_ULTIMA_LONGITUD));
-					dispositivo.setPosicion(coordenada);
+					dispositivo.setPosicion(new Coordenada(json_data.getDouble(CAMPO_ULTIMA_LATITUD), json_data.getDouble(CAMPO_ULTIMA_LONGITUD)));
 					return true;
 				} catch (Exception e) {
 					Log.e(TAG, "cargarDispositivo, " + e.toString());
