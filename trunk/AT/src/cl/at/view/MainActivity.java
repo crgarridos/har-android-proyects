@@ -1,5 +1,6 @@
 package cl.at.view;
 
+import java.io.IOException;
 import java.io.Serializable;
 
 import android.app.ProgressDialog;
@@ -88,6 +89,7 @@ public class MainActivity extends MapActivity {
 		mOverlayLocation.enableMyLocation();
 		mOverlayLocation.enableCompass();
 		mapView.getOverlays().add(mOverlayLocation);
+//		mapView.getController().setCenter(mOverlayLocation.getMyLocation());
 		mOverlayLocation.runOnFirstFix(new Runnable() {
 			public void run() {
 				centrarEnMiPosicion();
@@ -192,7 +194,13 @@ public class MainActivity extends MapActivity {
 			dispositivo = usuario != null ? usuario.getDispositivo() : new Dispositivo(null);
 			gf = usuario != null ? usuario.getGrupoFamiliar() : null;
 			ciudad = new Ciudad(mapView, dispositivo, gf != null ? gf.getPuntoEncuentro() : null);
-			ciudad.obtenerCiudad();
+			try {
+				ciudad.obtenerCiudad();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			dispositivo.actualizarPosicion();
 			// SystemClock.sleep(300);
 			return true;
 		}
