@@ -28,9 +28,16 @@ public class Dispositivo implements Serializable{
 		this.estadoDeRiesgo = false;//TODO Calcular la posicion e indicar si hay estado de riesgo
 		this.context = AlertTsunamiApplication.getAppContext();
 		this.intervalo = Util.getPreferencia("intervalo", context)!= null?Integer.parseInt(Util.getPreferencia("intervalo", context)):20000;//TODO cambiar tiempo default
-		this.posicion = new Coordenada();
 		setUsuario(usuario);
-		this.locManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
+		if(!usuario.esExterno()){
+			this.locManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
+			this.location = (Location)(this.locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)!=null?this.locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER):new DispositivoSQL().getUltimaPosicion(this.getUsuario(), this));
+			if((Location)this.locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)!=null)
+				setPosicion(new Coordenada(location.getLatitude(), location.getLongitude()));
+		}
+		else{
+			new DispositivoSQL().getUltimaPosicion(this.getUsuario(), this);
+		}
 //		actualizarPosicion();
 	}
 	
@@ -78,8 +85,9 @@ public class Dispositivo implements Serializable{
 		grupoFamiliar = getUsuario().getGrupoFamiliar().getIntegrantes();
 		try{
 			this.location = this.locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-			this.posicion.setLatitud(this.location.getLatitude());
-			this.posicion.setLongitud(this.location.getLongitude());
+			setPosicion(new Coordenada(this.location.getLatitude(), this.location.getLongitude()));
+//			this.posicion.setLatitud(this.location.getLatitude());
+//			this.posicion.setLongitud(this.location.getLongitude());
 			DispositivoSQL dSQL = new DispositivoSQL();
 			while(i < grupoFamiliar.size()){
 				dSQL.getUltimaPosicion(grupoFamiliar.get(i), grupoFamiliar.get(i).getDispositivo());
