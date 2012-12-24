@@ -1,5 +1,6 @@
 package cl.at.bussines;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import android.location.Location;
@@ -15,6 +16,7 @@ import com.google.android.maps.MapView;
 public class Ciudad {
 
 	private static final String TAG = Ciudad.class.getName();
+	private Integer id;
 	private Dispositivo dispositivo;
 	private Coordenada coordenada;
 	private Punto puntoSeguridad;
@@ -32,6 +34,7 @@ public class Ciudad {
 	
 	public Ciudad(MapView mapView, Dispositivo disp, PuntoEncuentro ptoEncuentro) {
 		dispositivo = disp;
+		
 		puntoSeguridad = new Punto();//TODO Calcular punto seguridad???
 		areaInundacion = new ArrayList<Coordenada>();//cargar desde la bd
 		puntosRiesgo = new ArrayList<PuntoRiesgo>();//cargar desde la bd
@@ -40,8 +43,9 @@ public class Ciudad {
 //		gMapsAPI.setCentro(disp.getPosicion());
 		locListener = new LocationListener() {
 	    	public void onLocationChanged(Location location) {
-	    		dispositivo.getPosicion().setLatitud(location.getLatitude());
-	    		dispositivo.getPosicion().setLongitud(location.getLongitude());
+//	    		dispositivo.getPosicion().setLatitud(location.getLatitude());
+//	    		dispositivo.getPosicion().setLongitud(location.getLongitude());
+	    		dispositivo.setPosicion(new Coordenada(location.getLatitude(), location.getLongitude()));
 	    		Log.i(TAG, "Localización: "+dispositivo.getPosicion().getLatitud()+" - "+dispositivo.getPosicion().getLongitud());
 	    		new AsyncMapa().execute();
 	    	}
@@ -111,19 +115,19 @@ public class Ciudad {
 		this.puntoEncuentro = puntoEncuentro;
 	}
 	
-//	//get y set GMapsAPI
-//	public GMapsAPI getgMapsAPI() {
-//		return gMapsAPI;
-//	}
-//
-//	public void setgMapsAPI(GMapsAPI gMapsAPI) {
-//		this.gMapsAPI = gMapsAPI;
-//	}
-//
-//	//Destructor?
-//	public void finalize() throws Throwable {
-//
-//	}
+	//get y set GMapsAPI
+	public GMapsAPI getgMapsAPI() {
+		return gMapsAPI;
+	}
+	
+	//get y set Id
+	public Integer getId(){
+		return this.id;
+	}
+	
+	public void setId(Integer id){
+		this.id = id;
+	}
 
 	//Otros
 	public Punto determinarPuntoSeguridad(Coordenada c){
@@ -131,9 +135,10 @@ public class Ciudad {
 	}
 
 
-	public void obtenerCiudad() {
+	public void obtenerCiudad() throws IOException {
 		Coordenada c = dispositivo.getPosicion();
-		gMapsAPI.determinarCiudad();
+		gMapsAPI.determinarCiudad(this);
+//		gMapsAPI.setCentro(c);
 		gMapsAPI.desplegarMapa(c);
 	}
 
