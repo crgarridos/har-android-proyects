@@ -1,13 +1,21 @@
 package cl.at.bussines;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
+import cl.at.data.CiudadSQL;
+import cl.at.data.PuntoSQL;
 import cl.at.view.AlertTsunamiApplication;
 import cl.at.view.MarkItemizedOverlay;
 import cl.at.view.R;
@@ -39,7 +47,8 @@ public class GMapsAPI implements Serializable{
 		this.zoom = zoom;
 		this.mapController = mapView.getController();
 		this.mapOverlays = null;
-		mapController.setCenter(this.centro);
+		
+//		mapController.setCenter(this.centro);
 		mapController.setZoom(this.zoom.intValue());
 		
 	}
@@ -49,6 +58,7 @@ public class GMapsAPI implements Serializable{
 	}
 
 	public GMapsAPI(MapView mapView) {
+		//TODO determinarCiudad();
 		this(mapView,new Coordenada(0.0, 0.0),15);
 	}
 
@@ -62,7 +72,7 @@ public class GMapsAPI implements Serializable{
 
 	public void setCentro(Coordenada centro) {
 		this.centro = new GeoPoint((int)(centro.getLatitud()*1E6),(int) (centro.getLongitud()*1E6));
-//		mapController.setCenter(this.centro);
+		this.mapController.setCenter(this.centro);
 	}
 	
 	public Coordenada getCentro() {
@@ -78,22 +88,35 @@ public class GMapsAPI implements Serializable{
 		return false;
 	}
 
-	public void determinarCiudad(){
+	public void determinarCiudad(Ciudad ciudad) throws IOException{
+		String nombreCiudad = null;
+		Geocoder geoCoder = new Geocoder(this.mapView.getContext(), Locale.getDefault());
+		List<Address> direccion = geoCoder.getFromLocation(ciudad.getDispositivo().getPosicion().getLatitud(), ciudad.getDispositivo().getPosicion().getLongitud(), 1);
+		if(direccion.size() > 0)
+			nombreCiudad = direccion.get(0).getLocality();
+		CiudadSQL cSQL = new CiudadSQL();
+		cSQL.cargarCiudad(ciudad, nombreCiudad);
+		ciudad.setAreaInundacion(new PuntoSQL().cargarAreaInundacion(ciudad));
+		dibujarPolilinea(ciudad.getAreaInundacion());
+//		for(int i = 0; i < ciudad.getAreaInundacion().size(); i++){
+//			dibujarPunto(ciudad.getAreaInundacion().get(i), 1);
+//		}
+		
 		//TODO obtener ciudad desde la BD
-		mapController.setCenter(this.centro);
 //		return getCentro();
 	}
 
-	public void desplegarMapa(Coordenada ciudadCercana){
-		this.dibujarPosicion(ciudadCercana, Punto.RADIO);
+	public void desplegarMapa(Coordenada coordenada){
+		this.setCentro(coordenada);
+		this.dibujarPosicion(coordenada, Punto.RADIO);
 	}
 
 	public void dibujarPoligono(ArrayList<Coordenada> dots){
 
 	}
 
-	public void dibujarPolilinea(ArrayList<Coordenada> dots){
-
+	public void dibujarPolilinea(ArrayList<Coordenada> areaInundacion){
+//		Polyline polilinea = new Polyline();
 	}
 
 	public void dibujarPosicion(Coordenada c, float radio){
@@ -101,13 +124,11 @@ public class GMapsAPI implements Serializable{
 	}
 
 	public void dibujarPunto(Coordenada c, int color){
-		setCentro(c);
+//		setCentro(c);
 		GeoPoint posicion = new GeoPoint((int)(c.getLatitud()*1E6), (int)(c.getLongitud()*1E6));
 		this.mapOverlays = mapView.getOverlays();
-		int i = 1;
-		while(i < this.mapOverlays.size()){
+		for(int i = 1; i < this.mapOverlays.size(); i++){
 			this.mapOverlays.remove(i);
-			i++;
 		}
 		Drawable drawable = mapView.getContext().getResources().getDrawable(color == 1? R.drawable.icono_persona_segura: R.drawable.icono_persona_riesgo);
 		MarkItemizedOverlay itemizedoverlay = new MarkItemizedOverlay(drawable, mapView.getContext());
