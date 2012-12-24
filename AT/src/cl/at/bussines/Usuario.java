@@ -22,7 +22,7 @@ public class Usuario implements Serializable {
 	protected ArrayList<Invitacion> invitaciones;
 	protected GrupoFamiliar grupoFamiliar;
 	protected Boolean existeUsuario = false;
-	protected Boolean externo = true;
+	protected Boolean externo = false;
 
 	// Constructores
 	public Usuario(String nombre, String pass) {
@@ -30,7 +30,7 @@ public class Usuario implements Serializable {
 		UsuarioSQL uSQL = new UsuarioSQL();
 		existeUsuario = uSQL.cargarUsuario(this);
 		grupoFamiliar = new GrupoFamiliar(this);
-		externo = false;
+//		externo = false;
 	}
 
 	public Usuario(String nombre) {
@@ -39,7 +39,7 @@ public class Usuario implements Serializable {
 
 	public Usuario(String nombre, boolean externo) {
 		this(nombre, null, null, null);
-		this.externo = externo;
+//		this.externo = externo;
 		UsuarioSQL uSQL = new UsuarioSQL();
 		existeUsuario = uSQL.cargarUsuario(this);
 		if(!externo) 
@@ -47,18 +47,21 @@ public class Usuario implements Serializable {
 	}
 
 	public Usuario() {
-		if(externo)
-			dispositivo = new Dispositivo(this);// TODO ,externo); debe cargar de la bd
-		comentarios = new ArrayList<Comentario>();
-		invitaciones = new ArrayList<Invitacion>();
+//		if(externo)
+//			dispositivo = new Dispositivo(this);// TODO ,externo); debe cargar de la bd
+//		comentarios = new ArrayList<Comentario>();
+//		invitaciones = new ArrayList<Invitacion>();
 	}
 
 	protected Usuario(String nombreUsuario, String nombreCompleto, String password, String email) {
-		this();
 		this.nombreUsuario = nombreUsuario;
 		this.nombreCompleto = nombreCompleto;
 		this.password = password;
 		this.email = email;
+		if(!externo)
+			dispositivo = new Dispositivo(this);// TODO ,externo); debe cargar de la bd
+		comentarios = new ArrayList<Comentario>();
+		invitaciones = new ArrayList<Invitacion>();
 	}
 	
 	protected Usuario(Usuario usuario) {
@@ -69,6 +72,8 @@ public class Usuario implements Serializable {
 		this.dispositivo = usuario.getDispositivo();
 		this.comentarios = usuario.getComentarios();
 		this.invitaciones = usuario.getInvitaciones();
+		this.existeUsuario = usuario.getExisteUsuario();
+		this.externo = usuario.getExterno();
 	}// Fin contructores
 
 	public void finalize() throws Throwable {
@@ -132,6 +137,13 @@ public class Usuario implements Serializable {
 		return dispositivo;
 	}
 	
+	public Boolean getExterno(){
+		return this.externo;
+	}
+	
+	public void changeExterno(Boolean externo){
+		this.externo = externo;
+	}
 	// public void addDispositivo(Dispositivo dispositivo) {
 	// this.dispositivos.add(dispositivo);
 	// }
