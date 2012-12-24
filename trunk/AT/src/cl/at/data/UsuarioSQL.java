@@ -6,7 +6,10 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import android.util.Log;
+import cl.at.bussines.Comentario;
+import cl.at.bussines.Dispositivo;
 import cl.at.bussines.GrupoFamiliar;
+import cl.at.bussines.Invitacion;
 import cl.at.bussines.Lider;
 import cl.at.bussines.Usuario;
 import cl.at.util.Parametros;
@@ -48,32 +51,6 @@ public class UsuarioSQL {
 		}
 		return false;
 	}
-
-	// public Boolean cargarUsuarioIniciar(Usuario u) {
-	// try {
-	// Parametros postParametersToSend = new Parametros();
-	// postParametersToSend.add("nombre", u.getNombreUsuario());
-	// JSONArray jdata = null;
-	// jdata = post.getServerData(postParametersToSend, URL_connect +
-	// "getPersona.php");
-	// if (jdata != null) {
-	// try {
-	// JSONObject json_data = jdata.getJSONObject(0); // Se lee la respuesta
-	// if(json_data.getString("NOMBRE_COMPLETO_USUARIO") != null);
-	// u.setNombreCompleto(json_data.getString("NOMBRE_COMPLETO_USUARIO"));
-	// u.setEmail(json_data.getString("EMAIL"));
-	// u.setPassword(json_data.getString("PASS_USUARIO"));
-	// //TODO la pass deberia validarla es servidor, recuendenlo xD
-	// return true;
-	// } catch (Exception e) {
-	// Log.e(TAG, "cargarUsuario, " + e.toString());
-	// }
-	// }
-	// } catch (Exception e) {
-	// Log.e(TAG, "cargarUsuarioIniciar, " + e.toString());
-	// }
-	// return false;
-	// }
 
 	public Boolean persistir(Usuario u) {
 		try {
@@ -117,6 +94,8 @@ public class UsuarioSQL {
 					} catch (Exception e) {
 						Log.e(TAG, "cargarIntegrantes, " + e.toString());
 					}
+					if(i > 0)
+						integrantes.get(i).changeExterno(true);
 				}
 				return integrantes;
 			}

@@ -46,11 +46,6 @@ public class GrupoFamiliar implements Serializable{
 			UsuarioSQL uSQL = new UsuarioSQL();
 			lider = usuario.esLider() ? new Lider(usuario) : uSQL.cargarLider(this);
 			integrantes = uSQL.cargarIntegrantes(this);
-			int i = 0;
-			while(i < integrantes.size()){
-			Log.e(TAG, integrantes.get(i).getNombreUsuario());
-			i++;
-			}
 			ComentarioSQL cSQL = new ComentarioSQL();
 			comentarios = cSQL.cargarComentarios(this);
 		}
