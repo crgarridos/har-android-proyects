@@ -1,4 +1,4 @@
-package cl.at.data;
+ package cl.at.data;
 
 import java.util.ArrayList;
 
@@ -27,6 +27,23 @@ public class ComentarioSQL {
 		post = ConexionHttp.getConexion();
 	}
 
+	public Boolean persistir(Comentario c){
+		try {
+			Parametros postParametersToSend = new Parametros();
+			postParametersToSend.add("nombreFamiliar", c.getUsuario().getGrupoFamiliar().getNombre());
+			postParametersToSend.add("nombreUsuario", c.getUsuario().getNombreCompleto());
+			postParametersToSend.add("contenidoComentario", c.getContenido());
+			JSONArray jdata = null;
+			jdata = post.getServerData(postParametersToSend, ConexionHttp.URL_CONNECT + "ingresarComentario.php");
+			if (jdata != null) {
+				return true;
+			}
+		} catch (Exception e) {
+			Log.e(TAG, "persistir, " + e.toString());
+		}
+		return false;
+	}
+	
 	public ArrayList<Comentario> cargarComentarios(final GrupoFamiliar grupoFamiliar) {
 		try {
 			Parametros postParametersToSend = new Parametros();
