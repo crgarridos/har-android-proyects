@@ -1,9 +1,10 @@
 package cl.at.bussines;
 
-import java.io.Serializable;
 import java.util.Date;
 
-public class Invitacion implements Serializable {
+import cl.at.data.InvitacionSQL;
+
+public class Invitacion{
 
 	private Date fecha;
 	private Usuario invitado;
@@ -55,8 +56,10 @@ public class Invitacion implements Serializable {
 
 	}
 
-	public void persistir() {
-
+	public void persistir() throws Exception{
+		InvitacionSQL iSQL = new InvitacionSQL();
+		if(!iSQL.persistir(this))
+			throw new Exception("Error");
 	}
 
 }
