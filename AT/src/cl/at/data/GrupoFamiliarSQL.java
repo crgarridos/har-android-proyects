@@ -17,7 +17,7 @@ public class GrupoFamiliarSQL {
 	ConexionHttp post;
 	
 	public GrupoFamiliarSQL() {
-		post = new ConexionHttp();
+		post = ConexionHttp.getConexion();
 	}
 
 	public boolean cargarGrupoFamiliar(GrupoFamiliar grupoFamiliar, final Usuario usuario) {

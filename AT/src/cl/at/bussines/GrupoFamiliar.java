@@ -7,7 +7,6 @@ import android.util.Log;
 
 import cl.at.data.ComentarioSQL;
 import cl.at.data.GrupoFamiliarSQL;
-import cl.at.data.LiderSQL;
 import cl.at.data.PuntoEncuentroSQL;
 import cl.at.data.UsuarioSQL;
 

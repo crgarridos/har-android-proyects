@@ -24,7 +24,7 @@ public class ComentarioSQL {
 	ConexionHttp post;
 
 	public ComentarioSQL() {
-		post = new ConexionHttp();
+		post = ConexionHttp.getConexion();
 	}
 
 	public ArrayList<Comentario> cargarComentarios(final GrupoFamiliar grupoFamiliar) {

@@ -25,7 +25,7 @@ public class UsuarioSQL {
 	ConexionHttp post;
 
 	public UsuarioSQL() {
-		post = new ConexionHttp();
+		post = ConexionHttp.getConexion();
 	}
 
 	public Boolean cargarUsuario(Usuario u) {

@@ -23,7 +23,7 @@ public class PuntoSQL {
 	ConexionHttp post;
 
 	public PuntoSQL() {
-		post = new ConexionHttp();
+		post = ConexionHttp.getConexion();
 	}
 	
 	public ArrayList<Coordenada> cargarAreaInundacion(final Ciudad ciudad) {

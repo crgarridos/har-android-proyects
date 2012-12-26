@@ -14,6 +14,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
+
 import android.util.Log;
 
 /*CLASE AUXILIAR PARA EL ENVIO DE PETICIONES A NUESTRO SISTEMA Y MANEJO DE RESPUESTA.*/
@@ -21,9 +22,20 @@ public class ConexionHttp {
 
 	public static final String TAG = ConexionHttp.class.getName();
 	public static final String URL_CONNECT = "http://acinfo.unap.cl/jvega/Alerttsunami/";
+	
+	private static ConexionHttp conexion;
+	
 	private InputStream is = null;
 	private String result = "";
 
+	private ConexionHttp() {
+	}
+	public static ConexionHttp getConexion() {
+		if (conexion == null)
+			conexion = new ConexionHttp();
+		return conexion;
+	}
+	
 	public JSONArray getServerData(ArrayList<NameValuePair> parameters, String urlwebserver) {
 		// conecta via http y envia un post.
 		httpPostConnect(parameters, urlwebserver);

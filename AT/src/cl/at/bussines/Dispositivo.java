@@ -1,20 +1,26 @@
 package cl.at.bussines;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.util.Log;
+import android.media.AudioManager;
+import android.net.Uri;
 import cl.at.data.DispositivoSQL;
+import cl.at.util.AlertTsunamiApplication;
 import cl.at.util.Util;
-import cl.at.view.AlertTsunamiApplication;
+import cl.at.view.R;
 
-public class Dispositivo implements Serializable{
-	
-	private static final String TAG = Dispositivo.class.getName();
+public class Dispositivo {
+
+	// private static final String TAG = Dispositivo.class.getName();
+	private Integer id;
 	private Boolean estadoDeRiesgo;
 	private Usuario usuario;
 	private Coordenada posicion;
@@ -22,98 +28,165 @@ public class Dispositivo implements Serializable{
 	private LocationManager locManager;
 	private Location location;
 	private Context context;
-	
+	private String regGCM;
 
-	public Dispositivo(Usuario usuario){
-		this.estadoDeRiesgo = false;//TODO Calcular la posicion e indicar si hay estado de riesgo
+	public Dispositivo(Usuario usuario) {
+		DispositivoSQL dSQL = new DispositivoSQL();
+		this.estadoDeRiesgo = false;// TODO Calcular la posicion e indicar si
+									// hay estado de riesgo
 		this.context = AlertTsunamiApplication.getAppContext();
-		this.intervalo = Util.getPreferencia("intervalo", context)!= null?Integer.parseInt(Util.getPreferencia("intervalo", context)):20000;//TODO cambiar tiempo default
+		this.intervalo = Util.getPreferencia("intervalo") 
+				!= null ? Integer.parseInt(Util.getPreferencia("intervalo")) : 20000;// TODO cambiar tiempo default
 		setUsuario(usuario);
 		if(!usuario.esExterno()){
 			this.locManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
-			this.location = (Location)(this.locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)!=null?this.locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER):new DispositivoSQL().getUltimaPosicion(this.getUsuario(), this));
-			if((Location)this.locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)!=null)
+			if(this.locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)!=null){
+				this.location = this.locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 				setPosicion(new Coordenada(location.getLatitude(), location.getLongitude()));
+			}
+			else new DispositivoSQL().getUltimaPosicion(this.getUsuario(), this);
 		}
 		else{
-			new DispositivoSQL().getUltimaPosicion(this.getUsuario(), this);
+			dSQL.getUltimaPosicion(this.getUsuario(), this);
 		}
-//		actualizarPosicion();
+//		if(Util.getPreferencia("usuario")!=null)
+			if(Util.getPreferencia("dispositivo")==null){
+				dSQL.persistir(this);
+				Util.guardar(this);
+			}
+			else{
+				this.id = Integer.parseInt(Util.getPreferencia("dispositivo"));
+				dSQL.cargarDispositivo(this);
+			}
+		
 	}
-	
-	//get estado de riesgo
-	public Boolean getEstadoDeRiesgo(){
+
+	public Dispositivo() {
+		
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public Boolean getEstadoDeRiesgo() {
 		return this.estadoDeRiesgo;
 	}
-	
-	//get y set usuario
-	public Usuario getUsuario(){
+
+	public Usuario getUsuario() {
 		return usuario;
 	}
-	
-	public void setUsuario(Usuario usuario){
+
+	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
 	}
-	
-	//get y set posición
-	public Coordenada getPosicion(){
+
+	public Coordenada getPosicion() {
 		return posicion;
 	}
 	
-	public void setPosicion(Coordenada posicion){
+	public void setPosicion(Coordenada posicion) {
 		this.posicion = posicion;
 	}
 
-	//get y set intervalo en que se demora en actualizar la posiciï¿½n del dispositivo
-	public Integer getIntervalo(){
+	public Integer getIntervalo() {
 		return intervalo;
 	}
-	
-	public void setIntervalo(Integer intervalo){
+
+	public void setIntervalo(Integer intervalo) {
 		this.intervalo = intervalo;
 	}
-	
-	//destructor
-	public void finalize() throws Throwable {
 
+	public String getRegGCM() {
+		return regGCM;
 	}
-	
-	//otros
-	public void actualizarPosicion(){
-		Integer i = 1;
+
+	public void setRegGCM(String regGCM) {
+		this.regGCM = regGCM;
+	}
+
+	public void actualizarPosicion() {
+		Integer i = 1;// TODO porque en 1????
 		ArrayList<Usuario> grupoFamiliar = new ArrayList<Usuario>();
 		grupoFamiliar = getUsuario().getGrupoFamiliar().getIntegrantes();
-		try{
+		try {
 			this.location = this.locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 			setPosicion(new Coordenada(this.location.getLatitude(), this.location.getLongitude()));
 //			this.posicion.setLatitud(this.location.getLatitude());
 //			this.posicion.setLongitud(this.location.getLongitude());
 			DispositivoSQL dSQL = new DispositivoSQL();
-			while(i < grupoFamiliar.size()){
+			while (i < grupoFamiliar.size()) {
 				dSQL.getUltimaPosicion(grupoFamiliar.get(i), grupoFamiliar.get(i).getDispositivo());
 				i++;
 			}
-		}catch(Exception e){
+		} catch (Exception e) {
 			DispositivoSQL dSQL = new DispositivoSQL();
 			dSQL.getUltimaPosicion(this.getUsuario(), this);
-			}
-		if(!estaSeguro()){
-			//TODO comprobar estado de dispositivo
 		}
+		if (!estaSeguro()) {
+			// TODO comprobar estado de dispositivo
+		}
+		DispositivoSQL dSQL = new DispositivoSQL();
+		dSQL.actualizarPosicion(this);
 	}
 
-	public Boolean estaSeguro(){
+	public Boolean estaSeguro() {
 		return estadoDeRiesgo;
-		//podria tener un setter para que la ciudad lo haga cambiar de estado, asi evitarnos la relacion.
-								// creo que para eso estaba :S, la relacion...
-//		if(this.posicion == this.ciudad.getPuntoSeguridad().coordenada){
-//			return true;
-//		}
-//		else
-//			return false;
+		// podria tener un setter para que la ciudad lo haga cambiar de estado,
+		// asi evitarnos la relacion.
+		// creo que para eso estaba :S, la relacion...
+		// if(this.posicion == this.ciudad.getPuntoSeguridad().coordenada){
+		// return true;
+		// }
+		// else
+		// return false;
 	}
 
 	public void inicializar(LocationListener locListener) {
-		 this.locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, this.intervalo, 0, locListener);
+		this.locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, this.intervalo, 0, locListener);
 	}
+
+	public void onAlertaRecibida(Alerta a) {
+		// ciudad.visualizarMapa();
+		// Obtenemos una referencia al servicio de notificaciones
+		String ns = Context.NOTIFICATION_SERVICE;
+		context = AlertTsunamiApplication.getAppContext();
+		NotificationManager notManager = (NotificationManager) context.getSystemService(ns);
+
+		// Configuramos la notificación
+		int icono = android.R.drawable.stat_sys_warning;
+		CharSequence textoEstado = "Alerta de Tsunami";
+		long hora = System.currentTimeMillis();
+		Context contexto = context.getApplicationContext();
+
+		Notification notif = new Notification(icono, textoEstado, hora);
+		// notif.defaults = Notification.DEFAULT_ALL;
+		// long[] vibrate = {100,100,200,300};
+		// notif.vibrate = vibrate;
+		notif.sound = Uri.parse("android.resource://" + contexto.getPackageName() + "/" + R.raw.alerta);
+		notif.audioStreamType = AudioManager.STREAM_NOTIFICATION;
+		notif.defaults = Notification.DEFAULT_LIGHTS | Notification.DEFAULT_VIBRATE;
+		// Configuramos el Intent
+
+		CharSequence titulo = "Alerta de Tsunami";
+		CharSequence descripcion = a.getDescripcion();
+		Intent notIntent = new Intent("at.MAPA");// contexto,
+													// GCMIntentService.class);
+		PendingIntent contIntent = PendingIntent.getActivity(contexto, 0, notIntent, 0);
+		notif.setLatestEventInfo(contexto, titulo, descripcion, contIntent);
+		// AutoCancel: cuando se pulsa la notificaión ésta desaparece
+		notif.flags |= Notification.FLAG_AUTO_CANCEL;
+		// Enviar notificación
+		notManager.notify(1, notif);
+	}
+
+	public void registrarEnGCM(String regId) {
+		this.setRegGCM(regId);
+		new DispositivoSQL().registrarEnGCM(this);
+	}
+
 }

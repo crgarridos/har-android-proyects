@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import cl.at.data.UsuarioSQL;
-import cl.at.util.Util;
 
 public class Usuario implements Serializable {
 
@@ -47,10 +46,10 @@ public class Usuario implements Serializable {
 	}
 
 	public Usuario() {
-//		if(externo)
-//			dispositivo = new Dispositivo(this);// TODO ,externo); debe cargar de la bd
-//		comentarios = new ArrayList<Comentario>();
-//		invitaciones = new ArrayList<Invitacion>();
+		if(externo)
+			dispositivo = new Dispositivo(this);// TODO ,externo); debe cargar de la bd
+		comentarios = new ArrayList<Comentario>();
+		invitaciones = new ArrayList<Invitacion>();
 	}
 
 	protected Usuario(String nombreUsuario, String nombreCompleto, String password, String email) {

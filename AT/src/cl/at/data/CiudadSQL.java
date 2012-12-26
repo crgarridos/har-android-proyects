@@ -25,7 +25,7 @@ public class CiudadSQL {
 	ConexionHttp post;
 
 	public CiudadSQL() {
-		post = new ConexionHttp();
+		post = ConexionHttp.getConexion();
 	}
 
 	public Boolean cargarCiudad(Ciudad ciudad, String nombreCiudad) {

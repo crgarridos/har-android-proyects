@@ -24,7 +24,7 @@ public class PuntoEncuentroSQL {
 	ConexionHttp post;
 
 	public PuntoEncuentroSQL() {
-		post = new ConexionHttp();
+		post = ConexionHttp.getConexion();
 	}
 
 	public PuntoEncuentro cargarPtoEncuentro(final GrupoFamiliar grupoFamiliar) {
