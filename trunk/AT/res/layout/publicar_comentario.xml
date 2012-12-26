@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#FFFFFF" >
+
+    <RelativeLayout
+        android:id="@+id/publicarComentario_layoutBtns"
+        style="@android:style/ButtonBar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+
+            <Button
+                android:id="@+id/publicarComentario_btnSgte"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Siguiente" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@id/publicarComentario_layoutBtns"
+        android:layout_below="@+id/publicarComentario_titulo"
+        android:layout_marginLeft="10dp" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Ingrese su comentario:"
+                android:textColor="#000000" />
+
+            <EditText
+                android:id="@+id/publicarComentario_editTextComentario"
+                android:layout_width="fill_parent"
+                android:layout_height="80dip"
+                android:layout_weight="13.29"
+                android:hint="Ej: Chichi esta bien"
+                android:inputType="text"
+                android:lines="1" >
+            </EditText>
+        </LinearLayout>
+
+        <requestFocus />
+    </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/publicarComentario_titulo"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/degradado" >
+
+        <LinearLayout
+            android:id="@+id/publicarComentarioTitulo_layout_contenido"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:gravity="center_vertical"
+                android:paddingBottom="10dp"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"
+                android:text="Publicar Comentario"
+                android:textColor="#FFFFFF"
+                android:textSize="17dp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="2dp"
+            android:layout_below="@+id/publicarComentarioTitulo_layout_contenido"
+            android:layout_gravity="bottom"
+            android:background="#A9E2F3" />
+    </RelativeLayout>
+
+</RelativeLayout>
