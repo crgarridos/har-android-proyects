@@ -2,6 +2,7 @@ package cl.at.view;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 import cl.at.bussines.Ciudad;
 import cl.at.bussines.Dispositivo;
 import cl.at.bussines.GrupoFamiliar;
+import cl.at.bussines.Invitacion;
 import cl.at.bussines.Usuario;
 import cl.at.util.Comunicador;
 import cl.at.util.Util;
@@ -150,7 +152,8 @@ public class MainActivity extends MapActivity {
 			Intent intent = new Intent("at.MODIFICAR_USUARIO");
 			startActivity(intent);
 			return true;
-		case 23:
+		case SMNU_OPC23:
+			mostrarInvitaciones();
 			return true;
 		case 24:
 			validarGrupoFamiliar();
@@ -177,6 +180,12 @@ public class MainActivity extends MapActivity {
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+	}
+
+	private void mostrarInvitaciones() {
+		Intent intent = new Intent("at.LISTA_INVITACIONES");
+		startActivity(intent);
+//		ArrayList<Invitacion> invitaciones = usuario.getInvitaciones();
 	}
 
 	@Override
@@ -294,6 +303,9 @@ public class MainActivity extends MapActivity {
 				finish();
 			}
 			dispositivo.inicializar(ciudad.getLocationListener());
+			com.setUsuario(usuario);
+			com.setCiudad(ciudad);
+			com.setDispositivo(dispositivo);
 			registrarDispositivo();
 		}
 	}

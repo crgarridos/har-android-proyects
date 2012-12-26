@@ -19,7 +19,12 @@ public class Invitacion{
 		this.setInvitado(invitado);
 		this.setRemitente(remitente);
 	}
-	
+	public Invitacion(Usuario invitado, Usuario remitente,Date fecha) {
+		this.fecha = fecha;
+		this.setInvitado(invitado);
+		this.setRemitente(remitente);
+	}
+
 	public Date getFecha() {
 		return this.fecha;
 	}
@@ -61,5 +66,6 @@ public class Invitacion{
 		if(!iSQL.persistir(this))
 			throw new Exception("Error");
 	}
+
 
 }

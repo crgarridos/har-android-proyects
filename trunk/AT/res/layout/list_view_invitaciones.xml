@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content" >
+
+    <ImageView
+        android:id="@+id/listViewInvitacion_imagen"
+        android:layout_width="64dip"
+        android:layout_height="64dip"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="10dip"
+        android:src="@drawable/grupo_familiar" />
+
+    <LinearLayout
+        android:id="@+id/listViewInvitacion_layoutTexts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dip"
+        android:layout_toRightOf="@id/listViewInvitacion_imagen"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/listViewInvitacion_nombreFamilia"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Large Text"
+            android:textStyle="bold"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="#7D7D7D" />
+
+        <TextView
+            android:id="@+id/listViewInvitacion_nombreRemitente"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dip"
+            android:textStyle="bold"
+            android:text="Invitado por: "
+            android:textColor="#7D7D7D" />
+
+        <TextView
+            android:id="@+id/listViewInvitacion_nombreCompletoRemitente"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dip"
+            android:text="TextView"
+            android:textColor="#7D7D7D"
+            android:textSize="10sp" />
+
+        <TextView
+            android:id="@+id/listViewInvitacion_emailRemitente"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dip"
+            android:text="TextView"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="#7D7D7D"
+            android:textSize="10sp" />
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="3dip"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@id/listViewInvitacion_layoutTexts"
+        android:background="@drawable/separator" />
+
+</RelativeLayout>
