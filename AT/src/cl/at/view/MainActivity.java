@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
@@ -24,13 +25,14 @@ import cl.at.bussines.Usuario;
 import cl.at.util.Comunicador;
 import cl.at.util.Util;
 
+import com.google.android.gcm.GCMRegistrar;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapView;
 import com.google.android.maps.MyLocationOverlay;
 
 public class MainActivity extends MapActivity {
 
-	private static final String TAG = MainActivity.class.getName();
+//	private static final String TAG = MainActivity.class.getName();
 	private MyLocationOverlay mOverlayLocation;
 	private MapView mapView;
 	private ImageButton btnCentrar;
@@ -38,7 +40,6 @@ public class MainActivity extends MapActivity {
 	private Context context;
 	private Comunicador com;
 	private boolean traerUsuario = false;
-	private MyLocationOverlay myLocationOverlay;
 
 	private Ciudad ciudad;
 	private Usuario usuario;
@@ -86,7 +87,6 @@ public class MainActivity extends MapActivity {
 		btnCentrar = (ImageButton) findViewById(R.id.ActivityMain_btnCentrar);
 		mOverlayLocation = new MyLocationOverlay(mapView.getContext(), mapView);
 		mOverlayLocation.enableMyLocation();
-		mOverlayLocation.enableCompass();
 		mapView.getOverlays().add(mOverlayLocation);
 //		mapView.getController().setCenter(mOverlayLocation.getMyLocation());
 		mOverlayLocation.runOnFirstFix(new Runnable() {
@@ -182,6 +182,15 @@ public class MainActivity extends MapActivity {
 	@Override
 	protected boolean isRouteDisplayed() {
 		return false;
+	}
+	
+	protected void registrarDispositivo(){
+        final String regId = GCMRegistrar.getRegistrationId(MainActivity.this);
+        if (regId.equals("")) {
+        	GCMRegistrar.register(MainActivity.this, "42760762845"); //Sender ID
+        } else {
+        	Log.v("GCMTest", "Ya registrado");
+        }
 	}
 
 	public void mostrarMensajeConfirmacion() {
@@ -285,6 +294,7 @@ public class MainActivity extends MapActivity {
 				finish();
 			}
 			dispositivo.inicializar(ciudad.getLocationListener());
+			registrarDispositivo();
 		}
 	}
 }

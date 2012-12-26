@@ -24,15 +24,8 @@ public class Ciudad {
 	private PuntoEncuentro puntoEncuentro;
 	private GMapsAPI gMapsAPI;
 	private LocationListener locListener;
-	
 	private boolean firstTime = true;
-
-	// constructor
-	// public Ciudad(){
-	// areaInundacion = new ArrayList<Coordenada>();
-	// puntosRiesgo = new ArrayList<PuntoRiesgo>();
-	// }
-
+	
 	public Ciudad(MapView mapView, Dispositivo disp, PuntoEncuentro ptoEncuentro) {
 		dispositivo = disp;
 
@@ -44,9 +37,7 @@ public class Ciudad {
 		// gMapsAPI.setCentro(disp.getPosicion());
 		locListener = new LocationListener() {
 	    	public void onLocationChanged(Location location) {
-
-//	    		dispositivo.getPosicion().setLatitud(location.getLatitude());
-//	    		dispositivo.getPosicion().setLongitud(location.getLongitude());
+	    		Log.i(TAG, "Localización: "+location.getLatitude()+" - "+location.getLongitude());
 	    		dispositivo.setPosicion(new Coordenada(location.getLatitude(), location.getLongitude()));
 	    		Log.i(TAG, "Localizaciï¿½n: "+dispositivo.getPosicion().getLatitud()+" - "+dispositivo.getPosicion().getLongitud());
 	    		new AsyncMapa().execute();
@@ -193,14 +184,10 @@ public class Ciudad {
 		@Override
 		protected String doInBackground(String... params) {
 			dispositivo.actualizarPosicion();
-			int i = 1;
-			while (i < dispositivo.getUsuario().getGrupoFamiliar().getIntegrantes().size()) {
+			for(int i = 0; i < dispositivo.getUsuario().getGrupoFamiliar().getIntegrantes().size(); i++)
 				gMapsAPI.dibujarPunto(dispositivo.getUsuario().getGrupoFamiliar().getIntegrantes().get(i).getDispositivo().getPosicion(), 1);
-				i++;
-			}
 			DispositivoSQL dSQL = new DispositivoSQL();
 			dSQL.actualizarPosicion(dispositivo);
-
 			return null;
 		}
 

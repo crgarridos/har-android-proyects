@@ -1,18 +1,14 @@
 package cl.at.bussines;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-
-import android.util.Log;
 
 import cl.at.data.ComentarioSQL;
 import cl.at.data.GrupoFamiliarSQL;
 import cl.at.data.PuntoEncuentroSQL;
 import cl.at.data.UsuarioSQL;
 
-public class GrupoFamiliar implements Serializable{
+public class GrupoFamiliar {
 
-	private static final String TAG = GrupoFamiliar.class.getName();
 	private Integer id;
 	private String nombre;
 	private ArrayList<Comentario> comentarios;
@@ -42,10 +38,10 @@ public class GrupoFamiliar implements Serializable{
 			PuntoEncuentroSQL ptoEncuentro = new PuntoEncuentroSQL();
 			puntoEncuentro = ptoEncuentro.cargarPtoEncuentro(this);
 			UsuarioSQL uSQL = new UsuarioSQL();
-			lider = usuario.esLider() ? new Lider(usuario) : uSQL.cargarLider(this);
-			integrantes = uSQL.cargarIntegrantes(this);
-			ComentarioSQL cSQL = new ComentarioSQL();
-			comentarios = cSQL.cargarComentarios(this);
+			lider = usuario.esLider ? new Lider(usuario) : uSQL.cargarLider(this);
+			integrantes = uSQL.cargarIntegrantes(this, usuario);
+//			ComentarioSQL cSQL = new ComentarioSQL();
+//			comentarios = cSQL.cargarComentarios(this);
 		}
 	}
 

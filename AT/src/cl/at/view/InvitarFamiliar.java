@@ -2,7 +2,6 @@ package cl.at.view;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,10 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import cl.at.bussines.GrupoFamiliar;
 import cl.at.bussines.Invitacion;
-import cl.at.bussines.Lider;
-import cl.at.bussines.PuntoEncuentro;
 import cl.at.bussines.Usuario;
 import cl.at.util.Comunicador;
 

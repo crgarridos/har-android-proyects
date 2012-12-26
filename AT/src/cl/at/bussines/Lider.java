@@ -20,7 +20,6 @@ public class Lider extends Usuario {
 	}
 
 	public void definirPuntoEncuentro(){
-
 	}
 
 	public void persistir(){

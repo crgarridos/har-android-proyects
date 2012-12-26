@@ -28,23 +28,23 @@ public class DispositivoSQL {
 		post = ConexionHttp.getConexion();
 	}
 
-	public Boolean getUltimaPosicion(Usuario usuario, Dispositivo dispositivo) {
+	public Boolean getUltimaPosicion(Dispositivo dispositivo) {
 		try {
 			Parametros postParametersToSend = new Parametros();
-			postParametersToSend.add("nombreUsuario", usuario.getNombreUsuario());
+			postParametersToSend.add("id", dispositivo.getId().toString());
 			JSONArray jdata = null;
-			jdata = post.getServerData(postParametersToSend, ConexionHttp.URL_CONNECT + "getUltimaPosicion.php");
+			jdata = post.getServerData(postParametersToSend, ConexionHttp.URL_CONNECT + "cargarDispositivo.php");
 			if (jdata != null) {
 				JSONObject json_data = jdata.getJSONObject(0);
 				try {
 					dispositivo.setPosicion(new Coordenada(json_data.getDouble(CAMPO_ULTIMA_LATITUD), json_data.getDouble(CAMPO_ULTIMA_LONGITUD)));
 					return true;
 				} catch (Exception e) {
-					Log.e(TAG, "cargarDispositivo, " + e.toString());
+					Log.e(TAG, "getUltimaPosicion, " + e.toString());
 				}
 			}
 		} catch (Exception e) {
-			Log.e(TAG, "cargarDispositivo, " + e.toString());
+			Log.e(TAG, "getUltimaPosicion, " + e.toString());
 		}
 		return false;
 	}
@@ -71,6 +71,7 @@ public class DispositivoSQL {
 			Parametros postParametersToSend = new Parametros();
 			Usuario usuario = dispositivo.getUsuario();
 			postParametersToSend.add("usuario", usuario!=null ? usuario.getNombreUsuario() : null);
+//			postParametersToSend.add("usuario", dispositivo.getUsuario().getNombreUsuario());
 			postParametersToSend.add("latitud", dispositivo.getPosicion().getLatitud().toString());
 			postParametersToSend.add("longitud", dispositivo.getPosicion().getLongitud().toString());
 			JSONArray jdata = null;
@@ -105,10 +106,13 @@ public class DispositivoSQL {
 	public Boolean cargarDispositivo(Dispositivo dispositivo) {
 		try {
 			Parametros postParametersToSend = new Parametros();
-			postParametersToSend.add("id", dispositivo.getId().toString());
+			if(dispositivo.getId() != null)
+				postParametersToSend.add("id", dispositivo.getId().toString());
+			else postParametersToSend.add("nombreUsuario", dispositivo.getUsuario().getNombreUsuario());
 			JSONArray jdata = post.getServerData(postParametersToSend, ConexionHttp.URL_CONNECT + "cargarDispositivo.php");
 			if (jdata != null) {
 				JSONObject jsonData = jdata.getJSONObject(0);
+				dispositivo.setId(jsonData.getInt(CAMPO_ID));
 				Coordenada coordenada = new Coordenada(jsonData.getDouble(CAMPO_ULTIMA_LATITUD), jsonData.getDouble(CAMPO_ULTIMA_LONGITUD));
 				dispositivo.setPosicion(coordenada);
 				dispositivo.setRegGCM(jsonData.getString(CAMPO_COD_GCM));

@@ -6,10 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import android.util.Log;
-import cl.at.bussines.Comentario;
-import cl.at.bussines.Dispositivo;
 import cl.at.bussines.GrupoFamiliar;
-import cl.at.bussines.Invitacion;
 import cl.at.bussines.Lider;
 import cl.at.bussines.Usuario;
 import cl.at.util.Parametros;
@@ -21,6 +18,7 @@ public class UsuarioSQL {
 	private static final String CAMPO_EMAIL = "EMAIL";
 	private static final String CAMPO_PASS = "PASS_USUARIO";
 	private static final String CAMPO_NOMBRE_USUARIO = "NOMBRE_USUARIO";
+	private static final String CAMPO_ES_LIDER = "ES_LIDER";
 
 	ConexionHttp post;
 
@@ -29,6 +27,7 @@ public class UsuarioSQL {
 	}
 
 	public Boolean cargarUsuario(Usuario u) {
+		Log.i(TAG, "cargando usuario...");
 		try {
 			Parametros postParametersToSend = new Parametros();
 			postParametersToSend.add("nombre", u.getNombreUsuario());
@@ -40,7 +39,9 @@ public class UsuarioSQL {
 				try {
 					u.setNombreCompleto(u.getNombreCompleto() == null ? json_data.getString(CAMPO_NOMBRE_COMPLETO) : u.getNombreCompleto());
 					u.setEmail(u.getEmail() == null ? json_data.getString(CAMPO_EMAIL) : u.getEmail());
-					u.setPassword(u.getPassword() == null ? json_data.getString(CAMPO_PASS) : u.getPassword());
+					if(!u.getExterno())
+						u.setPassword(u.getPassword() == null ? json_data.getString(CAMPO_PASS) : u.getPassword());
+					u.esLider(json_data.getInt(CAMPO_ES_LIDER));
 					return true;
 				} catch (Exception e) {
 					Log.e(TAG, "cargarUsuario, " + e.toString());
@@ -90,10 +91,12 @@ public class UsuarioSQL {
 		return null;
 	}
 
-	public ArrayList<Usuario> cargarIntegrantes(final GrupoFamiliar grupoFamiliar) {
+	public ArrayList<Usuario> cargarIntegrantes(final GrupoFamiliar grupoFamiliar, Usuario usuario) {
+		Log.i(TAG, "cargando integrantes...");
 		try {
 			Parametros postParametersToSend = new Parametros();
 			postParametersToSend.add("id", grupoFamiliar.getId().toString());
+			postParametersToSend.add("nombreUsuario", usuario.getNombreUsuario());
 			JSONArray jdata = null;
 			jdata = post.getServerData(postParametersToSend, ConexionHttp.URL_CONNECT + "getIntegrantes.php");
 			if (jdata != null) {
@@ -101,17 +104,18 @@ public class UsuarioSQL {
 				for (int i = 0; i < jdata.length(); i++) {
 					try {
 						JSONObject jsonData = jdata.getJSONObject(i);
-						Usuario u = new Usuario();
-						u.setEmail(jsonData.getString(CAMPO_EMAIL));
-						u.setNombreCompleto(jsonData.getString(CAMPO_NOMBRE_COMPLETO));
-						u.setNombreUsuario(jsonData.getString(CAMPO_NOMBRE_USUARIO));
-						integrantes.add(u);
+						if(jsonData.getInt(CAMPO_ES_LIDER) != 1){
+							Usuario u = new Usuario(jsonData.getString(CAMPO_NOMBRE_USUARIO), true);
+							u.setEmail(jsonData.getString(CAMPO_EMAIL));
+							u.setNombreCompleto(jsonData.getString(CAMPO_NOMBRE_COMPLETO));
+							integrantes.add(u);
+						}
 					} catch (Exception e) {
 						Log.e(TAG, "cargarIntegrantes, " + e.toString());
 					}
-					if(i > 0)
-						integrantes.get(i).changeExterno(true);
 				}
+				if(!usuario.getEsLider())
+					integrantes.add(usuario);
 				return integrantes;
 			}
 		} catch (Exception e) {

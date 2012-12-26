@@ -66,7 +66,7 @@ public class PublicarComentarioActivity extends Activity {
 
 		protected String doInBackground(String... params) {
 			try {
-				comentario.persistir();
+//				comentario.persistir();
 				return "Comentario ingresado exitosamente!";
 			} catch (Exception w) {
 				return "Ha ocurrido un error";
