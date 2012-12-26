@@ -8,8 +8,12 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import cl.at.bussines.Dispositivo;
 import cl.at.bussines.Usuario;
 
 public abstract class Util {
@@ -48,14 +52,14 @@ public abstract class Util {
 		}
 	}
 
-	public static String getPreferencia(String preferencia,Context context) {
-		return context.getSharedPreferences("Prefs", Context.MODE_PRIVATE).getString(preferencia, null);
+	public static String getPreferencia(String preferencia) {
+		return AlertTsunamiApplication.getAppContext().getSharedPreferences("Prefs", Context.MODE_PRIVATE).getString(preferencia, null);
 	}
 	
 	public static void reiniciarPreferencias(Context context) {
 		SharedPreferences prefs = context.getSharedPreferences("Prefs", Context.MODE_PRIVATE);
 		SharedPreferences.Editor editar = prefs.edit();
-		final String[] titlePrefs ={"usuario","login","intervalo"};
+		final String[] titlePrefs ={"usuario","login","intervalo","dispositivo"};
 		for(int i=0; i<titlePrefs.length; i++)
 			if(prefs.getString(titlePrefs[i],null)!=null)
 				editar.remove(titlePrefs[i]);
@@ -96,4 +100,45 @@ public abstract class Util {
             return null;
         }
     }
+
+    /**
+     * Metodo encargado de verificar si existe una conexion a internet
+     * @param a Activity o contexto de donde se llama al metodo
+     * @return retorna true si existe alguna conexion a internet, Wifi o Datos
+     */
+    public final static boolean verificarInternet(Activity a) { 
+        //Variables de estado
+        boolean hasConnectedWifi = false; 
+        boolean hasConnectedMobile = false;
+        //Instanciamos un objeto de conexion y verificamos si en wifi o datos hay conexion 
+        ConnectivityManager cm = (ConnectivityManager) a.getSystemService(Context.CONNECTIVITY_SERVICE); 
+        NetworkInfo[] netInfo = cm.getAllNetworkInfo(); 
+        //Recorremos la informacion de la red en busqueda de una conexion
+        for (NetworkInfo ni : netInfo) { 
+            //Si el tipo de red es Wifi
+            if (ni.getTypeName().equalsIgnoreCase("wifi")){
+                //Si wifi esta conectado
+                if (ni.isConnected()){
+                    hasConnectedWifi = true;
+                }                    
+            }
+            //Si el tipo de red es mobile (datos)
+            if (ni.getTypeName().equalsIgnoreCase("mobile")){
+                //si datos o mobile esta conectado
+                if (ni.isConnected()){
+                    hasConnectedMobile = true;
+                }    
+            }
+        }
+        return hasConnectedWifi || hasConnectedMobile; 
+    }
+
+	
+    public static void guardar(Dispositivo dispositivo) {
+		SharedPreferences prefs = AlertTsunamiApplication.getAppContext().getSharedPreferences("Prefs", Context.MODE_PRIVATE);
+		SharedPreferences.Editor editar = prefs.edit();
+		editar.putString("dispositivo", dispositivo.getId().toString());
+		editar.commit();
+		
+	}
 }

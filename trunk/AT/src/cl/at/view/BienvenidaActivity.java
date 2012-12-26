@@ -15,7 +15,7 @@ public class BienvenidaActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		if(Util.getPreferencia("usuario", getApplicationContext())!=null){
+		if(Util.getPreferencia("usuario")!=null){
 			startActivity(new Intent("at.MAPA"));
 			finish();
 		}

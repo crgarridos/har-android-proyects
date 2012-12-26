@@ -24,8 +24,7 @@ public class IniciarSesionActivity extends Activity {
 	private EditText editTextNombre;
 	private EditText editTextPass;
 	private ProgressDialog pDialog;
-	int respuesta;
-	public Usuario u;
+	private Usuario u;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -39,7 +38,6 @@ public class IniciarSesionActivity extends Activity {
 				if (validarCoherencia()) {
 					new asynclogin().execute();
 				}
-
 			}
 		});
 	}

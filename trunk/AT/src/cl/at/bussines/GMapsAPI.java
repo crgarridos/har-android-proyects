@@ -6,17 +6,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
-import android.location.LocationManager;
-import android.os.Bundle;
 import android.util.Log;
 import cl.at.data.CiudadSQL;
 import cl.at.data.PuntoSQL;
-import cl.at.view.AlertTsunamiApplication;
 import cl.at.view.MarkItemizedOverlay;
 import cl.at.view.R;
 

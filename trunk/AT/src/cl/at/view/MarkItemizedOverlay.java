@@ -25,7 +25,7 @@ public class MarkItemizedOverlay extends ItemizedOverlay{
 
 	@Override
 	protected OverlayItem createItem(int i) {
-	  return mOverlays.get(i);
+		return mOverlays.get(i);
 	}
 
 	public void addOverlay(OverlayItem overlay) {

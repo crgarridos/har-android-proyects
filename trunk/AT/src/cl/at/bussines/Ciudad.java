@@ -9,8 +9,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 
-import cl.at.data.DispositivoSQL;
-
 import com.google.android.maps.MapView;
 
 public class Ciudad {
@@ -25,6 +23,8 @@ public class Ciudad {
 	private PuntoEncuentro puntoEncuentro;
 	private GMapsAPI gMapsAPI;
 	private LocationListener locListener;
+	
+	private boolean firstTime = true;
 
 	//constructor
 //	public Ciudad(){
@@ -43,6 +43,7 @@ public class Ciudad {
 //		gMapsAPI.setCentro(disp.getPosicion());
 		locListener = new LocationListener() {
 	    	public void onLocationChanged(Location location) {
+
 //	    		dispositivo.getPosicion().setLatitud(location.getLatitude());
 //	    		dispositivo.getPosicion().setLongitud(location.getLongitude());
 	    		dispositivo.setPosicion(new Coordenada(location.getLatitude(), location.getLongitude()));
@@ -59,6 +60,10 @@ public class Ciudad {
 	    		Log.i(TAG, "Provider Status: " + status);
 	    	}
     	};
+	}
+
+	public Ciudad() {
+		// Usado para la alerta Don't touch it!!
 	}
 
 	//get y set Dispositivo
@@ -97,7 +102,6 @@ public class Ciudad {
 		this.areaInundacion = areaInundacion;
 	}
 	
-	//get y set Puntos de riesgo
 	public ArrayList<PuntoRiesgo> getPuntosRiesgo() {
 		return puntosRiesgo;
 	}
@@ -106,7 +110,6 @@ public class Ciudad {
 		this.puntosRiesgo = puntosRiesgo;
 	}
 	
-	//get y set Punto de encuentro
 	public PuntoEncuentro getPuntoEncuentro(){
 		return puntoEncuentro;
 	}
@@ -129,11 +132,9 @@ public class Ciudad {
 		this.id = id;
 	}
 
-	//Otros
 	public Punto determinarPuntoSeguridad(Coordenada c){
 		return puntoSeguridad;
 	}
-
 
 	public void obtenerCiudad() throws IOException {
 		Coordenada c = dispositivo.getPosicion();
@@ -145,7 +146,10 @@ public class Ciudad {
 	public LocationListener getLocationListener() {
 		return this.locListener;
 	}
-	
+
+	public void visualizarMapa() {
+		
+	}	
 	class AsyncMapa extends AsyncTask<String, String , String>{
 
 		@Override
@@ -156,10 +160,10 @@ public class Ciudad {
 				gMapsAPI.dibujarPunto(dispositivo.getUsuario().getGrupoFamiliar().getIntegrantes().get(i).getDispositivo().getPosicion(), 1);
 				i++;
 			}
-    		DispositivoSQL dSQL = new DispositivoSQL();
-    		dSQL.actualizarPosicion(dispositivo);
 			return null;
 		}
 		
 	}
+
+
 }

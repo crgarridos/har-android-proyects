@@ -7,63 +7,49 @@ public class Alerta {
 	private Integer categoria;
 	private String descripcion;
 	private Date fecha;
-	public IObserverAlerta iObserverAlerta;
+	public Dispositivo	dispositivo;
 
-	//constructor
-	public Alerta(Integer categoria, String descripcion, IObserverAlerta iObserverAlerta){
+	public Alerta() {
+	}
+
+	public Alerta(Integer categoria, String descripcion, Dispositivo dispositivo){
 		setCategoria(categoria);
 		setDescripcion(descripcion);
 		this.fecha = new Date();
-		setiObserverAlerta(iObserverAlerta);
+		this.dispositivo = dispositivo;
 	}
 	
-	//get y set categoria
+	public Alerta(Dispositivo dispositivo) {
+		this.dispositivo=dispositivo;
+	}
+
 	public Integer getCategoria() {
 		return categoria;
 	}
-	
-	public void setCategoria(Integer categoria){
-
+	public void setCategoria(Integer categoria) {
+		this.categoria = categoria;
 	}
-	
-	//get y set descripci�n
 	public String getDescripcion() {
 		return descripcion;
 	}
-	
-	public void setDescripcion(String desc){
-
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
 	}
-	
-	//get y set fecha
 	public Date getFecha() {
 		return fecha;
 	}
-	
-	//get y set Interface Observer Alerta
-	public void setiObserverAlerta(IObserverAlerta iObserverAlerta) {
-		this.iObserverAlerta = iObserverAlerta;
+	public void setFecha(Date fecha) {
+		this.fecha = fecha;
 	}
 	
-	public IObserverAlerta getiObserverAlerta() {
-		return iObserverAlerta;
-	}
-		
-	//destructor
-	public void finalize() throws Throwable {
-
-	}
-
-	//otros
-	public void addAlertaListener(IObserverAlerta ia){
-
-	}
-
-	public void consultarSHOA(){
-
+	public void consultaSHOA(Date fecha,Integer categoria,String descripcion){
+		setFecha(fecha);
+		setCategoria(categoria);
+		setDescripcion(descripcion);
+		notificar();
 	}
 
 	public void notificar(){
-
+		dispositivo.onAlertaRecibida(this);
 	}
 }

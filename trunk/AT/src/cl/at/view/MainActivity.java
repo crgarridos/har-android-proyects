@@ -15,18 +15,16 @@ import android.view.SubMenu;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
+import cl.at.bussines.Alerta;
 import cl.at.bussines.Ciudad;
-import cl.at.bussines.Coordenada;
 import cl.at.bussines.Dispositivo;
-import cl.at.bussines.GMapsAPI;
 import cl.at.bussines.GrupoFamiliar;
 import cl.at.bussines.Usuario;
 import cl.at.util.Comunicador;
 import cl.at.util.Util;
 
-import com.google.android.maps.GeoPoint;
+import com.google.android.gcm.GCMRegistrar;
 import com.google.android.maps.MapActivity;
-import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.MyLocationOverlay;
 
@@ -45,6 +43,7 @@ public class MainActivity extends MapActivity {
 	private Ciudad ciudad;
 	private Usuario usuario;
 	private Dispositivo dispositivo;
+	private Alerta alerta;
 	private GrupoFamiliar gf;
 
 	private static final int MNU_OPC1 = 1;
@@ -76,13 +75,27 @@ public class MainActivity extends MapActivity {
 		context = getApplicationContext();
 		if (com.getUsuario() != null) {
 			usuario = com.getUsuario();
-		} else if (Util.getPreferencia("usuario", context) != null) {
+		} else if (Util.getPreferencia("usuario") != null) {
 			traerUsuario = true;
 		} else {
 			Toast.makeText(context, "Ha ocurrido un error inesperado al iniciar la aplicación", Toast.LENGTH_LONG).show();
 			Util.reiniciarPreferencias(context);
 			finish();
 		}
+//		SharedPreferences prefs =
+//			     getSharedPreferences("MisPreferencias", Context.MODE_PRIVATE);
+//		
+//		SharedPreferences.Editor editor = prefs.edit();
+////		editor.putString("usuario", txtUsuario.getText().toString());
+//		editor.commit();
+
+//		//Si estamos registrados --> Nos des-registramos en GCM
+//        final String regId = GCMRegistrar.getRegistrationId(GcmActivity.this);
+//        if (!regId.equals("")) {
+//        	GCMRegistrar.unregister(GcmActivity.this);
+//        } else {
+//        	Log.v("GCMTest", "Ya des-registrado");
+//        }
 		mapView = (MapView) findViewById(R.id.mapview);	
 		btnCentrar = (ImageButton) findViewById(R.id.ActivityMain_btnCentrar);
 		mOverlayLocation = new MyLocationOverlay(mapView.getContext(), mapView);
@@ -169,6 +182,16 @@ public class MainActivity extends MapActivity {
 		return false;
 	}
 
+	protected void registrarDispositivo(){
+        final String regId = GCMRegistrar.getRegistrationId(MainActivity.this);
+        if (regId.equals("")) {
+        	GCMRegistrar.register(MainActivity.this, "42760762845"); //Sender ID
+        } else {
+        	Log.v("GCMTest", "Ya registrado");
+        }
+	}
+	
+	
 	class AsyncLogin extends AsyncTask<String, String, Boolean> {
 
 		protected void onPreExecute() {
@@ -181,9 +204,9 @@ public class MainActivity extends MapActivity {
 		protected Boolean doInBackground(String... params) {
 			if (traerUsuario) {
 				pDialog.setMessage("Cargando...");
-				usuario = new Usuario((String) Util.getPreferencia("usuario", context));
+				usuario = new Usuario((String) Util.getPreferencia("usuario"));
 				if (!usuario.getExisteUsuario() || usuario.getPassword() == null
-						|| !Util.encriptaEnMD5(usuario.getNombreUsuario() + usuario.getPassword()).equals(Util.getPreferencia("login", context))) {
+						|| !Util.encriptaEnMD5(usuario.getNombreUsuario() + usuario.getPassword()).equals(Util.getPreferencia("login"))) {
 					Util.reiniciarPreferencias(context);
 					return false;
 					// TODO se debe cambiar el encriptado de login en
@@ -201,6 +224,7 @@ public class MainActivity extends MapActivity {
 				e.printStackTrace();
 			}
 			dispositivo.actualizarPosicion();
+			dispositivo.actualizarPosicion();
 			// SystemClock.sleep(300);
 			return true;
 		}
@@ -212,7 +236,11 @@ public class MainActivity extends MapActivity {
 				Toast.makeText(context, "Ha ocurrido un error inesperado al iniciar la aplicación", Toast.LENGTH_LONG).show();
 				finish();
 			}
+			com.setDispositivo(dispositivo);
+			com.setUsuario(usuario);
+			com.setCiudad(ciudad);
 			dispositivo.inicializar(ciudad.getLocationListener());
+			registrarDispositivo();
 		}
 	}
 }
