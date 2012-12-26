@@ -45,6 +45,7 @@ public class ComentarioSQL {
 	}
 	
 	public ArrayList<Comentario> cargarComentarios(final GrupoFamiliar grupoFamiliar) {
+		Log.i(TAG, "cargando comentarios...");
 		try {
 			Parametros postParametersToSend = new Parametros();
 			postParametersToSend.add("id", grupoFamiliar.getId().toString());

@@ -1,7 +1,6 @@
 package cl.at.bussines;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -22,7 +21,7 @@ import com.google.android.maps.MyLocationOverlay;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 
-public class GMapsAPI implements Serializable{
+public class GMapsAPI{
 
 	private static final String TAG = GMapsAPI.class.getName();
 	private Float zoom;

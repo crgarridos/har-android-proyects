@@ -45,8 +45,6 @@ public class IniciarSesionActivity extends Activity {
 	}
 	class asynclogin extends AsyncTask<String, String, Boolean> {
 
-		private final String TAG = IniciarSesionActivity.class.getName();
-
 		protected void onPreExecute() {
 			pDialog = new ProgressDialog(IniciarSesionActivity.this);
 			pDialog.setMessage("Autentificando....");
@@ -56,6 +54,7 @@ public class IniciarSesionActivity extends Activity {
 		}
 
 		protected Boolean doInBackground(String... params) {
+//			Util.verificarInternet(IniciarSesionActivity.this);
 			SystemClock.sleep(500);
 			u = new Usuario(editTextNombre.getText().toString(), editTextPass.getText().toString());
 			return u.getExisteUsuario();
