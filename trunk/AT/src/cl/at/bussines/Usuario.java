@@ -2,14 +2,13 @@ package cl.at.bussines;
 
 import java.util.ArrayList;
 
+import android.util.Log;
+
 import cl.at.data.UsuarioSQL;
 
 public class Usuario {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 2640096247226986181L;
+	private static final String TAG = Usuario.class.getName();
 	protected String email;
 	protected Boolean estadoDeLlegada;
 	protected String nombreCompleto;
@@ -21,6 +20,7 @@ public class Usuario {
 	protected GrupoFamiliar grupoFamiliar;
 	protected Boolean existeUsuario = false;
 	protected Boolean externo = false;
+	protected Boolean esLider = false;
 
 	// Constructores
 	public Usuario(String nombre, String pass) {
@@ -35,32 +35,33 @@ public class Usuario {
 		this(nombre, null);
 	}
 
-	public Usuario(String nombre, boolean externo) {
-		this(nombre, null, null, null);
-		// this.externo = externo;
-		UsuarioSQL uSQL = new UsuarioSQL();
-		existeUsuario = uSQL.cargarUsuario(this);
-		if (!externo)
-			grupoFamiliar = new GrupoFamiliar(this);
+	public Usuario(String nombreUsuario, boolean externo) {
+		this.nombreUsuario = nombreUsuario;
+		if(!externo){
+			UsuarioSQL uSQL = new UsuarioSQL();
+			existeUsuario = uSQL.cargarUsuario(this);
+		}
+		else this.externo = externo;
+		dispositivo = new Dispositivo(this);
 	}
 
 	public Usuario() {
-		if(externo)
-			dispositivo = new Dispositivo(this);// TODO ,externo); debe cargar de la bd
-		comentarios = new ArrayList<Comentario>();
-		invitaciones = new ArrayList<Invitacion>();
+//		if(externo)
+//			dispositivo = new Dispositivo(this);// TODO ,externo); debe cargar de la bd
+//		comentarios = new ArrayList<Comentario>();
+//		invitaciones = new ArrayList<Invitacion>();
 	}
 
 	protected Usuario(String nombreUsuario, String nombreCompleto, String password, String email) {
 		this.nombreUsuario = nombreUsuario;
 		this.nombreCompleto = nombreCompleto;
-		this.password = password;
 		this.email = email;
-		if (!externo)
-			dispositivo = new Dispositivo(this);// TODO ,externo); debe cargar
-												// de la bd
-		comentarios = new ArrayList<Comentario>();
-		invitaciones = new ArrayList<Invitacion>();
+		if(!externo){
+			this.password = password;
+			dispositivo = new Dispositivo(this);// TODO ,externo); debe cargar de la bd
+			comentarios = new ArrayList<Comentario>();
+			invitaciones = new ArrayList<Invitacion>();
+		}
 	}
 
 	protected Usuario(Usuario usuario) {
@@ -150,7 +151,7 @@ public class Usuario {
 
 	// Fin setters y getters
 	public void abandonarGrupoFamiliar() {
-
+		
 	}
 
 	public void agregarUsuario() {
@@ -173,8 +174,10 @@ public class Usuario {
 
 	}
 
-	public Boolean esLider() {
-		return false;// TODO implementar
+	public void esLider(int esLider) {
+		if(esLider == 1)
+			this.esLider = true;
+		else this.esLider = false;
 	}
 
 	public Boolean existe(String nombreUsuario) {
@@ -224,5 +227,9 @@ public class Usuario {
 
 	public Boolean esExterno() {
 		return externo;
+	}
+
+	public boolean getEsLider() {
+		return this.esLider;
 	}
 }
