@@ -1,9 +1,7 @@
 package cl.at.view;
 
-import cl.at.bussines.Usuario;
-import cl.at.view.IniciarSesionActivity.asynclogin;
-import android.accounts.Account;
-import android.accounts.AccountManager;
+import java.io.Serializable;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -14,8 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import cl.at.bussines.*;
-import java.util.regex.*;
+import cl.at.bussines.Usuario;
 
 public class RegistrarUsuarioActivity extends Activity {
 
@@ -102,7 +99,7 @@ public class RegistrarUsuarioActivity extends Activity {
 				try {
 					u.persistir();
 					exito = true;
-					return "¡Cuenta creada exitosamente!";
+					return "Cuenta creada exitosamente!";
 				} catch (Exception w) {
 					return "No se ha podido crear la cuenta";
 				}
@@ -114,7 +111,9 @@ public class RegistrarUsuarioActivity extends Activity {
 		protected void onPostExecute(String s) {
 			Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
 			if (exito) {
-				startActivity(new Intent("at.MAPA"));
+				Intent intent = new Intent("at.MAPA");
+				intent.putExtra("usuario", (Serializable) u);
+				startActivity(intent);
 				setResult(Activity.RESULT_OK);
 				finish();
 			}

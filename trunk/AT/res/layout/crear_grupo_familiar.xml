@@ -1,24 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    android:layout_height="fill_parent"
+    android:background="#FFFFFF" >
 
     <RelativeLayout
-        android:id="@+id/iniciarSesion_layoutBtns"
+        android:id="@+id/crearGrupoFamiliar_titulo"
         style="@android:style/ButtonBar"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true" >
 
-        <!-- b -->
-
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" >
 
-            <!-- android:id="@+id/plantilla_btnSgte" -->
-
             <Button
+                android:id="@+id/crearGrupoFamiliar_btnSgte"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -27,74 +25,69 @@
     </RelativeLayout>
 
     <ScrollView
+        android:id="@+id/crearGrupoFamiliar_ScrollView"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_above="@id/iniciarSesion_layoutBtns"
-        android:layout_below="@+id/iniciarSesion_titulo" >
-
-        <requestFocus />
+        android:layout_height="wrap_content"
+        android:layout_above="@id/crearGrupoFamiliar_titulo"
+        android:layout_below="@+id/crearGrupoFamiliar_layoutBtns"
+        android:layout_marginLeft="10dp" >
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="5dip"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
             android:orientation="vertical" >
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ingrese un nombre para el grupo familiar" />
+                android:layout_marginTop="10dp"
+                android:text="Nombre del grupo familiar:"
+                android:textColor="#000000" />
 
             <EditText
-                android:id="@+id/crearGrupoFamiliar_nombreGrupo"
-                android:layout_width="match_parent"
+                android:id="@+id/crearGrupoFamiliar_editTextNombreGrupoFamiliar"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="Familia Gonzalez Tapia"
-                android:inputType="textPersonName" >
-            </EditText>
+                android:hint="Ej: Familia Peralta Silva"
+                android:inputType="textPersonName" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal" >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="48dip"
-                    android:text="Debe definir un punto de encuentro para la familia:" />
-
-                <ImageView
-                    android:id="@+id/crearGrupoFamiliar_imageEstadoPtoEncuentro"
-                    android:layout_width="48dip"
-                    android:layout_height="48dip"
-                    android:layout_marginLeft="-48dip"
-                    android:layout_marginRight="10dip"
-                    android:src="@drawable/warning" />
-            </LinearLayout>
-
-            <Button
-                android:id="@+id/crearGrupoFamiliar_btnDefinirPtoEncuentro"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dip"
-                android:text="Definir punto de encuentro" />
-            <!-- <com.google.android.maps.MapView -->
-            <!-- android:id="@+id/crearGrupoFamiliar_mapview" -->
-            <!-- android:layout_width="fill_parent" -->
-            <!-- android:layout_height="300dip" -->
-            <!-- android:layout_margin="10dip" -->
-            <!-- android:apiKey="0NDpcj4-69wkPNQIcANwZ1CgA3Fl7nNCBjsGUzw" -->
-            <!-- android:clickable="true" /> -->
-
-            <Button
-                android:id="@+id/crearGrupoFamiliar_btnInvitar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dip"
-                android:text="Invitar usuarios" />
         </LinearLayout>
+
+        <requestFocus />
     </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/crearGrupoFamiliar_layoutBtns"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/degradado" >
+
+        <LinearLayout
+            android:id="@+id/crearGrupoFamiliar_layout_contenido"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:gravity="center_vertical"
+                android:paddingBottom="10dp"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"
+                android:text="Crear grupo familiar"
+                android:textColor="#FFFFFF"
+                android:textSize="17dp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="2dp"
+            android:layout_below="@+id/crearGrupoFamiliar_layout_contenido"
+            android:layout_gravity="bottom"
+            android:background="#A9E2F3" />
+    </RelativeLayout>
 
 </RelativeLayout>

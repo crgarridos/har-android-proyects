@@ -24,7 +24,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 		super("42760762845");
 		dispositivo = new Dispositivo();
 		alerta = new Alerta(dispositivo);
-		com = Comunicador.getIntancia();
+		com = Comunicador.getInstancia();
 	}
 
 	@Override

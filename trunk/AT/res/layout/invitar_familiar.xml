@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#FFFFFF" >
+
+    <RelativeLayout
+        android:id="@+id/invitarFamiliar_titulo"
+        style="@android:style/ButtonBar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+
+            <Button
+                android:id="@+id/invitarFamiliar_btnInvitarFamiliar"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Invitar"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/invitarFamiliar_btnSalir"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Salir" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <ScrollView
+        android:id="@+id/invitarFamiliar_ScrollView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/invitarFamiliar_titulo"
+        android:layout_below="@+id/invitarFamiliar_layoutBtns"
+        android:layout_marginLeft="10dp" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Nombre de usuario o email:"
+                android:textColor="#000000" />
+
+            <EditText
+                android:id="@+id/invitarFamiliar_editTextCadenaBusqueda"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="Ej: Chichi o negro.chichi@gmail.com"
+                android:inputType="textPersonName" />
+
+            <Button
+                android:id="@+id/invitarFamiliar_btnBuscar"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Buscar" />
+
+            <TextView
+                android:id="@+id/invitarFamiliar_textViewNombreUsuario"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textColor="#000000" />
+
+            <TextView
+                android:id="@+id/invitarFamiliar_textViewNombreCompleto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textColor="#000000" />
+
+            <TextView
+                android:id="@+id/invitarFamiliar_textViewEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textColor="#000000" />
+        </LinearLayout>
+
+        <requestFocus />
+    </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/invitarFamiliar_layoutBtns"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/degradado" >
+
+        <LinearLayout
+            android:id="@+id/invitarFamiliar_layout_contenido"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:gravity="center_vertical"
+                android:paddingBottom="10dp"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"
+                android:text="Invitar familiar"
+                android:textColor="#FFFFFF"
+                android:textSize="17dp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="2dp"
+            android:layout_below="@+id/invitarFamiliar_layout_contenido"
+            android:layout_gravity="bottom"
+            android:background="#A9E2F3" />
+    </RelativeLayout>
+
+</RelativeLayout>

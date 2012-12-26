@@ -25,14 +25,13 @@ public class GrupoFamiliar implements Serializable{
 		integrantes = new ArrayList<Usuario>();
 	}
 
-	public GrupoFamiliar(String nombre, PuntoEncuentro puntoEncuentro, Lider lider) {
+	public GrupoFamiliar(String nombre, PuntoEncuentro puntoEncuentro, Lider lider) throws Exception{
 		lider.setGrupoFamiliar(this);
 		comentarios = new ArrayList<Comentario>();
 		integrantes = new ArrayList<Usuario>();
 		this.setNombre(nombre);
-		this.setPuntoEncuentro(puntoEncuentro);
+		this.setPuntoEncuentro(null);
 		this.setLider(lider);
-
 	}
 
 	// Setter y getter
@@ -111,8 +110,15 @@ public class GrupoFamiliar implements Serializable{
 
 	}
 
-	public void persistir() {
+	public void persistir() throws Exception{
+			GrupoFamiliarSQL grupoFamiliarSQL = new GrupoFamiliarSQL();
+			if(!grupoFamiliarSQL.persistir(this))
+				throw new Exception("Error");
+	}
 
+	public void notificar() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

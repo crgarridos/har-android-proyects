@@ -1,15 +1,12 @@
 package cl.at.view;
 
 
-import java.io.Serializable;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -46,7 +43,6 @@ public class IniciarSesionActivity extends Activity {
 		// Validar la coherencia
 		return true;
 	}
-	
 	class asynclogin extends AsyncTask<String, String, Boolean> {
 
 		private final String TAG = IniciarSesionActivity.class.getName();
@@ -69,11 +65,11 @@ public class IniciarSesionActivity extends Activity {
 			pDialog.dismiss();
 			if (existe) {
 				Toast.makeText(getApplicationContext(), "Bienvenido " + u.getNombreCompleto(), Toast.LENGTH_SHORT).show();
-				Comunicador com = Comunicador.getIntancia();
+				Comunicador com = Comunicador.getInstancia();
 				com.setUsuario(u);
 				Intent intent = new Intent("at.MAPA");
 				startActivity(intent);
-				Util.guardarUsuario(u,getApplicationContext());
+				Util.guardarUsuario(u, getApplicationContext());
 				setResult(Activity.RESULT_OK);
 				finish();
 			} else {
