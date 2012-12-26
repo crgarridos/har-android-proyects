@@ -16,7 +16,7 @@ public class Comunicador {
 	private Comunicador() {
 	}
 
-	public static Comunicador getIntancia() {
+	public static Comunicador getInstancia() {
 		if (comunicador == null)
 			comunicador = new Comunicador();
 		return comunicador;

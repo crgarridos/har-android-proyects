@@ -6,10 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import android.util.Log;
-import cl.at.bussines.Comentario;
-import cl.at.bussines.Dispositivo;
 import cl.at.bussines.GrupoFamiliar;
-import cl.at.bussines.Invitacion;
 import cl.at.bussines.Lider;
 import cl.at.bussines.Usuario;
 import cl.at.util.Parametros;
@@ -25,7 +22,7 @@ public class UsuarioSQL {
 	ConexionHttp post;
 
 	public UsuarioSQL() {
-		post = ConexionHttp.getConexion();
+		post = new ConexionHttp();
 	}
 
 	public Boolean cargarUsuario(Usuario u) {
@@ -36,11 +33,19 @@ public class UsuarioSQL {
 			JSONArray jdata = null;
 			jdata = post.getServerData(postParametersToSend, ConexionHttp.URL_CONNECT + "getPersona.php");
 			if (jdata != null) {
-				JSONObject json_data = jdata.getJSONObject(0); // Se lee la respuesta
+				JSONObject json_data = jdata.getJSONObject(0); // Se lee la
+																// respuesta
 				try {
+<<<<<<< .mine
+					u.setNombreCompleto(u.getNombreCompleto() == null ? json_data.getString("NOMBRE_COMPLETO_USUARIO") : u
+							.getNombreCompleto());
+					u.setEmail(u.getEmail() == null ? json_data.getString("EMAIL") : u.getEmail());
+					u.setPassword(u.getPassword() == null ? json_data.getString("PASS_USUARIO") : u.getPassword());
+=======
 					u.setNombreCompleto(u.getNombreCompleto() == null ? json_data.getString(CAMPO_NOMBRE_COMPLETO) : u.getNombreCompleto());
 					u.setEmail(u.getEmail() == null ? json_data.getString(CAMPO_EMAIL) : u.getEmail());
 					u.setPassword(u.getPassword() == null ? json_data.getString(CAMPO_PASS) : u.getPassword());
+>>>>>>> .r72
 					return true;
 				} catch (Exception e) {
 					Log.e(TAG, "cargarUsuario, " + e.toString());
@@ -51,6 +56,32 @@ public class UsuarioSQL {
 		}
 		return false;
 	}
+
+	// public Boolean cargarUsuarioIniciar(Usuario u) {
+	// try {
+	// Parametros postParametersToSend = new Parametros();
+	// postParametersToSend.add("nombre", u.getNombreUsuario());
+	// JSONArray jdata = null;
+	// jdata = post.getServerData(postParametersToSend, URL_connect +
+	// "getPersona.php");
+	// if (jdata != null) {
+	// try {
+	// JSONObject json_data = jdata.getJSONObject(0); // Se lee la respuesta
+	// if(json_data.getString("NOMBRE_COMPLETO_USUARIO") != null);
+	// u.setNombreCompleto(json_data.getString("NOMBRE_COMPLETO_USUARIO"));
+	// u.setEmail(json_data.getString("EMAIL"));
+	// u.setPassword(json_data.getString("PASS_USUARIO"));
+	// //TODO la pass deberia validarla es servidor, recuendenlo xD
+	// return true;
+	// } catch (Exception e) {
+	// Log.e(TAG, "cargarUsuario, " + e.toString());
+	// }
+	// }
+	// } catch (Exception e) {
+	// Log.e(TAG, "cargarUsuarioIniciar, " + e.toString());
+	// }
+	// return false;
+	// }
 
 	public Boolean persistir(Usuario u) {
 		try {
@@ -70,12 +101,13 @@ public class UsuarioSQL {
 		return false;
 	}
 
+<<<<<<< .mine
 	public Boolean eliminar(Usuario u) {
 		try {
 			Parametros postParametersToSend = new Parametros();
 			postParametersToSend.add("nombreUsuario", u.getNombreUsuario());
 			JSONArray jdata = null;
-			jdata = post.getServerData(postParametersToSend, ConexionHttp.URL_CONNECT + "eliminarUsuario.php");
+			jdata = post.getServerData(postParametersToSend, URL_connect + "eliminarUsuario.php");
 			if (jdata != null) {
 				return true;
 			}
@@ -85,6 +117,9 @@ public class UsuarioSQL {
 		return false;
 	}
 
+	public GrupoFamiliar obtenerGrupoFamiliar(Usuario usuario) {
+
+=======
 	public GrupoFamiliar obtenerGrupoFamiliar(final Usuario usuario) {
 
 		return null;
@@ -109,8 +144,6 @@ public class UsuarioSQL {
 					} catch (Exception e) {
 						Log.e(TAG, "cargarIntegrantes, " + e.toString());
 					}
-					if(i > 0)
-						integrantes.get(i).changeExterno(true);
 				}
 				return integrantes;
 			}
@@ -127,45 +160,21 @@ public class UsuarioSQL {
 			JSONArray jdata = null;
 			jdata = post.getServerData(postParametersToSend, ConexionHttp.URL_CONNECT + "getLider.php");
 			if (jdata != null) {
-				try {
-					JSONObject jsonData = jdata.getJSONObject(0);
-					Lider lider = new Lider();
-					lider.setEmail(jsonData.getString(CAMPO_EMAIL));
-					lider.setNombreCompleto(jsonData.getString(CAMPO_NOMBRE_COMPLETO));
-					lider.setNombreUsuario(jsonData.getString(CAMPO_NOMBRE_USUARIO));
-					return lider;
-				} catch (Exception e) {
-					Log.e(TAG, "cargarIntegrantes, " + e.toString());
-				}
+					try {
+						JSONObject jsonData = jdata.getJSONObject(0);
+						Lider lider = new Lider();
+						lider.setEmail(jsonData.getString(CAMPO_EMAIL));
+						lider.setNombreCompleto(jsonData.getString(CAMPO_NOMBRE_COMPLETO));
+						lider.setNombreUsuario(jsonData.getString(CAMPO_NOMBRE_USUARIO));
+						return lider;
+					} catch (Exception e) {
+						Log.e(TAG, "cargarIntegrantes, " + e.toString());
+					}
 			}
 		} catch (Exception e) {
 			Log.e(TAG, "cargarIntegrantes, " + e.toString());
 		}
+>>>>>>> .r72
 		return null;
-	}
-
-	public Boolean buscar(Usuario usuario, String cadenaBusqueda) {
-		try {
-			Parametros postParametersToSend = new Parametros();
-			postParametersToSend.add("cadenaBusqueda", cadenaBusqueda);
-			JSONArray jdata = null;
-			jdata = post.getServerData(postParametersToSend, ConexionHttp.URL_CONNECT + "buscarUsuario.php");
-			if (jdata != null) {
-				JSONObject json_data = jdata.getJSONObject(0);
-				try {
-					usuario.setNombreUsuario(json_data.getString(CAMPO_NOMBRE_USUARIO));
-					usuario.setNombreCompleto(json_data.getString(CAMPO_NOMBRE_COMPLETO));
-					usuario.setEmail(json_data.getString(CAMPO_EMAIL));
-					if(json_data.getString("ID_FAMILIAR") != null)
-						usuario.setGrupoFamiliar(new GrupoFamiliar());
-					return true;
-				} catch (Exception e) {
-					Log.e(TAG, "buscar, " + e.toString());
-				}
-			}
-		} catch (Exception e) {
-			Log.e(TAG, "buscar, " + e.toString());
-		}
-		return false;
 	}
 }

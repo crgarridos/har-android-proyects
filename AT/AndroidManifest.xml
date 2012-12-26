@@ -49,6 +49,44 @@
             </intent-filter>
         </activity>
         <activity
+            android:name="cl.at.view.DefinirPuntoEncuentroMapActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="at.DEFINIR_PUNTO_ENCUENTRO_MAP" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="cl.at.view.DefinirPuntoEncuentroActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar">
+            <intent-filter>
+                <action android:name="at.DEFINIR_PUNTO_ENCUENTRO" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="cl.at.view.PublicarComentarioActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar">
+            <intent-filter>
+                <action android:name="at.PUBLICAR_COMENTARIO" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="cl.at.view.IngresarPuntoDeRiesgoActivity"
+            android:label="@string/app_name"
+            android:windowSoftInputMode="stateHidden" >
+            <intent-filter>
+                <action android:name="at.INGRESAR_PUNTO_DE_RIESGO" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name="cl.at.view.IniciarSesionActivity"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.NoTitleBar"
@@ -56,6 +94,16 @@
             <intent-filter>
                 <action android:name="at.INICIAR_SESION" />
 
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="cl.at.view.InvitarFamiliar"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="stateHidden" >
+            <intent-filter>
+                <action android:name="at.INVITAR_FAMILIAR" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

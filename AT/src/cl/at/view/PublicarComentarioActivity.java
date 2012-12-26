@@ -27,7 +27,7 @@ public class PublicarComentarioActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.publicar_comentario);
-		com = Comunicador.getIntancia();
+		com = Comunicador.getInstancia();
 		usuario = com.getUsuario();
 
 		btnSgte = (Button) findViewById(R.id.publicarComentario_btnSgte);

@@ -1,45 +1,49 @@
 package cl.at.view;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
-import cl.at.bussines.Usuario;
 
 import com.google.android.maps.MapActivity;
 
-public class CrearGrupoFamiliarActivity extends MapActivity{
+public class CrearGrupoFamiliarActivity extends MapActivity {
 
 	private EditText editTextNombreGrupo;
-//	private MapView mapView;
-	private ImageView imgStatusPtoEncuentro;
-	private Button btnInvitar;
-	private Button btnPtoEncuentro;
-	
-	private Usuario usuario = new Usuario("crusier","1234");
+	private Button btnSgte;
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState){
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.crear_grupo_familiar);
-		editTextNombreGrupo = (EditText)findViewById(R.id.crearGrupoFamiliar_nombreGrupo);
-//		mapView = (MapView)findViewById(R.id.crearGrupoFamiliar_mapview);
-//		mapView.setBuiltInZoomControls(true);
-		btnInvitar = (Button)findViewById(R.id.crearGrupoFamiliar_btnInvitar);
-		btnPtoEncuentro = (Button)findViewById(R.id.crearGrupoFamiliar_btnDefinirPtoEncuentro);
-		imgStatusPtoEncuentro = (ImageView)findViewById(R.id.crearGrupoFamiliar_imageEstadoPtoEncuentro);
-		
-		btnPtoEncuentro.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
+		editTextNombreGrupo = (EditText) findViewById(R.id.crearGrupoFamiliar_editTextNombreGrupoFamiliar);
+		btnSgte = (Button) findViewById(R.id.crearGrupoFamiliar_btnSgte);
+		btnSgte.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				imgStatusPtoEncuentro.setImageResource(R.drawable.ticket);
-				Toast.makeText(getApplicationContext(), "hola", 2000).show();
-				
+				if (validarCoherencia()) {
+					Intent i = new Intent("at.DEFINIR_PUNTO_ENCUENTRO_MAP");
+					i.putExtra("nombreGrupo", editTextNombreGrupo.getText().toString());
+					startActivityForResult(i,777);
+				}
 			}
 		});
+	}
+
+	private Boolean validarCoherencia() {
+		String nombreGrupoFamiliarRegEx = "[a-z A-Z]{3,20}";
+		Pattern p = Pattern.compile(nombreGrupoFamiliarRegEx);
+		Matcher m = p.matcher(editTextNombreGrupo.getText().toString());
+		if (!m.matches()) {
+			Toast.makeText(getApplicationContext(), "El nombre del grupo debe tener entre 3 y 20 caracteres", Toast.LENGTH_SHORT).show();
+			return false;
+		}
+		return true;
 	}
 
 	@Override
@@ -47,4 +51,11 @@ public class CrearGrupoFamiliarActivity extends MapActivity{
 		return false;
 	}
 	
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if ((resultCode != Activity.RESULT_CANCELED) && (requestCode == 777)) {
+			finish();
+		}
+	}
+	
+
 }

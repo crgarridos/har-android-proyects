@@ -5,8 +5,13 @@ public class PuntoEncuentro extends Punto {
 	private GrupoFamiliar grupoFamiliar;
 	private String referencia;
 
-	public PuntoEncuentro(){
-		
+	public PuntoEncuentro() {
+
+	}
+	
+	public PuntoEncuentro(Coordenada c){
+		super(c);
+		//TODO notificar
 	}
 	public PuntoEncuentro(GrupoFamiliar grupoFamiliar) {
 		this.grupoFamiliar=grupoFamiliar;
@@ -16,7 +21,7 @@ public class PuntoEncuentro extends Punto {
 		System.out.println();
 	}
 
-	public GrupoFamiliar getGrupoFamiliar(){
+	public GrupoFamiliar getGrupoFamiliar() {
 		return grupoFamiliar;
 	}
 	
@@ -25,6 +30,7 @@ public class PuntoEncuentro extends Punto {
 	}
 	public void setReferencia(String referencia) {
 		this.referencia = referencia;
+
 	}
 
 }

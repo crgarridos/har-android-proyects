@@ -8,8 +8,6 @@ import android.location.LocationListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import cl.at.data.DispositivoSQL;
-
 import com.google.android.maps.MapView;
 
 public class Ciudad {
@@ -43,12 +41,34 @@ public class Ciudad {
 		gMapsAPI = new GMapsAPI(mapView);
 		// gMapsAPI.setCentro(disp.getPosicion());
 		locListener = new LocationListener() {
+<<<<<<< .mine
+			public void onLocationChanged(Location location) {
+				// dispositivo.getPosicion().setLatitud(location.getLatitude());
+				// dispositivo.getPosicion().setLongitud(location.getLongitude());
+				dispositivo.setPosicion(new Coordenada(location.getLatitude(), location.getLongitude()));
+				Log.i(TAG, "Localizaciï¿½n: " + dispositivo.getPosicion().getLatitud() + " - " + dispositivo.getPosicion().getLongitud());
+				new AsyncMapa().execute();
+			}
+
+			public void onProviderDisabled(String provider) {
+				Log.i(TAG, "GPS Status: OFF");
+			}
+
+			public void onProviderEnabled(String provider) {
+				Log.i(TAG, "GPS Status: ON");
+			}
+
+			public void onStatusChanged(String provider, int status, Bundle extras) {
+				Log.i(TAG, "Provider Status: " + status);
+			}
+		};
+=======
 	    	public void onLocationChanged(Location location) {
 
 //	    		dispositivo.getPosicion().setLatitud(location.getLatitude());
 //	    		dispositivo.getPosicion().setLongitud(location.getLongitude());
 	    		dispositivo.setPosicion(new Coordenada(location.getLatitude(), location.getLongitude()));
-	    		Log.i(TAG, "Localizaciï¿½n: "+dispositivo.getPosicion().getLatitud()+" - "+dispositivo.getPosicion().getLongitud());
+	    		Log.i(TAG, "Localización: "+dispositivo.getPosicion().getLatitud()+" - "+dispositivo.getPosicion().getLongitud());
 	    		new AsyncMapa().execute();
 	    	}
 	    	public void onProviderDisabled(String provider){
@@ -61,14 +81,20 @@ public class Ciudad {
 	    		Log.i(TAG, "Provider Status: " + status);
 	    	}
     	};
+>>>>>>> .r91
 	}
 
+<<<<<<< .mine
+	// get y set Dispositivo
+	public Dispositivo getDispositivo() {
+=======
 	public Ciudad() {
 		// Usado para la alerta Don't touch it!!
 	}
 
 	//get y set Dispositivo
 	public Dispositivo getDispositivo(){
+>>>>>>> .r91
 		return dispositivo;
 	}
 
@@ -102,7 +128,12 @@ public class Ciudad {
 	public void setAreaInundacion(ArrayList<Coordenada> areaInundacion) {
 		this.areaInundacion = areaInundacion;
 	}
+<<<<<<< .mine
 
+	// get y set Puntos de riesgo
+=======
+	
+>>>>>>> .r91
 	public ArrayList<PuntoRiesgo> getPuntosRiesgo() {
 		return puntosRiesgo;
 	}
@@ -110,8 +141,14 @@ public class Ciudad {
 	public void setPuntosRiesgo(ArrayList<PuntoRiesgo> puntosRiesgo) {
 		this.puntosRiesgo = puntosRiesgo;
 	}
+<<<<<<< .mine
+
+	// get y set Punto de encuentro
+	public PuntoEncuentro getPuntoEncuentro() {
+=======
 	
 	public PuntoEncuentro getPuntoEncuentro(){
+>>>>>>> .r91
 		return puntoEncuentro;
 	}
 
@@ -146,7 +183,11 @@ public class Ciudad {
 		}
 	}
 
+<<<<<<< .mine
+	public Punto determinarPuntoSeguridad(Coordenada c) {
+=======
 	public Punto determinarPuntoSeguridad(Coordenada c){
+>>>>>>> .r91
 		return puntoSeguridad;
 	}
 
@@ -160,6 +201,7 @@ public class Ciudad {
 	public LocationListener getLocationListener() {
 		return this.locListener;
 	}
+<<<<<<< .mine
 
 	public PuntoEncuentro ingresar(String referencia, Coordenada coordenada) {
 		if (!this.gMapsAPI.estaEnElMedio(coordenada, this.areaInundacion)) {
@@ -175,10 +217,12 @@ public class Ciudad {
 		puntosRiesgo.add(puntoRiesgo);
 	}
 	
+=======
 
 	public void visualizarMapa() {
 		
 	}	
+>>>>>>> .r91
 	public Integer getId() {
 		return id;
 	}
@@ -198,9 +242,11 @@ public class Ciudad {
 				gMapsAPI.dibujarPunto(dispositivo.getUsuario().getGrupoFamiliar().getIntegrantes().get(i).getDispositivo().getPosicion(), 1);
 				i++;
 			}
+<<<<<<< .mine
 			DispositivoSQL dSQL = new DispositivoSQL();
 			dSQL.actualizarPosicion(dispositivo);
-
+=======
+>>>>>>> .r91
 			return null;
 		}
 

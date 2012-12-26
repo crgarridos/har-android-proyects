@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import cl.at.bussines.Usuario;
+import cl.at.util.Comunicador;
 import cl.at.util.Util;
 
 public class ModificarUsuarioActivity extends Activity {
@@ -25,12 +26,15 @@ public class ModificarUsuarioActivity extends Activity {
 	private EditText editTextPassNueva;
 	private EditText editTextPassNueva2;
 	private ProgressDialog pDialog;
-	private Usuario u;
 	private Context context;
+
+	private Usuario u;
 	
+	private Comunicador com;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		com = Comunicador.getInstancia();
 		setContentView(R.layout.modificar_usuario);
 		context = getApplicationContext();
 		btnSgte = (Button) findViewById(R.id.modificarUsuario_btnSgte);
@@ -39,18 +43,16 @@ public class ModificarUsuarioActivity extends Activity {
 		editTextPassActual = (EditText) findViewById(R.id.modificarUsuario_editTextPassActual);
 		editTextPassNueva = (EditText) findViewById(R.id.modificarUsuario_editTextPassNueva);
 		editTextPassNueva2 = (EditText) findViewById(R.id.modificarUsuario_editTextPassNueva2);
-		// TODO Recibir el u real desde el activity anterior
-		if(getIntent()!=null && getIntent().getSerializableExtra("usuario")!=null){
-			u = (Usuario)getIntent().getSerializableExtra("usuario");
-		}
 		
+		u = com.getUsuario();
 		editTextNombreCompleto.setText(u.getNombreCompleto());
 		editTextEmail.setText(u.getEmail());
+
 
 		btnSgte.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View w) {
 				if (validarCoherencia(editTextNombreCompleto.getText().toString(), editTextEmail.getText().toString()))
-					new asynclogin().execute();
+					new AsyncModificar().execute();
 			}
 		});
 	}
@@ -58,7 +60,7 @@ public class ModificarUsuarioActivity extends Activity {
 	private Boolean validarCoherencia(String nombreCompleto, String email) {
 		String nombreCompletoRegEx = "[a-z A-Z]{3,20}";
 		String emailRegEx = "([a-z._]{3,64})@([a-z._]{3,255}).(com|cl)";
-		String passRegEx = "[a-zA-Z_.0-9-*]{8,15}";
+		String passRegEx = "[a-zA-Z_.0-9-*]{4,15}";
 		Pattern p = Pattern.compile(nombreCompletoRegEx);
 		Pattern p1 = Pattern.compile(emailRegEx);
 		Pattern p2 = Pattern.compile(passRegEx);
@@ -86,7 +88,7 @@ public class ModificarUsuarioActivity extends Activity {
 		}
 	}
 
-	class asynclogin extends AsyncTask<String, String, String> {
+	class AsyncModificar extends AsyncTask<String, String, String> {
 
 		protected void onPreExecute() {
 			pDialog = new ProgressDialog(ModificarUsuarioActivity.this);
@@ -97,13 +99,12 @@ public class ModificarUsuarioActivity extends Activity {
 		}
 
 		protected String doInBackground(String... params) {
-			SystemClock.sleep(500);
 			u.setNombreCompleto(editTextNombreCompleto.getText().toString());
 			u.setEmail(editTextEmail.getText().toString());
 			u.setPassword(editTextPassNueva.getText().toString());
 			try {
 				u.persistir();
-				return "¡Datos modificados exitosamente!";
+				return "Datos modificados exitosamente!";
 			} catch (Exception w) {
 				return "No se han podido modificar los datos";
 			}

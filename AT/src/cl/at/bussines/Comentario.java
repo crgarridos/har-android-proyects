@@ -2,6 +2,8 @@ package cl.at.bussines;
 
 import java.util.Date;
 
+import cl.at.data.ComentarioSQL;
+
 public class Comentario {
 
 	private String contenido;
@@ -47,8 +49,10 @@ public class Comentario {
 	}
 
 	//destructor
-	public void finalize() throws Throwable {
-
+	public void persistir() throws Exception{
+		ComentarioSQL comentarioSQL = new ComentarioSQL();
+		if(!comentarioSQL.persistir(this))
+			throw new Exception("Error");
 	}
 	
 }

@@ -5,6 +5,7 @@ import org.json.JSONObject;
 
 import android.util.Log;
 import cl.at.bussines.GrupoFamiliar;
+import cl.at.bussines.Lider;
 import cl.at.bussines.Usuario;
 import cl.at.util.Parametros;
 
@@ -20,7 +21,7 @@ public class GrupoFamiliarSQL {
 		post = ConexionHttp.getConexion();
 	}
 
-	public boolean cargarGrupoFamiliar(GrupoFamiliar grupoFamiliar, final Usuario usuario) {
+	public Boolean cargarGrupoFamiliar(GrupoFamiliar grupoFamiliar, final Usuario usuario) {
 		try {
 			Parametros postParametersToSend = new Parametros();
 			postParametersToSend.add("nombre", usuario.getNombreUsuario());
@@ -42,4 +43,23 @@ public class GrupoFamiliarSQL {
 		return false;
 	}
 
+	
+	public Boolean persistir(GrupoFamiliar grupoFamiliar) {
+		try {
+			Parametros postParametersToSend = new Parametros();
+			postParametersToSend.add("nombreGrupo", grupoFamiliar.getNombre());
+			postParametersToSend.add("nombreUsuarioLider", grupoFamiliar.getLider().getNombreUsuario());
+			postParametersToSend.add("latitudPuntoEncuentro",grupoFamiliar.getPuntoEncuentro().getCoordenada().getLatitud().toString());
+			postParametersToSend.add("longitudPuntoEncuentro",grupoFamiliar.getPuntoEncuentro().getCoordenada().getLongitud().toString());
+			postParametersToSend.add("comentarioPuntoEncuentro", grupoFamiliar.getPuntoEncuentro().getReferencia());
+			JSONArray jdata = null;
+			jdata = post.getServerData(postParametersToSend, ConexionHttp.URL_CONNECT + "ingresarGrupoFamiliar.php");
+			if (jdata != null) {
+				return true;
+			}
+		} catch (Exception e) {
+			Log.e(TAG, "persistir, " + e.toString());
+		}
+		return false;
+	}
 }

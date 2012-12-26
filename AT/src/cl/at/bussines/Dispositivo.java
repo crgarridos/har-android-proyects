@@ -19,7 +19,7 @@ import cl.at.view.R;
 
 public class Dispositivo {
 
-	// private static final String TAG = Dispositivo.class.getName();
+	private static final String TAG = Dispositivo.class.getName();
 	private Integer id;
 	private Boolean estadoDeRiesgo;
 	private Usuario usuario;
@@ -45,8 +45,7 @@ public class Dispositivo {
 				setPosicion(new Coordenada(location.getLatitude(), location.getLongitude()));
 			}
 			else new DispositivoSQL().getUltimaPosicion(this.getUsuario(), this);
-		}
-		else{
+		} else {
 			dSQL.getUltimaPosicion(this.getUsuario(), this);
 		}
 //		if(Util.getPreferencia("usuario")!=null)
@@ -116,8 +115,8 @@ public class Dispositivo {
 		try {
 			this.location = this.locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 			setPosicion(new Coordenada(this.location.getLatitude(), this.location.getLongitude()));
-//			this.posicion.setLatitud(this.location.getLatitude());
-//			this.posicion.setLongitud(this.location.getLongitude());
+			// this.posicion.setLatitud(this.location.getLatitude());
+			// this.posicion.setLongitud(this.location.getLongitude());
 			DispositivoSQL dSQL = new DispositivoSQL();
 			while (i < grupoFamiliar.size()) {
 				dSQL.getUltimaPosicion(grupoFamiliar.get(i), grupoFamiliar.get(i).getDispositivo());
@@ -157,7 +156,7 @@ public class Dispositivo {
 		context = AlertTsunamiApplication.getAppContext();
 		NotificationManager notManager = (NotificationManager) context.getSystemService(ns);
 
-		// Configuramos la notificación
+		// Configuramos la notificaciï¿½n
 		int icono = android.R.drawable.stat_sys_warning;
 		CharSequence textoEstado = "Alerta de Tsunami";
 		long hora = System.currentTimeMillis();
@@ -178,9 +177,9 @@ public class Dispositivo {
 													// GCMIntentService.class);
 		PendingIntent contIntent = PendingIntent.getActivity(contexto, 0, notIntent, 0);
 		notif.setLatestEventInfo(contexto, titulo, descripcion, contIntent);
-		// AutoCancel: cuando se pulsa la notificaión ésta desaparece
+		// AutoCancel: cuando se pulsa la notificaiï¿½n ï¿½sta desaparece
 		notif.flags |= Notification.FLAG_AUTO_CANCEL;
-		// Enviar notificación
+		// Enviar notificaciï¿½n
 		notManager.notify(1, notif);
 	}
 

@@ -1,11 +1,10 @@
 package cl.at.bussines;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 import cl.at.data.UsuarioSQL;
 
-public class Usuario implements Serializable {
+public class Usuario {
 
 	/**
 	 * 
@@ -29,7 +28,7 @@ public class Usuario implements Serializable {
 		UsuarioSQL uSQL = new UsuarioSQL();
 		existeUsuario = uSQL.cargarUsuario(this);
 		grupoFamiliar = new GrupoFamiliar(this);
-//		externo = false;
+		// externo = false;
 	}
 
 	public Usuario(String nombre) {
@@ -38,10 +37,10 @@ public class Usuario implements Serializable {
 
 	public Usuario(String nombre, boolean externo) {
 		this(nombre, null, null, null);
-//		this.externo = externo;
+		// this.externo = externo;
 		UsuarioSQL uSQL = new UsuarioSQL();
 		existeUsuario = uSQL.cargarUsuario(this);
-		if(!externo) 
+		if (!externo)
 			grupoFamiliar = new GrupoFamiliar(this);
 	}
 
@@ -57,12 +56,13 @@ public class Usuario implements Serializable {
 		this.nombreCompleto = nombreCompleto;
 		this.password = password;
 		this.email = email;
-		if(!externo)
-			dispositivo = new Dispositivo(this);// TODO ,externo); debe cargar de la bd
+		if (!externo)
+			dispositivo = new Dispositivo(this);// TODO ,externo); debe cargar
+												// de la bd
 		comentarios = new ArrayList<Comentario>();
 		invitaciones = new ArrayList<Invitacion>();
 	}
-	
+
 	protected Usuario(Usuario usuario) {
 		this.nombreUsuario = usuario.getNombreUsuario();
 		this.nombreCompleto = usuario.getNombreCompleto();
@@ -135,14 +135,15 @@ public class Usuario implements Serializable {
 	public Dispositivo getDispositivo() {
 		return dispositivo;
 	}
-	
-	public Boolean getExterno(){
+
+	public Boolean getExterno() {
 		return this.externo;
 	}
-	
-	public void changeExterno(Boolean externo){
+
+	public void changeExterno(Boolean externo) {
 		this.externo = externo;
 	}
+
 	// public void addDispositivo(Dispositivo dispositivo) {
 	// this.dispositivos.add(dispositivo);
 	// }
