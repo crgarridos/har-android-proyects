@@ -77,9 +77,9 @@ public class GrupoFamiliar {
 		return puntoEncuentro;
 	}
 
-	public void addIntegrante(Usuario usuario) {
+	public Boolean addIntegrante(Usuario usuario) {
 		this.integrantes.add(usuario);
-		usuario.setGrupoFamiliar(this);
+		return usuario.setGrupoFamiliar(this);
 	}
 
 	public ArrayList<Usuario> getIntegrantes() {

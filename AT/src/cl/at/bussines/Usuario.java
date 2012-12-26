@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.util.Log;
 
+import cl.at.data.InvitacionSQL;
 import cl.at.data.UsuarioSQL;
 
 public class Usuario {
@@ -37,28 +38,39 @@ public class Usuario {
 
 	public Usuario(String nombreUsuario, boolean externo) {
 		this.nombreUsuario = nombreUsuario;
-		if(!externo){
+		if (!externo) {
 			UsuarioSQL uSQL = new UsuarioSQL();
 			existeUsuario = uSQL.cargarUsuario(this);
-		}
-		else this.externo = externo;
+		} else
+			this.externo = externo;
 		dispositivo = new Dispositivo(this);
 	}
 
+	public Usuario(String nombreUsuario, boolean externo, boolean disp) {
+		this.nombreUsuario = nombreUsuario;
+		if (!externo) {
+			UsuarioSQL uSQL = new UsuarioSQL();
+			existeUsuario = uSQL.cargarUsuario(this);
+		} else
+			this.externo = externo;
+	}
+
 	public Usuario() {
-//		if(externo)
-//			dispositivo = new Dispositivo(this);// TODO ,externo); debe cargar de la bd
-//		comentarios = new ArrayList<Comentario>();
-//		invitaciones = new ArrayList<Invitacion>();
+		// if(externo)
+		// dispositivo = new Dispositivo(this);// TODO ,externo); debe cargar de
+		// la bd
+		// comentarios = new ArrayList<Comentario>();
+		// invitaciones = new ArrayList<Invitacion>();
 	}
 
 	protected Usuario(String nombreUsuario, String nombreCompleto, String password, String email) {
 		this.nombreUsuario = nombreUsuario;
 		this.nombreCompleto = nombreCompleto;
 		this.email = email;
-		if(!externo){
+		if (!externo) {
 			this.password = password;
-			dispositivo = new Dispositivo(this);// TODO ,externo); debe cargar de la bd
+			dispositivo = new Dispositivo(this);// TODO ,externo); debe cargar
+												// de la bd
 			comentarios = new ArrayList<Comentario>();
 			invitaciones = new ArrayList<Invitacion>();
 		}
@@ -151,7 +163,7 @@ public class Usuario {
 
 	// Fin setters y getters
 	public void abandonarGrupoFamiliar() {
-		
+
 	}
 
 	public void agregarUsuario() {
@@ -175,9 +187,10 @@ public class Usuario {
 	}
 
 	public void esLider(int esLider) {
-		if(esLider == 1)
+		if (esLider == 1)
 			this.esLider = true;
-		else this.esLider = false;
+		else
+			this.esLider = false;
 	}
 
 	public Boolean existe(String nombreUsuario) {
@@ -197,14 +210,14 @@ public class Usuario {
 		return grupoFamiliar;
 	}
 
-	public void setGrupoFamiliar(GrupoFamiliar grupoFamiliar) {
-		// if(this.grupoFamiliar!=null){
-		// this.grupoFamiliar = grupoFamiliar;
-		// }
-		// return this.grupoFamiliar!=null;
+	public Boolean setGrupoFamiliar(GrupoFamiliar grupoFamiliar) {
+		this.grupoFamiliar = grupoFamiliar;
+		return new UsuarioSQL().enlazarGrupoFamiliar(this,grupoFamiliar);
 	}
 
 	public ArrayList<Invitacion> getInvitaciones() {
+		if (invitaciones == null || invitaciones.size() == 0)// TODO lo dejo asi?? xD :D
+			invitaciones = new InvitacionSQL().cargarInvitaciones(this);
 		return invitaciones;
 	}
 
@@ -218,7 +231,11 @@ public class Usuario {
 			throw new Exception("Error");
 	}
 
-	public void vaciarInvitaciones() {
+	public Boolean vaciarInvitaciones() {
+		Boolean exito = new InvitacionSQL().eliminarTodas(this);
+		if(exito)
+			this.invitaciones = new ArrayList<Invitacion>();
+		return exito;
 	}
 
 	public void responderInvitacion() {
@@ -231,5 +248,19 @@ public class Usuario {
 
 	public boolean getEsLider() {
 		return this.esLider;
+	}
+
+	public Boolean rechazarInvitacion(int posicionSeleccionada) {
+		try{
+			Invitacion inv = invitaciones.get(posicionSeleccionada);
+			Boolean exito = new InvitacionSQL().eliminarInvitacion(inv);
+			if(exito)
+				this.invitaciones.remove(posicionSeleccionada);
+			return exito;
+		}
+		catch(Exception ex){
+			Log.e(TAG, "rechazarInvitacion, "+ex.toString()+" "+ex.getCause());
+		}
+		return false;
 	}
 }

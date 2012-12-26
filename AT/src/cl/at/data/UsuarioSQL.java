@@ -1,6 +1,7 @@
 package cl.at.data;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -169,6 +170,23 @@ public class UsuarioSQL {
 			}
 		} catch (Exception e) {
 			Log.e(TAG, "buscar, " + e.toString());
+		}
+		return false;
+	}
+
+
+	public Boolean enlazarGrupoFamiliar(Usuario usuario, GrupoFamiliar grupoFamiliar) {
+		try {
+			Parametros postParametersToSend = new Parametros();
+			postParametersToSend.add("usuario", usuario.getNombreUsuario());
+			postParametersToSend.add("grupo_familiar", grupoFamiliar.getId().toString());
+			JSONArray jdata = null;
+			jdata = post.getServerData(postParametersToSend, ConexionHttp.URL_CONNECT + "enlazarGrupoFamiliar.php");
+			if (jdata != null) {
+				return true;
+			}
+		} catch (Exception e) {
+			Log.e(TAG, "persistir, " + e.toString());
 		}
 		return false;
 	}

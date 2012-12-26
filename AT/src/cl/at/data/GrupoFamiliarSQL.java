@@ -28,7 +28,7 @@ public class GrupoFamiliarSQL {
 			JSONArray jdata = null;
 			jdata = post.getServerData(postParametersToSend, ConexionHttp.URL_CONNECT + "getGrupoFamiliar.php");
 			if (jdata != null) {
-				JSONObject jsonData = jdata.getJSONObject(0); // Se lee la respuesta
+				JSONObject jsonData = jdata.getJSONObject(0);
 				try {
 					grupoFamiliar.setId(Integer.parseInt(jsonData.getString(CAMPO_ID)));
 					grupoFamiliar.setNombre(jsonData.getString(CAMPO_NOMBRE));
