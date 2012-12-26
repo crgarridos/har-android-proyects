@@ -8,7 +8,11 @@ import android.location.LocationListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 import cl.at.data.DispositivoSQL;
+import cl.at.util.Comunicador;
+import cl.at.util.Util;
+import cl.at.view.IniciarSesionActivity;
 
 import com.google.android.maps.MapView;
 
@@ -39,7 +43,6 @@ public class Ciudad {
 	    	public void onLocationChanged(Location location) {
 	    		Log.i(TAG, "Localización: "+location.getLatitude()+" - "+location.getLongitude());
 	    		dispositivo.setPosicion(new Coordenada(location.getLatitude(), location.getLongitude()));
-	    		Log.i(TAG, "Localizaciï¿½n: "+dispositivo.getPosicion().getLatitud()+" - "+dispositivo.getPosicion().getLongitud());
 	    		new AsyncMapa().execute();
 	    	}
 	    	public void onProviderDisabled(String provider){
@@ -185,7 +188,8 @@ public class Ciudad {
 		protected String doInBackground(String... params) {
 			dispositivo.actualizarPosicion();
 			for(int i = 0; i < dispositivo.getUsuario().getGrupoFamiliar().getIntegrantes().size(); i++)
-				gMapsAPI.dibujarPunto(dispositivo.getUsuario().getGrupoFamiliar().getIntegrantes().get(i).getDispositivo().getPosicion(), 1);
+				gMapsAPI.dibujarPunto(dispositivo.getUsuario());
+//				gMapsAPI.dibujarPunto(dispositivo.getUsuario().getGrupoFamiliar().getIntegrantes().get(i).getDispositivo().getPosicion(), 1);
 			DispositivoSQL dSQL = new DispositivoSQL();
 			dSQL.actualizarPosicion(dispositivo);
 			return null;
