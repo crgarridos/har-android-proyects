@@ -12,6 +12,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.media.AudioManager;
 import android.net.Uri;
+import android.util.Log;
 import cl.at.data.DispositivoSQL;
 import cl.at.util.AlertTsunamiApplication;
 import cl.at.util.Util;
@@ -38,7 +39,7 @@ public class Dispositivo {
 		this.context = AlertTsunamiApplication.getAppContext();
 		setUsuario(usuario);
 		if(!usuario.esExterno()){
-			this.intervalo = Util.getPreferencia("intervalo") != null ? Integer.parseInt(Util.getPreferencia("intervalo")) : 1000;// TODO cambiar tiempo default
+			this.intervalo = Util.getPreferencia("intervalo") != null ? Integer.parseInt(Util.getPreferencia("intervalo")) : 10000;// TODO cambiar tiempo default
 			this.locManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
 			if(this.locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)!=null){
 				this.location = this.locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -47,7 +48,7 @@ public class Dispositivo {
 				Util.guardar(this);
 			}
 			else{
-				this.location = new Location(LocationManager.GPS_PROVIDER);
+				this.location = this.locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 				dSQL.cargarDispositivo(this);
 			}
 		}
@@ -139,7 +140,8 @@ public class Dispositivo {
 	}
 
 	public void inicializar(LocationListener locListener) {
-		this.locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, this.intervalo, 0, locListener);
+//		this.locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, this.intervalo, 0, locListener);
+		this.locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 0, locListener);
 	}
 
 	public void onAlertaRecibida(Alerta a) {
