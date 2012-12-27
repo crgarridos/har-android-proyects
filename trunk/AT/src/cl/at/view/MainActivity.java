@@ -138,18 +138,18 @@ public class MainActivity extends MapActivity {
 		}
 
 		SubMenu smnu4 = menu.addSubMenu(Menu.NONE, MNU_OPC4, Menu.NONE, "Ajustes").setIcon(R.drawable.ajustes);
-		smnu4.add(Menu.NONE, SMNU_OPC41, Menu.NONE, "Configurar geolocalización");
-		smnu4.add(Menu.NONE, SMNU_OPC42, Menu.NONE, "Actualizar posición");
+		smnu4.add(Menu.NONE, SMNU_OPC41, Menu.NONE, "Configurar geolocalizacion");
+		smnu4.add(Menu.NONE, SMNU_OPC42, Menu.NONE, "Actualizar posicion");
 		return true;
 	}
 
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case 11:
-			Toast.makeText(getApplicationContext(), "grupo familiar", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getApplicationContext(), "Grupo Familiar", Toast.LENGTH_SHORT).show();
 			return true;
 		case 12:
-			Toast.makeText(getApplicationContext(), "puntos de riesgo", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getApplicationContext(), "Puntos de Riesgo", Toast.LENGTH_SHORT).show();
 			return true;
 		case 21:
 			startActivity(new Intent("at.INGRESAR_PUNTO_DE_RIESGO"));
