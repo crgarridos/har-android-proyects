@@ -1,4 +1,4 @@
-package cl.at.view;
+ package cl.at.view;
 
 import cl.at.util.Util;
 import android.app.Activity;

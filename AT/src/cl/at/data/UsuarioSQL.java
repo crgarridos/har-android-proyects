@@ -93,7 +93,7 @@ public class UsuarioSQL {
 	}
 
 	public ArrayList<Usuario> cargarIntegrantes(final GrupoFamiliar grupoFamiliar) {
-		Log.i(TAG, "cargando integrantes...");
+		Log.i(TAG, "Cargando integrantes...");
 		try {
 			Parametros postParametersToSend = new Parametros();
 			postParametersToSend.add("id", grupoFamiliar.getId().toString());

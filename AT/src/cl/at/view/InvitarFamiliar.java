@@ -101,7 +101,7 @@ public class InvitarFamiliar extends Activity {
 					}
 				} else {
 					exito = false;
-					return "No se encontró a un usuario con el dato ingresado";
+					return "No se encontra el usuario con el dato ingresado";
 				}
 			} catch (Exception w) {
 				Log.d("Error:", w.toString());
