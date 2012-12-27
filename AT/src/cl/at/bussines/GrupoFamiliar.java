@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import cl.at.data.GrupoFamiliarSQL;
 import cl.at.data.InvitacionSQL;
+import cl.at.data.PuntoEncuentroSQL;
 import cl.at.data.UsuarioSQL;
 
 public class GrupoFamiliar {
@@ -74,7 +75,7 @@ public class GrupoFamiliar {
 		this.puntoEncuentro = puntoEncuentro;
 	}
 
-	public PuntoEncuentro getPuntoEncuentro() {
+	public PuntoEncuentro getPuntoEncuentro(){
 		return puntoEncuentro;
 	}
 
@@ -84,8 +85,11 @@ public class GrupoFamiliar {
 	}
 
 	public ArrayList<Usuario> getIntegrantes() {
-		if (integrantes == null || integrantes.size() == 0)
+		if (integrantes == null || integrantes.size() == 0){
 			integrantes= new UsuarioSQL().cargarIntegrantes(this);
+			PuntoEncuentroSQL ptoEncuentro = new PuntoEncuentroSQL();
+			puntoEncuentro = ptoEncuentro.cargarPtoEncuentro(this);
+		}
 		return integrantes;
 	}
 

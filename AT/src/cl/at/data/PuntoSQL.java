@@ -40,13 +40,13 @@ public class PuntoSQL {
 						Coordenada coordenada = new Coordenada(jsonData.getDouble(CAMPO_LATITUD_PUNTO), jsonData.getDouble(CAMPO_LONGITUD_PUNTO));
 						areaInundacion.add(coordenada);
 					} catch (Exception e) {
-						Log.e(TAG, e.toString());
+						Log.e(TAG, "cargarAreaInundacion: "+e.toString()+" "+e.getCause());
 					}
 				}
 				return areaInundacion;
 			}
 		} catch (Exception e) {
-			Log.e(TAG, e.toString());
+			Log.e(TAG, "cargarAreaInundacion: "+e.toString()+" "+e.getCause());
 		}
 		return null;
 	}
