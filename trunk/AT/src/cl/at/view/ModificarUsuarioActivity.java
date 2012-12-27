@@ -68,20 +68,20 @@ public class ModificarUsuarioActivity extends Activity {
 		Matcher m1 = p1.matcher(email);
 		Matcher m2 = p2.matcher(this.editTextPassNueva.getText().toString());
 		if (!m.matches()) {
-			Toast.makeText(getApplicationContext(), "Nombre no permitido", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getApplicationContext(), "Nombre no permitido, debe tener un maximo de 20", Toast.LENGTH_SHORT).show();
 			return false;
 		} else {
 			if (!m1.matches()) {
 				Toast.makeText(getApplicationContext(), "Email no permitido", Toast.LENGTH_SHORT).show();
 				return false;
 			} else if (!this.editTextPassNueva.getText().toString().equals(this.editTextPassNueva2.getText().toString())) {
-				Toast.makeText(getApplicationContext(), "Las contraseÃ±as no coinciden", Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(), "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show();
 				return false;
 			} else if (!m2.matches()) {
-				Toast.makeText(getApplicationContext(), "ContraseÃ±a no permitida", Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(), "Contraseña no permitida", Toast.LENGTH_SHORT).show();
 				return false;
 			} else if (!u.getPassword().equals(this.editTextPassActual.getText().toString())) {
-				Toast.makeText(getApplicationContext(), "ContraseÃ±a actual incorrecta", Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(), "Contraseña actual incorrecta", Toast.LENGTH_SHORT).show();
 				return false;
 			}
 			return true;
