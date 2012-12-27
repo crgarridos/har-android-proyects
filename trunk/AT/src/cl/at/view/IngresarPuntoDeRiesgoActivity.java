@@ -83,8 +83,8 @@ public class IngresarPuntoDeRiesgoActivity extends MapActivity {
 		LayoutInflater factory = LayoutInflater.from(this);
 		final View viewComentario = factory.inflate(R.layout.ingresar_comentario_riesgo, null);
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
-		alert.setTitle("Descripción");
-		alert.setMessage("Ingrese una descripción del punto de riesgo");
+		alert.setTitle("Descripcion");
+		alert.setMessage("Ingrese una descripcion del punto de riesgo");
 		alert.setView(viewComentario);
 		editTextComentario = (EditText) viewComentario.findViewById(R.id.ingresar_comentario_riesgo);
 		
@@ -92,7 +92,7 @@ public class IngresarPuntoDeRiesgoActivity extends MapActivity {
 		final View viewCategoria = factory1.inflate(R.layout.ingresar_categoria_riesgo, null);
 		AlertDialog.Builder alert1 = new AlertDialog.Builder(this);
 		alert1.setTitle("Categoría");
-		alert1.setMessage("Seleccione una categoría del punto de riesgo");
+		alert1.setMessage("Seleccione una categoria del punto de riesgo");
 		alert1.setView(viewCategoria);
 		btnRojo = (Button) viewCategoria.findViewById(R.id.ingresarCategoria_btnRojo);
 		btnNaranjo = (Button) viewCategoria.findViewById(R.id.ingresarCategoria_btnNaranjo);
@@ -104,7 +104,7 @@ public class IngresarPuntoDeRiesgoActivity extends MapActivity {
 				if(comentario.length() > 2 && comentario.length() < 201)
 					dialog1.show();
 				else
-					Toast.makeText(getApplicationContext(), "La descripción debe tener entre 3 y 200 caracteres", Toast.LENGTH_SHORT).show();
+					Toast.makeText(getApplicationContext(), "La descripcion debe tener entre 3 y 200 caracteres", Toast.LENGTH_SHORT).show();
 			}
 		});
 
