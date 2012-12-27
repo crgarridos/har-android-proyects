@@ -87,8 +87,8 @@ public class DefinirPuntoEncuentroMapActivity extends MapActivity {
 		LayoutInflater factory = LayoutInflater.from(this);
 		final View viewComentario = factory.inflate(R.layout.ingresar_comentario, null);
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
-		alert.setTitle("Descripción");
-		alert.setMessage("Ingrese una descripción del punto de encuentro familiar");
+		alert.setTitle("Descripciï¿½n");
+		alert.setMessage("Ingrese una descripciï¿½n del punto de encuentro familiar");
 		alert.setView(viewComentario);
 		editTextComentario = (EditText) viewComentario.findViewById(R.id.ingresar_comentario);
 		alert.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
@@ -117,9 +117,11 @@ public class DefinirPuntoEncuentroMapActivity extends MapActivity {
 
 	class definirPuntoEncuentroAsync extends AsyncTask<String, String, String> {
 
+		Boolean existe;
 		Boolean exito = false;
 
 		protected void onPreExecute() {
+			existe = true;
 			pDialog = new ProgressDialog(DefinirPuntoEncuentroMapActivity.this);
 			if (grupoFamiliar == null)
 				pDialog.setMessage("Creando grupo familiar....");
@@ -133,28 +135,29 @@ public class DefinirPuntoEncuentroMapActivity extends MapActivity {
 		protected String doInBackground(String... params) {
 			try {
 				if (grupoFamiliar == null) {
-					//lider = new Lider(usuario);
+					lider = new Lider(usuario);
 					usuario.setEsLider(true);
 					grupoFamiliar = new GrupoFamiliar(nombreGrupo, null, lider);
+					existe = false;
 				}
 				definirPuntoEncuentro();
 				Log.d("dispositivo", "" + ciudad.getDispositivo());
 				PuntoEncuentro puntoEncuentro = ciudad.ingresar(editTextComentario.getText().toString(), coordenada);
-				if (puntoEncuentro != null) { 
-					if (grupoFamiliar == null) {
+				if (puntoEncuentro != null) {
+					if (!existe) {
 						puntoEncuentro.setGrupoFamiliar(grupoFamiliar);
-						grupoFamiliar.persistir();
 						grupoFamiliar.setPuntoEncuentro(puntoEncuentro);
+						grupoFamiliar.persistir();
 						com.getUsuario().setGrupoFamiliar(grupoFamiliar);
 						exito = true;
 						return "Grupo familiar creado exitosamente";
 					} else
 						puntoEncuentro.setGrupoFamiliar(grupoFamiliar);
-						puntoEncuentro.persistir();
 						grupoFamiliar.setPuntoEncuentro(puntoEncuentro);
+						puntoEncuentro.persistir();
 						return "Punto de encuentro definido exitosamente";
 				} else
-					return "El punto de encuentro debe estar dentro de la zona de seguridad";						
+					return "El punto de encuentro debe estar dentro de la zona de seguridad";
 			} catch (Exception w) {
 				Log.d("Error:", w.toString());
 				return "Ha ocurrido un error";
