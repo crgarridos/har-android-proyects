@@ -199,9 +199,16 @@ public class Ciudad {
 				gMapsAPI.dibujando(true);
 				dispositivo.actualizarPosicion();
 				gMapsAPI.borrarPuntos();
-				ArrayList<Usuario> integrantes = dispositivo.getUsuario().getGrupoFamiliar().getIntegrantes();
-				for(int i = 0; i < integrantes.size(); i++)
-					gMapsAPI.dibujarPunto(integrantes.get(i));
+				GrupoFamiliar grupoFamiliar = dispositivo.getUsuario().getGrupoFamiliar();
+				if(grupoFamiliar != null){
+					ArrayList<Usuario> integrantes = grupoFamiliar.getIntegrantes();
+//					ArrayList<Usuario> integrantes = dispositivo.getUsuario().getGrupoFamiliar().getIntegrantes();
+					for(int i = 0; i < integrantes.size(); i++){
+						if(integrantes.get(i).getNombreUsuario().compareTo(dispositivo.getUsuario().getNombreUsuario()) != 0)
+							gMapsAPI.dibujarPunto(integrantes.get(i));
+					}
+					gMapsAPI.dibujarPunto(grupoFamiliar.getPuntoEncuentro());
+				}
 				DispositivoSQL dSQL = new DispositivoSQL();
 				dSQL.actualizarPosicion(dispositivo);
 				gMapsAPI.dibujando(false);

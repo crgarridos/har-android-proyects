@@ -1,8 +1,7 @@
 package cl.at.bussines;
 
-import java.io.Serializable;
 
-public class Coordenada implements Serializable{
+public class Coordenada{
 
 	private Double latitud;
 	private Double longitud;

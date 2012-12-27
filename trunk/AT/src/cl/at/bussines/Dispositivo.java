@@ -108,14 +108,14 @@ public class Dispositivo {
 		else 
 			dSQL.getUltimaPosicion(this);
 		if(this.getUsuario()!=null&&this.getUsuario().getGrupoFamiliar()!=null)
-		try{
-			ArrayList<Usuario> grupoFamiliar = new ArrayList<Usuario>();
-			grupoFamiliar = getUsuario().getGrupoFamiliar().getIntegrantes();
-			for(int i = 1; i < grupoFamiliar.size(); i++)
-				dSQL.getUltimaPosicion(grupoFamiliar.get(i).getDispositivo());
-		} catch (Exception e) {
-			Log.e(TAG, "actualizarPosicion: "+e.toString());
-		}
+			try{
+				ArrayList<Usuario> grupoFamiliar = new ArrayList<Usuario>();
+				grupoFamiliar = getUsuario().getGrupoFamiliar().getIntegrantes();
+				for(int i = 0; i < grupoFamiliar.size(); i++)
+					dSQL.getUltimaPosicion(grupoFamiliar.get(i).getDispositivo());
+			} catch (Exception e) {
+				Log.e(TAG, "actualizarPosicion: "+e.toString());
+			}
 		if (!estaSeguro()) {
 			// TODO comprobar estado de dispositivoa
 		}

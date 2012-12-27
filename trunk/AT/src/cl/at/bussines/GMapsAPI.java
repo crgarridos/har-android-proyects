@@ -17,7 +17,6 @@ import cl.at.view.R;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
-import com.google.android.maps.MyLocationOverlay;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 
@@ -29,7 +28,6 @@ public class GMapsAPI {
 	private MapView mapView;
 	private MapController mapController;
 	private List<Overlay> mapOverlays;
-	private MyLocationOverlay mOverlayLocation;
 	private boolean dibujando = false;
 
 	public GMapsAPI(MapView m, Coordenada centro, float zoom) {
@@ -108,33 +106,26 @@ public class GMapsAPI {
 	}
 
 	public void dibujarPolilinea(ArrayList<Coordenada> areaInundacion) {
-		// Polyline polilinea = new Polyline();
+		try {
+			for(int i = 0; i < areaInundacion.size(); i++){
+				Coordenada coordenada = areaInundacion.get(i);
+				GeoPoint posicion = new GeoPoint((int) (coordenada.getLatitud() * 1E6), (int) (coordenada.getLongitud() * 1E6));
+				Drawable drawable = mapView.getContext().getResources().getDrawable(R.drawable.punto);
+				MarkItemizedOverlay itemizedoverlay = new MarkItemizedOverlay(drawable, mapView.getContext());
+				OverlayItem overlayItem = new OverlayItem(posicion, "punto "+i, "Posicion: " + coordenada.getLatitud().toString() + " / "
+						+ coordenada.getLongitud().toString());
+				itemizedoverlay.addOverlay(overlayItem);
+				mapOverlays.add(itemizedoverlay);
+			}
+			this.mapView.postInvalidate();
+		} catch (Exception e) {
+			Log.e(TAG, "dibujarPolilinea," + e.toString() + " " + e.getCause());
+		}
 	}
 
 	public void dibujarPosicion(Coordenada c, float radio) {
 
 	}
-
-	// public void dibujarPunto(Coordenada c, int color){
-	// // setCentro(c);
-	// GeoPoint posicion = new GeoPoint((int)(c.getLatitud()*1E6),
-	// (int)(c.getLongitud()*1E6));
-	// this.mapOverlays = mapView.getOverlays();
-	// for(int i = 1; i < this.mapOverlays.size(); i++){
-	// this.mapOverlays.remove(i);
-	// }
-	// Drawable drawable = mapView.getContext().getResources().getDrawable(color
-	// == 1? R.drawable.icono_persona_segura: R.drawable.icono_persona_riesgo);
-	// MarkItemizedOverlay itemizedoverlay = new MarkItemizedOverlay(drawable,
-	// mapView.getContext());
-	// OverlayItem overlayItem = new OverlayItem(posicion, ,
-	// "Posicion: "+c.getLatitud().toString()+" / "+c.getLongitud().toString());
-	// Log.i(TAG,
-	// "dibujo: "+posicion.getLatitudeE6()*1E6+" - "+posicion.getLongitudeE6()*1E6);
-	// itemizedoverlay.addOverlay(overlayItem);
-	// mapOverlays.add(itemizedoverlay);
-	// this.mapView.postInvalidate();
-	// }
 
 	public void dibujarPunto(Usuario usuario) {
 		// setCentro(c);
@@ -146,7 +137,7 @@ public class GMapsAPI {
 			MarkItemizedOverlay itemizedoverlay = new MarkItemizedOverlay(drawable, mapView.getContext());
 			OverlayItem overlayItem = new OverlayItem(posicion, usuario.getNombreUsuario(), "Posicion: " + coordenada.getLatitud().toString() + " / "
 					+ coordenada.getLongitud().toString());//TODO
-			Log.i(TAG, "integrante: " + usuario.getNombreUsuario() + posicion.getLatitudeE6() * 1E6 + " - " + posicion.getLongitudeE6() * 1E6);
+			Log.i(TAG, "integrante: " + usuario.getNombreUsuario() + posicion.getLatitudeE6()/1E6+ " - " + posicion.getLongitudeE6()/1E6);
 			itemizedoverlay.addOverlay(overlayItem);
 			mapOverlays.add(itemizedoverlay);
 			this.mapView.postInvalidate();
@@ -158,7 +149,7 @@ public class GMapsAPI {
 	public void borrarPuntos() {
 		try{
 			this.mapOverlays = mapView.getOverlays();
-			for (int i = 1; i < this.mapOverlays.size(); i++) {
+			for (int i = 0; i < this.mapOverlays.size(); i++) {
 				if (mapOverlays.get(i).getClass() == MarkItemizedOverlay.class)
 					this.mapOverlays.remove(i);
 			}
@@ -167,8 +158,20 @@ public class GMapsAPI {
 		}
 	}
 
-	public void dibujarPunto(Coordenada c, String titulo, int color) {
+	public void dibujarPunto(PuntoEncuentro puntoEncuentro) {
 		dibujando = true;// Entra en el metodo
+		try {
+			GeoPoint posicion = new GeoPoint((int) (puntoEncuentro.getCoordenada().getLatitud() * 1E6), (int) (puntoEncuentro.getCoordenada().getLongitud() * 1E6));
+			Drawable drawable = null;
+			drawable = mapView.getContext().getResources().getDrawable(R.drawable.zona_segura);
+			MarkItemizedOverlay itemizedoverlay = new MarkItemizedOverlay(drawable, mapView.getContext());
+			OverlayItem overlayItem = new OverlayItem(posicion, "Punto de encuentro", puntoEncuentro.getReferencia());
+			itemizedoverlay.addOverlay(overlayItem);
+			mapOverlays.add(itemizedoverlay);
+			this.mapView.postInvalidate();
+		} catch (Exception e) {
+			Log.e(TAG, "dibujarPunto," + e.toString() + " " + e.getCause());
+		}
 
 		// Lo que hace el metodo...
 
