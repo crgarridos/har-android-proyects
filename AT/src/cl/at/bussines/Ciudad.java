@@ -10,10 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 import cl.at.data.DispositivoSQL;
-import cl.at.util.Comunicador;
-import cl.at.util.Util;
-import cl.at.view.IniciarSesionActivity;
-import cl.at.view.MarkItemizedOverlay;
+import cl.at.util.AlertTsunamiApplication;
 
 import com.google.android.maps.MapView;
 
@@ -29,7 +26,6 @@ public class Ciudad {
 	private PuntoEncuentro puntoEncuentro;
 	private GMapsAPI gMapsAPI;
 	private LocationListener locListener;
-	private boolean firstTime = true;
 	
 	public Ciudad(MapView mapView, Dispositivo disp, PuntoEncuentro ptoEncuentro) {
 		dispositivo = disp;
@@ -190,15 +186,26 @@ public class Ciudad {
 	class AsyncMapa extends AsyncTask<String, String, String> {
 
 		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			Toast.makeText(AlertTsunamiApplication.getAppContext(), "Actualizando...", Toast.LENGTH_LONG).show();
+			if(gMapsAPI.dibujando())
+				this.cancel(true);
+		}
+		
+		@Override
 		protected String doInBackground(String... params) {
-			
-			dispositivo.actualizarPosicion();
-			gMapsAPI.borrarPuntos();
-			ArrayList<Usuario> integrantes = dispositivo.getUsuario().getGrupoFamiliar().getIntegrantes();
-			for(int i = 0; i < integrantes.size(); i++)
-				gMapsAPI.dibujarPunto(integrantes.get(i));
-			DispositivoSQL dSQL = new DispositivoSQL();
-			dSQL.actualizarPosicion(dispositivo);
+			if(!gMapsAPI.dibujando()){
+				gMapsAPI.dibujando(true);
+				dispositivo.actualizarPosicion();
+				gMapsAPI.borrarPuntos();
+				ArrayList<Usuario> integrantes = dispositivo.getUsuario().getGrupoFamiliar().getIntegrantes();
+				for(int i = 0; i < integrantes.size(); i++)
+					gMapsAPI.dibujarPunto(integrantes.get(i));
+				DispositivoSQL dSQL = new DispositivoSQL();
+				dSQL.actualizarPosicion(dispositivo);
+				gMapsAPI.dibujando(false);
+			}
 			return null;
 		}
 
