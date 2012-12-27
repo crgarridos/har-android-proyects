@@ -29,6 +29,7 @@ public class PublicarComentarioActivity extends Activity {
 		setContentView(R.layout.publicar_comentario);
 		com = Comunicador.getInstancia();
 		usuario = com.getUsuario();
+		usuario.getGrupoFamiliar().getComentarios();
 
 		btnSgte = (Button) findViewById(R.id.publicarComentario_btnSgte);
 		editTextComentario = (EditText) findViewById(R.id.publicarComentario_editTextComentario);
@@ -56,6 +57,8 @@ public class PublicarComentarioActivity extends Activity {
 
 	class AsyncPublicarComentario extends AsyncTask<String, String, String> {
 
+		Boolean exito = false;
+		
 		protected void onPreExecute() {
 			pDialog = new ProgressDialog(PublicarComentarioActivity.this);
 			pDialog.setMessage("Ingresando comentario");
@@ -66,7 +69,8 @@ public class PublicarComentarioActivity extends Activity {
 
 		protected String doInBackground(String... params) {
 			try {
-//				comentario.persistir();
+				comentario.persistir();
+				exito = true;
 				return "Comentario ingresado exitosamente!";
 			} catch (Exception w) {
 				return "Ha ocurrido un error";
@@ -76,6 +80,8 @@ public class PublicarComentarioActivity extends Activity {
 		protected void onPostExecute(String s) {
 			pDialog.dismiss();
 			Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
+			if(exito)
+				finish();
 			
 		}
 	}

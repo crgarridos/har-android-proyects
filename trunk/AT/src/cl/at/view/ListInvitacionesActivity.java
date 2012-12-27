@@ -53,14 +53,14 @@ public class ListInvitacionesActivity extends Activity {
 				AlertDialog.Builder alert = new AlertDialog.Builder(ListInvitacionesActivity.this);
 				alert.setTitle("Aceptar Invitacion");
 				String nombre = usuario.getInvitaciones().get(position).getRemitente().getNombreUsuario();
-				String mensaje = "¿Que desea hacer con la invitación  de " + nombre + "?"
-						+ "\nAl aceptar la invitacion se eliminaran las otras y serás incluido en el grupo familiar de " + nombre
+				String mensaje = "Que desea hacer con la invitacin  de " + nombre + "?"
+						+ "\nAl aceptar la invitacion se eliminaran las otras y serï¿½s incluido en el grupo familiar de " + nombre
 						+ ".\nSi la rechaza, se eliminara la invitacion y ya no volvera a estar disponible.";
 				alert.setMessage(mensaje);
 				posicionSeleccionada = position;
 				alert.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int which) {
-						new AsyncResponder().execute(usuario.getInvitaciones().get(position).getRemitente().getGrupoFamiliar());
+						new AsyncResponder().execute(usuario.getInvitaciones().get(position).getRemitente());
 					}
 				});
 				alert.setNegativeButton("Rechazar", new DialogInterface.OnClickListener() {
@@ -101,7 +101,10 @@ public class ListInvitacionesActivity extends Activity {
 		}
 
 		protected ArrayList<Invitacion> doInBackground(String... params) {
-			return usuario.getInvitaciones();
+			ArrayList<Invitacion> inv = usuario.getInvitaciones();
+			for(int i = 0; i < inv.size(); i++)
+				inv.get(i).getRemitente().getGrupoFamiliar();
+			return inv;
 		}
 
 		protected void onPostExecute(ArrayList<Invitacion> invs) {
@@ -113,7 +116,7 @@ public class ListInvitacionesActivity extends Activity {
 		}
 	}
 
-	class AsyncResponder extends AsyncTask<GrupoFamiliar, String, Boolean> {
+	class AsyncResponder extends AsyncTask<Usuario, String, Boolean> {
 
 		ProgressDialog pDialog;
 
@@ -126,14 +129,15 @@ public class ListInvitacionesActivity extends Activity {
 		}
 
 		@Override
-		protected Boolean doInBackground(GrupoFamiliar... gf) {
-			return gf[0].addIntegrante(usuario);
+		protected Boolean doInBackground(Usuario... u) {
+			GrupoFamiliar gf = u[0].getGrupoFamiliar();
+			return gf.addIntegrante(usuario);
 		}
 
 		protected void onPostExecute(Boolean est) {
 			if (est) {
 				new AsyncDeleteInvitacion().execute(true);
-				Toast.makeText(getApplicationContext(), "El usuario ha sido añadido al grupo exitosamente!", Toast.LENGTH_LONG).show();
+				Toast.makeText(getApplicationContext(), "El usuario ha sido aï¿½adido al grupo exitosamente!", Toast.LENGTH_LONG).show();
 			} else
 				Toast.makeText(getApplicationContext(), "No se ha podido realizar la operacion, intentelo mas tarde", Toast.LENGTH_LONG).show();
 			pDialog.dismiss();

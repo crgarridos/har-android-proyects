@@ -3,6 +3,7 @@ package cl.at.bussines;
 import java.util.ArrayList;
 
 import android.util.Log;
+
 import cl.at.data.InvitacionSQL;
 import cl.at.data.UsuarioSQL;
 
@@ -49,6 +50,15 @@ public class Usuario {
 		dispositivo = new Dispositivo(this);
 	}
 
+	public Usuario(String nombreUsuario, boolean externo, boolean disp) {
+		this.nombreUsuario = nombreUsuario;
+		if (!externo) {
+			UsuarioSQL uSQL = new UsuarioSQL();
+			existeUsuario = uSQL.cargarUsuario(this);
+		} else
+			this.externo = externo;
+	}
+
 	public Usuario() {
 		// if(externo)
 		// dispositivo = new Dispositivo(this);// TODO ,externo); debe cargar de
@@ -61,10 +71,19 @@ public class Usuario {
 		this.nombreUsuario = nombreUsuario;
 		this.nombreCompleto = nombreCompleto;
 		this.email = email;
+<<<<<<< .mine
+		if (!externo) {
+			this.password = password;
+			dispositivo = new Dispositivo(this);
+			comentarios = new ArrayList<Comentario>();
+			invitaciones = new ArrayList<Invitacion>();
+		}
+=======
 		this.password = password;
 		dispositivo = new Dispositivo(this);
 //			comentarios = new ArrayList<Comentario>();
 //			invitaciones = new ArrayList<Invitacion>();
+>>>>>>> .r102
 	}
 
 	protected Usuario(Usuario usuario){
@@ -78,6 +97,11 @@ public class Usuario {
 		this.existeUsuario = usuario.getExisteUsuario();
 		this.externo = usuario.getExterno();
 	}// Fin contructores
+
+	public void finalize() throws Throwable {
+
+	}
+
 	// Setters y getters
 	public String getNombreUsuario() {
 		return nombreUsuario.toLowerCase();
@@ -162,7 +186,6 @@ public class Usuario {
 				return this;
 			return null;
 		} catch (Exception e) {
-			Log.e(TAG, "buscar, "+e.toString());
 			return null;
 		}
 	}
@@ -196,11 +219,9 @@ public class Usuario {
 	}
 
 	public GrupoFamiliar getGrupoFamiliar() {
-		if(grupoFamiliar == null){
-			grupoFamiliar = new GrupoFamiliar(this);
-			if(grupoFamiliar.getId()==null)
-					grupoFamiliar = null;
-		}
+		grupoFamiliar = new GrupoFamiliar(this);
+		if(grupoFamiliar.getId()==null)
+				grupoFamiliar = null;
 		return grupoFamiliar;
 	}
 
@@ -242,10 +263,6 @@ public class Usuario {
 
 	public boolean getEsLider() {
 		return this.esLider;
-	}
-	
-	public void setEsLider(Boolean esLider) {
-		this.esLider = esLider;
 	}
 
 	public Boolean rechazarInvitacion(int posicionSeleccionada) {

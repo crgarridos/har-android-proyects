@@ -3,7 +3,7 @@ package cl.at.bussines;
 import java.util.ArrayList;
 
 import android.util.Log;
-import cl.at.data.InvitacionSQL;
+
 import cl.at.data.UsuarioSQL;
 
 public class Usuario {
@@ -27,6 +27,8 @@ public class Usuario {
 		this(nombre, null, pass, null);
 		UsuarioSQL uSQL = new UsuarioSQL();
 		existeUsuario = uSQL.cargarUsuario(this);
+		grupoFamiliar = new GrupoFamiliar(this);
+		// externo = false;
 	}
 
 	public Usuario(String nombre){
@@ -41,33 +43,42 @@ public class Usuario {
 
 	public Usuario(String nombreUsuario, boolean externo) {
 		this.nombreUsuario = nombreUsuario;
-		if (!externo) {
+		if(!externo){
 			UsuarioSQL uSQL = new UsuarioSQL();
 			existeUsuario = uSQL.cargarUsuario(this);
-		} else
-			this.externo = externo;
+		}
+		else this.externo = externo;
 		dispositivo = new Dispositivo(this);
 	}
 
 	public Usuario() {
+<<<<<<< .mine
 		// if(externo)
 		// dispositivo = new Dispositivo(this);// TODO ,externo); debe cargar de
 		// la bd
 		// comentarios = new ArrayList<Comentario>();
 		// invitaciones = new ArrayList<Invitacion>();
+=======
+//		if(externo)
+//			dispositivo = new Dispositivo(this);// TODO ,externo); debe cargar de la bd
+//		comentarios = new ArrayList<Comentario>();
+//		invitaciones = new ArrayList<Invitacion>();
+>>>>>>> .r97
 	}
 
 	protected Usuario(String nombreUsuario, String nombreCompleto, String password, String email) {
 		this.nombreUsuario = nombreUsuario;
 		this.nombreCompleto = nombreCompleto;
 		this.email = email;
-		this.password = password;
-		dispositivo = new Dispositivo(this);
-//			comentarios = new ArrayList<Comentario>();
-//			invitaciones = new ArrayList<Invitacion>();
+		if(!externo){
+			this.password = password;
+			dispositivo = new Dispositivo(this);// TODO ,externo); debe cargar de la bd
+			comentarios = new ArrayList<Comentario>();
+			invitaciones = new ArrayList<Invitacion>();
+		}
 	}
 
-	protected Usuario(Usuario usuario){
+	protected Usuario(Usuario usuario) {
 		this.nombreUsuario = usuario.getNombreUsuario();
 		this.nombreCompleto = usuario.getNombreCompleto();
 		this.password = usuario.getPassword();
@@ -78,6 +89,11 @@ public class Usuario {
 		this.existeUsuario = usuario.getExisteUsuario();
 		this.externo = usuario.getExterno();
 	}// Fin contructores
+
+	public void finalize() throws Throwable {
+
+	}
+
 	// Setters y getters
 	public String getNombreUsuario() {
 		return nombreUsuario.toLowerCase();
@@ -149,6 +165,12 @@ public class Usuario {
 
 	// Fin setters y getters
 	public void abandonarGrupoFamiliar() {
+<<<<<<< .mine
+		grupoFamiliar.eliminarIntegrante(this);
+		this.grupoFamiliar = null;
+=======
+		
+>>>>>>> .r97
 	}
 
 	public void agregarUsuario() {
@@ -162,7 +184,6 @@ public class Usuario {
 				return this;
 			return null;
 		} catch (Exception e) {
-			Log.e(TAG, "buscar, "+e.toString());
 			return null;
 		}
 	}
@@ -182,36 +203,34 @@ public class Usuario {
 	}
 
 	public void esLider(int esLider) {
-		this.esLider = (esLider == 1);
+		if(esLider == 1)
+			this.esLider = true;
+		else this.esLider = false;
 	}
-
 
 	public Boolean existe(String nombreUsuario) {
 		return false;
 	}
 
+	// OJO YA NO VA
+	// public Boolean existe(String nombre, String pass){
+	// return false;
+	// }
+
 	public ArrayList<Comentario> getComentarios() {
-		//TODO cargar de la bd
 		return comentarios;
 	}
 
 	public GrupoFamiliar getGrupoFamiliar() {
-		if(grupoFamiliar == null){
-			grupoFamiliar = new GrupoFamiliar(this);
-			if(grupoFamiliar.getId()==null)
-					grupoFamiliar = null;
-		}
 		return grupoFamiliar;
 	}
 
-	public Boolean setGrupoFamiliar(GrupoFamiliar grupoFamiliar) {
-		this.grupoFamiliar = grupoFamiliar;
-		return new UsuarioSQL().enlazarGrupoFamiliar(this,grupoFamiliar);
+	public void setGrupoFamiliar(GrupoFamiliar grupoFamiliar) {
+		if (this.grupoFamiliar != null) 
+			this.grupoFamiliar = grupoFamiliar;
 	}
 
 	public ArrayList<Invitacion> getInvitaciones() {
-		if (invitaciones == null || invitaciones.size() == 0)
-			invitaciones = new InvitacionSQL().cargarInvitaciones(this);
 		return invitaciones;
 	}
 
@@ -225,11 +244,7 @@ public class Usuario {
 			throw new Exception("Error");
 	}
 
-	public Boolean vaciarInvitaciones() {
-		Boolean exito = new InvitacionSQL().eliminarTodas(this);
-		if(exito)
-			this.invitaciones = new ArrayList<Invitacion>();
-		return exito;
+	public void vaciarInvitaciones() {
 	}
 
 	public void responderInvitacion() {
@@ -242,23 +257,5 @@ public class Usuario {
 
 	public boolean getEsLider() {
 		return this.esLider;
-	}
-	
-	public void setEsLider(Boolean esLider) {
-		this.esLider = esLider;
-	}
-
-	public Boolean rechazarInvitacion(int posicionSeleccionada) {
-		try{
-			Invitacion inv = invitaciones.get(posicionSeleccionada);
-			Boolean exito = new InvitacionSQL().eliminarInvitacion(inv);
-			if(exito)
-				this.invitaciones.remove(posicionSeleccionada);
-			return exito;
-		}
-		catch(Exception ex){
-			Log.e(TAG, "rechazarInvitacion, "+ex.toString()+" "+ex.getCause());
-		}
-		return false;
 	}
 }

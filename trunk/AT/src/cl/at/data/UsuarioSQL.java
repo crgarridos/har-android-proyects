@@ -36,11 +36,12 @@ public class UsuarioSQL {
 			JSONArray jdata = null;
 			jdata = post.getServerData(postParametersToSend, ConexionHttp.URL_CONNECT + "getPersona.php");
 			if (jdata != null) {
-				JSONObject json_data = jdata.getJSONObject(0); // Se lee la respuesta
+				JSONObject json_data = jdata.getJSONObject(0); // Se lee la
+																// respuesta
 				try {
 					u.setNombreCompleto(u.getNombreCompleto() == null ? json_data.getString(CAMPO_NOMBRE_COMPLETO) : u.getNombreCompleto());
 					u.setEmail(u.getEmail() == null ? json_data.getString(CAMPO_EMAIL) : u.getEmail());
-					if(!u.getExterno())
+					if (!u.getExterno())
 						u.setPassword(u.getPassword() == null ? json_data.getString(CAMPO_PASS) : u.getPassword());
 					u.esLider(json_data.getInt(CAMPO_ES_LIDER));
 					return true;
@@ -104,13 +105,13 @@ public class UsuarioSQL {
 				for (int i = 0; i < jdata.length(); i++) {
 					try {
 						JSONObject jsonData = jdata.getJSONObject(i);
-						
-//						TODO if(jsonData.getInt(CAMPO_ES_LIDER) != 1){
-							Usuario u = new Usuario(jsonData.getString(CAMPO_NOMBRE_USUARIO), true);
-							u.setEmail(jsonData.getString(CAMPO_EMAIL));
-							u.setNombreCompleto(jsonData.getString(CAMPO_NOMBRE_COMPLETO));
-							integrantes.add(u);
-//						}
+
+						// TODO if(jsonData.getInt(CAMPO_ES_LIDER) != 1){
+						Usuario u = new Usuario(jsonData.getString(CAMPO_NOMBRE_USUARIO), true);
+						u.setEmail(jsonData.getString(CAMPO_EMAIL));
+						u.setNombreCompleto(jsonData.getString(CAMPO_NOMBRE_COMPLETO));
+						integrantes.add(u);
+						// }
 					} catch (Exception e) {
 						Log.e(TAG, "cargarIntegrantes, " + e.toString());
 					}
@@ -155,23 +156,18 @@ public class UsuarioSQL {
 			jdata = post.getServerData(postParametersToSend, ConexionHttp.URL_CONNECT + "buscarUsuario.php");
 			if (jdata != null) {
 				JSONObject json_data = jdata.getJSONObject(0);
-				try {
-					usuario.setNombreUsuario(json_data.getString(CAMPO_NOMBRE_USUARIO));
-					usuario.setNombreCompleto(json_data.getString(CAMPO_NOMBRE_COMPLETO));
-					usuario.setEmail(json_data.getString(CAMPO_EMAIL));
-					if(json_data.getString("ID_FAMILIAR") != null)
-						usuario.setGrupoFamiliar(new GrupoFamiliar());
-					return true;
-				} catch (Exception e) {
-					Log.e(TAG, "buscar, " + e.toString());
-				}
+				usuario.setNombreUsuario(json_data.getString(CAMPO_NOMBRE_USUARIO));
+				usuario.setNombreCompleto(json_data.getString(CAMPO_NOMBRE_COMPLETO));
+				usuario.setEmail(json_data.getString(CAMPO_EMAIL));
+				if (!json_data.isNull("ID_FAMILIAR"))
+					usuario.setGrupoFamiliar(new GrupoFamiliar());
+				return true;
 			}
 		} catch (Exception e) {
 			Log.e(TAG, "buscar, " + e.toString());
 		}
 		return false;
 	}
-
 
 	public Boolean enlazarGrupoFamiliar(Usuario usuario, GrupoFamiliar grupoFamiliar) {
 		try {

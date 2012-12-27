@@ -48,5 +48,23 @@ public class PuntoEncuentroSQL {
 		}
 		return null;
 	}
+	
+	public Boolean persistir(PuntoEncuentro puntoEncuentro) {
+		try {
+			Parametros postParametersToSend = new Parametros();
+			postParametersToSend.add("idGrupo", puntoEncuentro.getGrupoFamiliar().getId().toString());
+			postParametersToSend.add("descripcion", puntoEncuentro.getReferencia());
+			postParametersToSend.add("latitud", puntoEncuentro.getCoordenada().getLatitud().toString());
+			postParametersToSend.add("longitud", puntoEncuentro.getCoordenada().getLongitud().toString());
+			JSONArray jdata = null;
+			jdata = post.getServerData(postParametersToSend, ConexionHttp.URL_CONNECT + "actualizarPuntoEncuentro.php");
+			if (jdata != null) {
+				return true;
+			}
+		} catch (Exception e) {
+			Log.e(TAG, "persistir, " + e.toString());
+		}
+		return false;
+	}
 
 }

@@ -88,7 +88,7 @@ public class GMapsAPI {
 		}
 		catch(IOException e){
 			nombreCiudad = new CiudadSQL().getNombre(ciudad.getDispositivo().getPosicion().getLatitud(), ciudad.getDispositivo().getPosicion().getLongitud());
-			Log.w(TAG, "determinarCiudad, "+e.toString()+" "+e.getCause());
+			//Log.w(TAG, "determinarCiudad, "+e.toString()+" "+e.getCause());
 		}
 		CiudadSQL cSQL = new CiudadSQL();
 		cSQL.cargarCiudad(ciudad, nombreCiudad);
