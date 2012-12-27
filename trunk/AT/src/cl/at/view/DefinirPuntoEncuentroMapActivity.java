@@ -86,8 +86,8 @@ public class DefinirPuntoEncuentroMapActivity extends MapActivity {
 		LayoutInflater factory = LayoutInflater.from(this);
 		final View viewComentario = factory.inflate(R.layout.ingresar_comentario, null);
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
-		alert.setTitle("DescripciÃ³n");
-		alert.setMessage("Ingrese una descripciÃ³n del punto de encuentro familiar");
+		alert.setTitle("Descripción");
+		alert.setMessage("Ingrese una descripción del punto de encuentro familiar");
 		alert.setView(viewComentario);
 		editTextComentario = (EditText) viewComentario.findViewById(R.id.ingresar_comentario);
 		alert.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
