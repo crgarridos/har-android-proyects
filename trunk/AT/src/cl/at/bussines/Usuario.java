@@ -44,15 +44,6 @@ public class Usuario {
 		dispositivo = new Dispositivo(this);
 	}
 
-	public Usuario(String nombreUsuario, boolean externo, boolean disp) {
-		this.nombreUsuario = nombreUsuario;
-		if (!externo) {
-			UsuarioSQL uSQL = new UsuarioSQL();
-			existeUsuario = uSQL.cargarUsuario(this);
-		} else
-			this.externo = externo;
-	}
-
 	public Usuario() {
 		// if(externo)
 		// dispositivo = new Dispositivo(this);// TODO ,externo); debe cargar de
@@ -82,11 +73,6 @@ public class Usuario {
 		this.existeUsuario = usuario.getExisteUsuario();
 		this.externo = usuario.getExterno();
 	}// Fin contructores
-
-	public void finalize() throws Throwable {
-
-	}
-
 	// Setters y getters
 	public String getNombreUsuario() {
 		return nombreUsuario.toLowerCase();
@@ -195,9 +181,11 @@ public class Usuario {
 	}
 
 	public GrupoFamiliar getGrupoFamiliar() {
-		grupoFamiliar = new GrupoFamiliar(this);
-		if(grupoFamiliar.getId()==null)
-				grupoFamiliar = null;
+		if(grupoFamiliar == null){
+			grupoFamiliar = new GrupoFamiliar(this);
+			if(grupoFamiliar.getId()==null)
+					grupoFamiliar = null;
+		}
 		return grupoFamiliar;
 	}
 

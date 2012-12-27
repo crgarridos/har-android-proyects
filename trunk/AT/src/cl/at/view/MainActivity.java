@@ -2,7 +2,6 @@ package cl.at.view;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -22,7 +21,6 @@ import android.widget.Toast;
 import cl.at.bussines.Ciudad;
 import cl.at.bussines.Dispositivo;
 import cl.at.bussines.GrupoFamiliar;
-import cl.at.bussines.Invitacion;
 import cl.at.bussines.Usuario;
 import cl.at.util.Comunicador;
 import cl.at.util.Util;
@@ -75,9 +73,12 @@ public class MainActivity extends MapActivity {
 		super.onCreate(savedInstanceState);
 		com = Comunicador.getInstancia();
 		setContentView(R.layout.activity_main);
+        GCMRegistrar.checkDevice(MainActivity.this);
+        GCMRegistrar.checkManifest(MainActivity.this);
 		context = getApplicationContext();
 		if (com.getUsuario() != null) {
 			usuario = com.getUsuario();
+//			desuscribirDispositivo();
 		} else if (Util.getPreferencia("usuario") != null) {
 			traerUsuario = true;
 		} else {
@@ -203,6 +204,15 @@ public class MainActivity extends MapActivity {
         	Log.v("GCMTest", "Ya registrado");
         }
 	}
+	
+	protected void desuscribirDispositivo(){
+        final String regId = GCMRegistrar.getRegistrationId(MainActivity.this);
+        if (!regId.equals("")) {
+        	GCMRegistrar.unregister(MainActivity.this);
+        } else {
+        	Log.v("GCMTest", "Ya des-registrado");
+        }
+	}
 
 	public void mostrarMensajeConfirmacion() {
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
@@ -289,15 +299,14 @@ public class MainActivity extends MapActivity {
 			try {
 				ciudad.obtenerCiudad(); 
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			dispositivo.actualizarPosicion();
-			// SystemClock.sleep(300);
+//			dispositivo.actualizarPosicion();
 			return true;
 		}
 
 		protected void onPostExecute(Boolean result) {
+			ciudad.actualizarPosiciones();
 			if (result)
 				pDialog.dismiss();
 			else {

@@ -100,7 +100,6 @@ public class DispositivoSQL {
 			Log.e(TAG, "Registro WS: NOK. " + e.getCause() + " || " + e.getMessage());
 		}
 		return jdata!= null;
-		
 	}
 
 	public Boolean cargarDispositivo(Dispositivo dispositivo) {
