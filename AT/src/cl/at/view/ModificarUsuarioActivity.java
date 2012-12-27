@@ -58,9 +58,9 @@ public class ModificarUsuarioActivity extends Activity {
 	}
 
 	private Boolean validarCoherencia(String nombreCompleto, String email) {
-		String nombreCompletoRegEx = "[a-z A-Z]{3,20}";
+		String nombreCompletoRegEx = "[a-z A-Z]{3,50}";
 		String emailRegEx = "([a-z._]{3,64})@([a-z._]{3,255}).(com|cl)";
-		String passRegEx = "[a-zA-Z_.0-9-*]{4,15}";
+		String passRegEx = "[a-zA-Z_.0-9-*]{3,15}";
 		Pattern p = Pattern.compile(nombreCompletoRegEx);
 		Pattern p1 = Pattern.compile(emailRegEx);
 		Pattern p2 = Pattern.compile(passRegEx);
@@ -90,6 +90,8 @@ public class ModificarUsuarioActivity extends Activity {
 
 	class AsyncModificar extends AsyncTask<String, String, String> {
 
+		Boolean exito = false; 
+		
 		protected void onPreExecute() {
 			pDialog = new ProgressDialog(ModificarUsuarioActivity.this);
 			pDialog.setMessage("Comprobando datos....");
@@ -104,6 +106,7 @@ public class ModificarUsuarioActivity extends Activity {
 			u.setPassword(editTextPassNueva.getText().toString());
 			try {
 				u.persistir();
+				exito = true;
 				return "Datos modificados exitosamente!";
 			} catch (Exception w) {
 				return "No se han podido modificar los datos";
@@ -111,9 +114,14 @@ public class ModificarUsuarioActivity extends Activity {
 		}
 
 		protected void onPostExecute(String s) {
-			Util.guardarUsuario(u, context);
+			pDialog.dismiss();
 			Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
-			pDialog.dismiss();// ocultamos progess dialog.
+			if(exito){
+				Util.guardarUsuario(u, context);
+				finish();
+			}
+			
+			
 		}
 	}
 

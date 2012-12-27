@@ -15,7 +15,7 @@ import cl.at.util.Util;
 
 public class InvitacionSQL {
 
-	private static final String TAG = UsuarioSQL.class.getName();
+	private static final String TAG = InvitacionSQL.class.getName();
 	private static final String CAMPO_INVITADO = "NOMBRE_INVITADO";
 	private static final String CAMPO_REMITENTE = "NOMBRE_REMITENTE";
 	private static final String CAMPO_FECHA = "INSTANTE_INVITACION";

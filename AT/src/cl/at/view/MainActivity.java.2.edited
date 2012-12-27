@@ -2,6 +2,7 @@ package cl.at.view;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 import cl.at.bussines.Ciudad;
 import cl.at.bussines.Dispositivo;
 import cl.at.bussines.GrupoFamiliar;
+import cl.at.bussines.Invitacion;
 import cl.at.bussines.Usuario;
 import cl.at.util.Comunicador;
 import cl.at.util.Util;
@@ -32,7 +34,7 @@ import com.google.android.maps.MyLocationOverlay;
 
 public class MainActivity extends MapActivity {
 
-	private static final String TAG = MainActivity.class.getName();
+//	private static final String TAG = MainActivity.class.getName();
 	private MyLocationOverlay mOverlayLocation;
 	private MapView mapView;
 	private ImageButton btnCentrar;
@@ -73,12 +75,9 @@ public class MainActivity extends MapActivity {
 		super.onCreate(savedInstanceState);
 		com = Comunicador.getInstancia();
 		setContentView(R.layout.activity_main);
-		GCMRegistrar.checkDevice(MainActivity.this);
-		GCMRegistrar.checkManifest(MainActivity.this);
 		context = getApplicationContext();
 		if (com.getUsuario() != null) {
 			usuario = com.getUsuario();
-			// desuscribirDispositivo();
 		} else if (Util.getPreferencia("usuario") != null) {
 			traerUsuario = true;
 		} else {
@@ -86,20 +85,20 @@ public class MainActivity extends MapActivity {
 			Util.reiniciarPreferencias(context);
 			finish();
 		}
-		
-		mapView = (MapView) findViewById(R.id.mapview);
+		mapView = (MapView) findViewById(R.id.mapview);	
 		btnCentrar = (ImageButton) findViewById(R.id.ActivityMain_btnCentrar);
 		mOverlayLocation = new MyLocationOverlay(mapView.getContext(), mapView);
 		mOverlayLocation.enableMyLocation();
 		mapView.getOverlays().add(mOverlayLocation);
+//		mapView.getController().setCenter(mOverlayLocation.getMyLocation());
 		mOverlayLocation.runOnFirstFix(new Runnable() {
 			public void run() {
 				centrarEnMiPosicion();
 			}
 		});
-
+		
 		btnCentrar.setOnClickListener(new View.OnClickListener() {
-
+			
 			@Override
 			public void onClick(View v) {
 				centrarEnMiPosicion();
@@ -114,7 +113,7 @@ public class MainActivity extends MapActivity {
 
 	public boolean onCreateOptionsMenu(Menu menu) {
 		SubMenu smnu1 = menu.addSubMenu(Menu.NONE, MNU_OPC1, Menu.NONE, "Capas").setIcon(R.drawable.capas);
-		if(usuario.getGrupoFamiliar() != null)
+		if(usuario.getGrupoFamiliar().getNombre() != null)
 			smnu1.add(Menu.NONE, SMNU_OPC11, Menu.NONE, "Grupo familiar");
 		smnu1.add(Menu.NONE, SMNU_OPC12, Menu.NONE, "Puntos de riesgo");
 
@@ -122,15 +121,14 @@ public class MainActivity extends MapActivity {
 		smnu2.add(Menu.NONE, SMNU_OPC21, Menu.NONE, "Ingresar punto de riesgo");
 		smnu2.add(Menu.NONE, SMNU_OPC22, Menu.NONE, "Actualizar datos");
 		smnu2.add(Menu.NONE, SMNU_OPC23, Menu.NONE, "Ver invitaciones");
-		if(usuario.getGrupoFamiliar() == null)
+		if(usuario.getGrupoFamiliar().getNombre() == null)
 			smnu2.add(Menu.NONE, SMNU_OPC24, Menu.NONE, "Crear grupo familiar");
 		smnu2.add(Menu.NONE, SMNU_OPC25, Menu.NONE, "Eliminar cuenta");
 		smnu2.add(Menu.NONE, SMNU_OPC26, Menu.NONE, "Cerrar sesion");
 
-		if(usuario.getGrupoFamiliar() != null){
+		if(usuario.getGrupoFamiliar().getNombre() != null){
 			SubMenu smnu3 = menu.addSubMenu(Menu.NONE, MNU_OPC3, Menu.NONE, "Grupo familiar").setIcon(R.drawable.grupo_familiar);
 			smnu3.add(Menu.NONE, SMNU_OPC31, Menu.NONE, "Invitar familiar");
-			if(usuario.getEsLider() == true)
 			smnu3.add(Menu.NONE, SMNU_OPC32, Menu.NONE, "Definir punto de encuentro");
 			smnu3.add(Menu.NONE, SMNU_OPC33, Menu.NONE, "Publicar comentario");
 			smnu3.add(Menu.NONE, SMNU_OPC34, Menu.NONE, "Visualizar comentarios");
@@ -174,13 +172,12 @@ public class MainActivity extends MapActivity {
 			startActivity(new Intent("at.INVITAR_FAMILIAR"));
 			return true;
 		case 32:
-			startActivity(new Intent("at.DEFINIR_PUNTO_ENCUENTRO_MAP"));
+			Intent intent1 = new Intent("at.DEFINIR_PUNTO_ENCUENTRO_MAP");
+			intent1.putExtra("usuario", (Serializable) usuario);
+			startActivity(intent1);
 			return true;
 		case 33:
 			startActivity(new Intent("at.PUBLICAR_COMENTARIO"));
-			return true;
-		case 42:
-			ciudad.actualizarPosiciones();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -190,37 +187,27 @@ public class MainActivity extends MapActivity {
 	private void mostrarInvitaciones() {
 		Intent intent = new Intent("at.LISTA_INVITACIONES");
 		startActivity(intent);
-		// ArrayList<Invitacion> invitaciones = usuario.getInvitaciones();
+//		ArrayList<Invitacion> invitaciones = usuario.getInvitaciones();
 	}
 
 	@Override
 	protected boolean isRouteDisplayed() {
 		return false;
 	}
-
-	protected void registrarDispositivo() {
-		final String regId = GCMRegistrar.getRegistrationId(MainActivity.this);
-		if (regId.equals("")) {
-			GCMRegistrar.register(MainActivity.this, "42760762845"); // Sender
-																		// ID
-		} else {
-			Log.v("GCMTest", "Ya registrado");
-		}
-	}
-
-	protected void desuscribirDispositivo() {
-		final String regId = GCMRegistrar.getRegistrationId(MainActivity.this);
-		if (!regId.equals("")) {
-			GCMRegistrar.unregister(MainActivity.this);
-		} else {
-			Log.v("GCMTest", "Ya des-registrado");
-		}
+	
+	protected void registrarDispositivo(){
+        final String regId = GCMRegistrar.getRegistrationId(MainActivity.this);
+        if (regId.equals("")) {
+        	GCMRegistrar.register(MainActivity.this, "42760762845"); //Sender ID
+        } else {
+        	Log.v("GCMTest", "Ya registrado");
+        }
 	}
 
 	public void mostrarMensajeConfirmacion() {
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
 		alert.setTitle("Eliminar cuenta");
-		alert.setMessage("Est�s seguro que desea eliminar su cuenta?");
+		alert.setMessage("Está seguro que desea eliminar su cuenta?");
 		alert.setPositiveButton("Si", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
 				new AsyncDelete().execute();
@@ -236,11 +223,12 @@ public class MainActivity extends MapActivity {
 
 	public void validarGrupoFamiliar() {
 		//if (usuario.getGrupoFamiliar() == null) {
-			startActivity(new Intent("at.CREAR_GRUPO_FAMILIAR"));
+			Intent i = new Intent("at.CREAR_GRUPO_FAMILIAR");
+			startActivity(i);
 		//} else
 			//	Toast.makeText(getApplicationContext(), "Ya pertenece a un grupo familiar", Toast.LENGTH_SHORT).show();
 	}
-	
+
 	class AsyncDelete extends AsyncTask<String, String, String> {
 
 		protected void onPreExecute() {
@@ -279,12 +267,12 @@ public class MainActivity extends MapActivity {
 			pDialog = new ProgressDialog(MainActivity.this);
 			pDialog.setIndeterminate(false);
 			pDialog.setCancelable(false);
-			pDialog.setMessage("Cargando...");
 			pDialog.show();
 		}
 
 		protected Boolean doInBackground(String... params) {
 			if (traerUsuario) {
+				pDialog.setMessage("Cargando...");
 				usuario = new Usuario((String) Util.getPreferencia("usuario"));
 				if (!usuario.getExisteUsuario() || usuario.getPassword() == null
 						|| !Util.encriptaEnMD5(usuario.getNombreUsuario() + usuario.getPassword()).equals(Util.getPreferencia("login"))) {
@@ -301,27 +289,32 @@ public class MainActivity extends MapActivity {
 			try {
 				ciudad.obtenerCiudad();
 			} catch (IOException e) {
-				Log.e(TAG, "AsyncCargar.doInBackground, " + e.toString() + e.getCause());
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			// dispositivo.actualizarPosicion();
+			dispositivo.actualizarPosicion();
+			// SystemClock.sleep(300);
 			return true;
 		}
-		
+
 		protected void onPostExecute(Boolean result) {
-			ciudad.actualizarPosiciones();
 			if (result)
 				pDialog.dismiss();
 			else {
 				Toast.makeText(context, "Ha ocurrido un error inesperado al iniciar la aplicacion", Toast.LENGTH_LONG).show();
 				finish();
 			}
-			
 			dispositivo.inicializar(ciudad.getLocationListener());
-			
+<<<<<<< .mine
+			com.setUsuario(usuario);
+			com.setDispositivo(dispositivo);
+			com.setCiudad(ciudad);
+=======
 			com.setUsuario(usuario);
 			com.setCiudad(ciudad);
 			com.setDispositivo(dispositivo);
 			registrarDispositivo();
+>>>>>>> .r98
 		}
 	}
 }

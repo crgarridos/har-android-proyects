@@ -12,8 +12,12 @@ import android.widget.EditText;
 import android.widget.Toast;
 import cl.at.bussines.Usuario;
 import cl.at.util.Comunicador;
+<<<<<<< .mine
 import cl.at.util.Util;
 
+=======
+import cl.at.util.Util;
+>>>>>>> .r108
 
 public class RegistrarUsuarioActivity extends Activity {
 
@@ -114,7 +118,13 @@ public class RegistrarUsuarioActivity extends Activity {
 		protected void onPostExecute(String s) {
 			Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
 			if (exito) {
+<<<<<<< .mine
+				Comunicador com = Comunicador.getInstancia();
+				com.setUsuario(u);
+				Intent intent = new Intent("at.MAPA");
+=======
 				Toast.makeText(getApplicationContext(), "Bienvenido " + u.getNombreCompleto(), Toast.LENGTH_SHORT).show();
+>>>>>>> .r108
 				Comunicador.getInstancia().setUsuario(u);
 				startActivity(new Intent("at.MAPA"));
 				Util.guardarUsuario(u, getApplicationContext());

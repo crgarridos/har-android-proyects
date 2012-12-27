@@ -56,7 +56,7 @@ public class DefinirPuntoEncuentroMapActivity extends MapActivity {
 
 	class MapOverlay extends com.google.android.maps.Overlay {
 		@Override
-		public boolean onTap(GeoPoint p,MapView mapView){
+		public boolean onTap(GeoPoint p, MapView mapView) {
 			Double latitud = ((double) p.getLatitudeE6()) / 1000000;
 			Double longitud = ((double) p.getLongitudeE6()) / 1000000;
 			coordenada = new Coordenada(latitud, longitud);
@@ -78,7 +78,8 @@ public class DefinirPuntoEncuentroMapActivity extends MapActivity {
 		mapView = (MapView) findViewById(R.id.definir_punto_encuentro_mapView);
 		this.setTitle("Seleccione un punto de seguridad en el mapa");
 		Bundle bundle = getIntent().getExtras();
-		nombreGrupo = bundle.getString("nombreGrupo");
+		if (grupoFamiliar == null)
+			nombreGrupo = bundle.getString("nombreGrupo");
 		MapOverlay mapOverlay = new MapOverlay();
 		List<Overlay> listOfOverlays = mapView.getOverlays();
 		listOfOverlays.clear();
@@ -120,7 +121,10 @@ public class DefinirPuntoEncuentroMapActivity extends MapActivity {
 
 		protected void onPreExecute() {
 			pDialog = new ProgressDialog(DefinirPuntoEncuentroMapActivity.this);
-			pDialog.setMessage("Creando grupo familiar....");
+			if (grupoFamiliar == null)
+				pDialog.setMessage("Creando grupo familiar....");
+			else
+				pDialog.setMessage("Definiendo punto de encuentro ...");
 			pDialog.setIndeterminate(false);
 			pDialog.setCancelable(false);
 			pDialog.show();
@@ -128,23 +132,32 @@ public class DefinirPuntoEncuentroMapActivity extends MapActivity {
 
 		protected String doInBackground(String... params) {
 			try {
-				lider = new Lider(usuario);
-				grupoFamiliar = new GrupoFamiliar(nombreGrupo, null, lider);
+				if (grupoFamiliar == null) {
+					//lider = new Lider(usuario);
+					usuario.setEsLider(true);
+					grupoFamiliar = new GrupoFamiliar(nombreGrupo, null, lider);
+				}
 				definirPuntoEncuentro();
 				Log.d("dispositivo", "" + ciudad.getDispositivo());
 				PuntoEncuentro puntoEncuentro = ciudad.ingresar(editTextComentario.getText().toString(), coordenada);
-				if (puntoEncuentro != null) {
-					grupoFamiliar.setPuntoEncuentro(puntoEncuentro);
-					grupoFamiliar.persistir();
-					com.getUsuario().setGrupoFamiliar(grupoFamiliar);
-					exito = true;
-					return "Grupo familiar creado exitosamente";
-				} else {
-					return "El punto de encuentro debe estar dentro de la zona de seguridad";
-				}
+				if (puntoEncuentro != null) { 
+					if (grupoFamiliar == null) {
+						puntoEncuentro.setGrupoFamiliar(grupoFamiliar);
+						grupoFamiliar.persistir();
+						grupoFamiliar.setPuntoEncuentro(puntoEncuentro);
+						com.getUsuario().setGrupoFamiliar(grupoFamiliar);
+						exito = true;
+						return "Grupo familiar creado exitosamente";
+					} else
+						puntoEncuentro.setGrupoFamiliar(grupoFamiliar);
+						puntoEncuentro.persistir();
+						grupoFamiliar.setPuntoEncuentro(puntoEncuentro);
+						return "Punto de encuentro definido exitosamente";
+				} else
+					return "El punto de encuentro debe estar dentro de la zona de seguridad";						
 			} catch (Exception w) {
 				Log.d("Error:", w.toString());
-				return "Ha ocurrido un error al crear el grupo familiar";
+				return "Ha ocurrido un error";
 			}
 		}
 

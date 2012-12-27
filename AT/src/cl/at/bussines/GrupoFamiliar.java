@@ -2,8 +2,8 @@ package cl.at.bussines;
 
 import java.util.ArrayList;
 
+import cl.at.data.ComentarioSQL;
 import cl.at.data.GrupoFamiliarSQL;
-import cl.at.data.InvitacionSQL;
 import cl.at.data.PuntoEncuentroSQL;
 import cl.at.data.UsuarioSQL;
 
@@ -35,6 +35,8 @@ public class GrupoFamiliar {
 	public GrupoFamiliar(Usuario usuario) {
 		GrupoFamiliarSQL gfSQL = new GrupoFamiliarSQL();
 		gfSQL.cargarGrupoFamiliar(this, usuario);
+		comentarios = new ArrayList<Comentario>();
+		integrantes = new ArrayList<Usuario>();
 		//TODO ahora solo se cargara el nombre y id del grupo familiar cuando se inicie sesion
 //		if (gfSQL.cargarGrupoFamiliar(this, usuario)) {
 //			PuntoEncuentroSQL ptoEncuentro = new PuntoEncuentroSQL();
@@ -68,6 +70,8 @@ public class GrupoFamiliar {
 	}
 
 	public ArrayList<Comentario> getComentarios() {
+		ComentarioSQL cSQL = new ComentarioSQL();
+		comentarios = cSQL.cargarComentarios(this);
 		return this.comentarios;
 	}
 
