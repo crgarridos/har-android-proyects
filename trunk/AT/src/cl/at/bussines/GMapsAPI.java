@@ -78,12 +78,18 @@ public class GMapsAPI {
 		return false;
 	}
 
-	public void determinarCiudad(Ciudad ciudad) throws IOException {
+	public void determinarCiudad(Ciudad ciudad){
 		String nombreCiudad = null;
 		Geocoder geoCoder = new Geocoder(this.mapView.getContext(), Locale.getDefault());
-		List<Address> direccion = geoCoder.getFromLocation(ciudad.getDispositivo().getPosicion().getLatitud(), ciudad.getDispositivo().getPosicion().getLongitud(), 1);
-		if (direccion.size() > 0)
-			nombreCiudad = direccion.get(0).getLocality();
+		try{
+			List<Address> direccion = geoCoder.getFromLocation(ciudad.getDispositivo().getPosicion().getLatitud(), ciudad.getDispositivo().getPosicion().getLongitud(), 1);
+			if (direccion.size() > 0)
+				nombreCiudad = direccion.get(0).getLocality();
+		}
+		catch(IOException e){
+			nombreCiudad = new CiudadSQL().getNombre(ciudad.getDispositivo().getPosicion().getLatitud(), ciudad.getDispositivo().getPosicion().getLongitud());
+			Log.w(TAG, "determinarCiudad, "+e.toString()+" "+e.getCause());
+		}
 		CiudadSQL cSQL = new CiudadSQL();
 		cSQL.cargarCiudad(ciudad, nombreCiudad);
 		ciudad.setAreaInundacion(new PuntoSQL().cargarAreaInundacion(ciudad));

@@ -73,12 +73,12 @@ public class MainActivity extends MapActivity {
 		super.onCreate(savedInstanceState);
 		com = Comunicador.getInstancia();
 		setContentView(R.layout.activity_main);
-        GCMRegistrar.checkDevice(MainActivity.this);
-        GCMRegistrar.checkManifest(MainActivity.this);
+		GCMRegistrar.checkDevice(MainActivity.this);
+		GCMRegistrar.checkManifest(MainActivity.this);
 		context = getApplicationContext();
 		if (com.getUsuario() != null) {
 			usuario = com.getUsuario();
-//			desuscribirDispositivo();
+			// desuscribirDispositivo();
 		} else if (Util.getPreferencia("usuario") != null) {
 			traerUsuario = true;
 		} else {
@@ -86,7 +86,8 @@ public class MainActivity extends MapActivity {
 			Util.reiniciarPreferencias(context);
 			finish();
 		}
-		mapView = (MapView) findViewById(R.id.mapview);	
+		
+		mapView = (MapView) findViewById(R.id.mapview);
 		btnCentrar = (ImageButton) findViewById(R.id.ActivityMain_btnCentrar);
 		mOverlayLocation = new MyLocationOverlay(mapView.getContext(), mapView);
 		mOverlayLocation.enableMyLocation();
@@ -96,9 +97,9 @@ public class MainActivity extends MapActivity {
 				centrarEnMiPosicion();
 			}
 		});
-		
+
 		btnCentrar.setOnClickListener(new View.OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				centrarEnMiPosicion();
@@ -188,30 +189,31 @@ public class MainActivity extends MapActivity {
 	private void mostrarInvitaciones() {
 		Intent intent = new Intent("at.LISTA_INVITACIONES");
 		startActivity(intent);
-//		ArrayList<Invitacion> invitaciones = usuario.getInvitaciones();
+		// ArrayList<Invitacion> invitaciones = usuario.getInvitaciones();
 	}
 
 	@Override
 	protected boolean isRouteDisplayed() {
 		return false;
 	}
-	
-	protected void registrarDispositivo(){
-        final String regId = GCMRegistrar.getRegistrationId(MainActivity.this);
-        if (regId.equals("")) {
-        	GCMRegistrar.register(MainActivity.this, "42760762845"); //Sender ID
-        } else {
-        	Log.v("GCMTest", "Ya registrado");
-        }
+
+	protected void registrarDispositivo() {
+		final String regId = GCMRegistrar.getRegistrationId(MainActivity.this);
+		if (regId.equals("")) {
+			GCMRegistrar.register(MainActivity.this, "42760762845"); // Sender
+																		// ID
+		} else {
+			Log.v("GCMTest", "Ya registrado");
+		}
 	}
-	
-	protected void desuscribirDispositivo(){
-        final String regId = GCMRegistrar.getRegistrationId(MainActivity.this);
-        if (!regId.equals("")) {
-        	GCMRegistrar.unregister(MainActivity.this);
-        } else {
-        	Log.v("GCMTest", "Ya des-registrado");
-        }
+
+	protected void desuscribirDispositivo() {
+		final String regId = GCMRegistrar.getRegistrationId(MainActivity.this);
+		if (!regId.equals("")) {
+			GCMRegistrar.unregister(MainActivity.this);
+		} else {
+			Log.v("GCMTest", "Ya des-registrado");
+		}
 	}
 
 	public void mostrarMensajeConfirmacion() {
@@ -277,12 +279,12 @@ public class MainActivity extends MapActivity {
 			pDialog = new ProgressDialog(MainActivity.this);
 			pDialog.setIndeterminate(false);
 			pDialog.setCancelable(false);
+			pDialog.setMessage("Cargando...");
 			pDialog.show();
 		}
 
 		protected Boolean doInBackground(String... params) {
 			if (traerUsuario) {
-				pDialog.setMessage("Cargando...");
 				usuario = new Usuario((String) Util.getPreferencia("usuario"));
 				if (!usuario.getExisteUsuario() || usuario.getPassword() == null
 						|| !Util.encriptaEnMD5(usuario.getNombreUsuario() + usuario.getPassword()).equals(Util.getPreferencia("login"))) {
@@ -297,14 +299,14 @@ public class MainActivity extends MapActivity {
 			gf = usuario != null ? usuario.getGrupoFamiliar() : null;
 			ciudad = new Ciudad(mapView, dispositivo, gf != null ? gf.getPuntoEncuentro() : null);
 			try {
-				ciudad.obtenerCiudad(); 
+				ciudad.obtenerCiudad();
 			} catch (IOException e) {
-				e.printStackTrace();
+				Log.e(TAG, "AsyncCargar.doInBackground, " + e.toString() + e.getCause());
 			}
-//			dispositivo.actualizarPosicion();
+			// dispositivo.actualizarPosicion();
 			return true;
 		}
-
+		
 		protected void onPostExecute(Boolean result) {
 			ciudad.actualizarPosiciones();
 			if (result)
@@ -313,7 +315,9 @@ public class MainActivity extends MapActivity {
 				Toast.makeText(context, "Ha ocurrido un error inesperado al iniciar la aplicacion", Toast.LENGTH_LONG).show();
 				finish();
 			}
+			
 			dispositivo.inicializar(ciudad.getLocationListener());
+			
 			com.setUsuario(usuario);
 			com.setCiudad(ciudad);
 			com.setDispositivo(dispositivo);

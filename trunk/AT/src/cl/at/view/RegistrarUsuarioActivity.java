@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import cl.at.bussines.Usuario;
 import cl.at.util.Comunicador;
+import cl.at.util.Util;
 
 public class RegistrarUsuarioActivity extends Activity {
 
@@ -108,9 +109,10 @@ public class RegistrarUsuarioActivity extends Activity {
 		protected void onPostExecute(String s) {
 			Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
 			if (exito) {
-				Intent intent = new Intent("at.MAPA");
+				Toast.makeText(getApplicationContext(), "Bienvenido " + u.getNombreCompleto(), Toast.LENGTH_SHORT).show();
 				Comunicador.getInstancia().setUsuario(u);
-				startActivity(intent);
+				startActivity(new Intent("at.MAPA"));
+				Util.guardarUsuario(u, getApplicationContext());
 				setResult(Activity.RESULT_OK);
 				finish();
 			}
