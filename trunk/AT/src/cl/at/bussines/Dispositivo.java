@@ -39,22 +39,17 @@ public class Dispositivo {
 		this.context = AlertTsunamiApplication.getAppContext();
 		setUsuario(usuario);
 		if(!usuario.esExterno()){
-			this.intervalo = Util.getPreferencia("intervalo") != null ? Integer.parseInt(Util.getPreferencia("intervalo")) : 10000;// TODO cambiar tiempo default
+			this.intervalo = Util.getPreferencia("intervalo") != null ? Integer.parseInt(Util.getPreferencia("intervalo")) : 5000;// TODO cambiar tiempo default
 			this.locManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
-			if(this.locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)!=null){
-				this.location = this.locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+			this.location = this.locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+			if(this.location!=null){
 				setPosicion(new Coordenada(location.getLatitude(), location.getLongitude()));
 				dSQL.persistir(this);
 				Util.guardar(this);
 			}
-			else{
-				this.location = this.locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-				dSQL.cargarDispositivo(this);
-			}
+			else dSQL.cargarDispositivo(this);
 		}
-		else{
-			dSQL.cargarDispositivo(this);
-		}
+		else dSQL.cargarDispositivo(this);
 	}
 
 	public Dispositivo() {
@@ -106,25 +101,26 @@ public class Dispositivo {
 	}
 
 	public void actualizarPosicion() {
-		ArrayList<Usuario> grupoFamiliar = new ArrayList<Usuario>();
-		grupoFamiliar = getUsuario().getGrupoFamiliar().getIntegrantes();
-		try {
-			DispositivoSQL dSQL = new DispositivoSQL();
-			this.location = this.locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-			if(this.location!=null)
-				setPosicion(new Coordenada(this.location.getLatitude(), this.location.getLongitude()));
-			else 
-				dSQL.getUltimaPosicion(this);
+		DispositivoSQL dSQL = new DispositivoSQL();
+		this.location = this.locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+		if(this.location!=null)
+			setPosicion(new Coordenada(this.location.getLatitude(), this.location.getLongitude()));
+		else 
+			dSQL.getUltimaPosicion(this);
+		if(this.getUsuario()!=null&&this.getUsuario().getGrupoFamiliar()!=null)
+		try{
+			ArrayList<Usuario> grupoFamiliar = new ArrayList<Usuario>();
+			grupoFamiliar = getUsuario().getGrupoFamiliar().getIntegrantes();
 			for(int i = 1; i < grupoFamiliar.size(); i++)
 				dSQL.getUltimaPosicion(grupoFamiliar.get(i).getDispositivo());
 		} catch (Exception e) {
-			DispositivoSQL dSQL = new DispositivoSQL();
+			Log.e(TAG, "actualizarPosicion: "+e.toString());
 		}
 		if (!estaSeguro()) {
-			// TODO comprobar estado de dispositivo
+			// TODO comprobar estado de dispositivoa
 		}
-		DispositivoSQL dSQL = new DispositivoSQL();
-		dSQL.cargarDispositivo(this);
+//		DispositivoSQL dSQL = new DispositivoSQL();
+//		dSQL.cargarDispositivo(this);
 	}
 
 	public Boolean estaSeguro() {

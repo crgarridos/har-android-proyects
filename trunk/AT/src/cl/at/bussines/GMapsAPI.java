@@ -137,17 +137,21 @@ public class GMapsAPI{
 //		setCentro(c);
 		Coordenada coordenada = new Coordenada(usuario.getDispositivo().getPosicion().getLatitud(), usuario.getDispositivo().getPosicion().getLongitud());
 		GeoPoint posicion = new GeoPoint((int)(coordenada.getLatitud()*1E6), (int)(coordenada.getLongitud()*1E6));
-		this.mapOverlays = mapView.getOverlays();
-		for(int i = 1; i < this.mapOverlays.size(); i++){
-			this.mapOverlays.remove(i);
-		}
 		Drawable drawable = mapView.getContext().getResources().getDrawable(usuario.getDispositivo().estaSeguro()? R.drawable.icono_persona_segura: R.drawable.icono_persona_riesgo);
 		MarkItemizedOverlay itemizedoverlay = new MarkItemizedOverlay(drawable, mapView.getContext());
 		OverlayItem overlayItem = new OverlayItem(posicion, usuario.getNombreUsuario(), "Posicion: "+coordenada.getLatitud().toString()+" / "+coordenada.getLongitud().toString());
-		Log.i(TAG, "dibujo: "+posicion.getLatitudeE6()*1E6+" - "+posicion.getLongitudeE6()*1E6);
+		Log.i(TAG, "integrante: "+usuario.getNombreUsuario()+posicion.getLatitudeE6()*1E6+" - "+posicion.getLongitudeE6()*1E6);
 		itemizedoverlay.addOverlay(overlayItem);
 		mapOverlays.add(itemizedoverlay);
 		this.mapView.postInvalidate();
+	}
+	
+	public void borrarPuntos(){
+		this.mapOverlays = mapView.getOverlays();
+		for(int i = 1; i < this.mapOverlays.size(); i++){
+			if(mapOverlays.get(i).getClass()==MarkItemizedOverlay.class)
+				this.mapOverlays.remove(i);
+		}
 	}
 
 	public void dibujarPunto(Coordenada c, String titulo, int color){

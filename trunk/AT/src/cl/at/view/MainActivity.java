@@ -35,7 +35,7 @@ import com.google.android.maps.MyLocationOverlay;
 public class MainActivity extends MapActivity {
 
 	private static final String TAG = MainActivity.class.getName();
-//	private MyLocationOverlay mOverlayLocation;
+	private MyLocationOverlay mOverlayLocation;
 	private MapView mapView;
 	private ImageButton btnCentrar;
 	private ProgressDialog pDialog;
@@ -87,28 +87,28 @@ public class MainActivity extends MapActivity {
 		}
 		mapView = (MapView) findViewById(R.id.mapview);	
 		btnCentrar = (ImageButton) findViewById(R.id.ActivityMain_btnCentrar);
-//		mOverlayLocation = new MyLocationOverlay(mapView.getContext(), mapView);
-//		mOverlayLocation.enableMyLocation();
-//		mapView.getOverlays().add(mOverlayLocation);
-//		mOverlayLocation.runOnFirstFix(new Runnable() {
-//			public void run() {
-//				centrarEnMiPosicion();
-//			}
-//		});
+		mOverlayLocation = new MyLocationOverlay(mapView.getContext(), mapView);
+		mOverlayLocation.enableMyLocation();
+		mapView.getOverlays().add(mOverlayLocation);
+		mOverlayLocation.runOnFirstFix(new Runnable() {
+			public void run() {
+				centrarEnMiPosicion();
+			}
+		});
 		
 		btnCentrar.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-//				centrarEnMiPosicion();
+				centrarEnMiPosicion();
 			}
 		});
 		new AsyncCargar().execute();
 	}
 
-//	protected void centrarEnMiPosicion() {
-//		mapView.getController().animateTo(mOverlayLocation.getMyLocation());
-//	}
+	protected void centrarEnMiPosicion() {
+		mapView.getController().animateTo(mOverlayLocation.getMyLocation());
+	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
 		SubMenu smnu1 = menu.addSubMenu(Menu.NONE, MNU_OPC1, Menu.NONE, "Capas").setIcon(R.drawable.capas);
@@ -175,6 +175,9 @@ public class MainActivity extends MapActivity {
 			return true;
 		case 33:
 			startActivity(new Intent("at.PUBLICAR_COMENTARIO"));
+			return true;
+		case 42:
+			ciudad.actualizarPosiciones();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -284,7 +287,7 @@ public class MainActivity extends MapActivity {
 			gf = usuario != null ? usuario.getGrupoFamiliar() : null;
 			ciudad = new Ciudad(mapView, dispositivo, gf != null ? gf.getPuntoEncuentro() : null);
 			try {
-				ciudad.obtenerCiudad();
+				ciudad.obtenerCiudad(); 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

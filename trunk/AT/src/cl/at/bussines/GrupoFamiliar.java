@@ -3,7 +3,7 @@ package cl.at.bussines;
 import java.util.ArrayList;
 
 import cl.at.data.GrupoFamiliarSQL;
-import cl.at.data.PuntoEncuentroSQL;
+import cl.at.data.InvitacionSQL;
 import cl.at.data.UsuarioSQL;
 
 public class GrupoFamiliar {
@@ -33,15 +33,17 @@ public class GrupoFamiliar {
 
 	public GrupoFamiliar(Usuario usuario) {
 		GrupoFamiliarSQL gfSQL = new GrupoFamiliarSQL();
-		if (gfSQL.cargarGrupoFamiliar(this, usuario)) {
-			PuntoEncuentroSQL ptoEncuentro = new PuntoEncuentroSQL();
-			puntoEncuentro = ptoEncuentro.cargarPtoEncuentro(this);
-			UsuarioSQL uSQL = new UsuarioSQL();
-			lider = usuario.esLider ? new Lider(usuario) : uSQL.cargarLider(this);
-			integrantes = uSQL.cargarIntegrantes(this, usuario);
+		gfSQL.cargarGrupoFamiliar(this, usuario);
+		//TODO ahora solo se cargara el nombre y id del grupo familiar cuando se inicie sesion
+//		if (gfSQL.cargarGrupoFamiliar(this, usuario)) {
+//			PuntoEncuentroSQL ptoEncuentro = new PuntoEncuentroSQL();
+//			puntoEncuentro = ptoEncuentro.cargarPtoEncuentro(this);
+//			UsuarioSQL uSQL = new UsuarioSQL();
+//			lider = usuario.esLider ? new Lider(usuario) : uSQL.cargarLider(this);
+//			integrantes = uSQL.cargarIntegrantes(this, usuario);
 //			ComentarioSQL cSQL = new ComentarioSQL();
 //			comentarios = cSQL.cargarComentarios(this);
-		}
+//		}
 	}
 
 	public Integer getId() {
@@ -82,7 +84,9 @@ public class GrupoFamiliar {
 	}
 
 	public ArrayList<Usuario> getIntegrantes() {
-		return this.integrantes;
+		if (integrantes == null || integrantes.size() == 0)
+			integrantes= new UsuarioSQL().cargarIntegrantes(this);
+		return integrantes;
 	}
 
 	public void eliminarIntegrante(Usuario usuario) {

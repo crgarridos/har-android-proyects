@@ -92,12 +92,11 @@ public class UsuarioSQL {
 		return null;
 	}
 
-	public ArrayList<Usuario> cargarIntegrantes(final GrupoFamiliar grupoFamiliar, Usuario usuario) {
+	public ArrayList<Usuario> cargarIntegrantes(final GrupoFamiliar grupoFamiliar) {
 		Log.i(TAG, "cargando integrantes...");
 		try {
 			Parametros postParametersToSend = new Parametros();
 			postParametersToSend.add("id", grupoFamiliar.getId().toString());
-			postParametersToSend.add("nombreUsuario", usuario.getNombreUsuario());
 			JSONArray jdata = null;
 			jdata = post.getServerData(postParametersToSend, ConexionHttp.URL_CONNECT + "getIntegrantes.php");
 			if (jdata != null) {
@@ -105,18 +104,17 @@ public class UsuarioSQL {
 				for (int i = 0; i < jdata.length(); i++) {
 					try {
 						JSONObject jsonData = jdata.getJSONObject(i);
-						if(jsonData.getInt(CAMPO_ES_LIDER) != 1){
+						
+//						TODO if(jsonData.getInt(CAMPO_ES_LIDER) != 1){
 							Usuario u = new Usuario(jsonData.getString(CAMPO_NOMBRE_USUARIO), true);
 							u.setEmail(jsonData.getString(CAMPO_EMAIL));
 							u.setNombreCompleto(jsonData.getString(CAMPO_NOMBRE_COMPLETO));
 							integrantes.add(u);
-						}
+//						}
 					} catch (Exception e) {
 						Log.e(TAG, "cargarIntegrantes, " + e.toString());
 					}
 				}
-				if(!usuario.getEsLider())
-					integrantes.add(usuario);
 				return integrantes;
 			}
 		} catch (Exception e) {

@@ -1,18 +1,16 @@
 package cl.at.view;
 
-import java.io.Serializable;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import cl.at.bussines.Usuario;
+import cl.at.util.Comunicador;
 
 public class RegistrarUsuarioActivity extends Activity {
 
@@ -45,7 +43,7 @@ public class RegistrarUsuarioActivity extends Activity {
 
 	private Boolean validarCoherencia(String nombreCompleto, String email) {
 		return true;
-		//
+		//TODO descomentar
 		// String nombreCompletoRegEx = "[a-z A-Z]{3,20}";
 		// String emailRegEx = "([a-z._]{3,64})@([a-z._]{3,255}).(com|cl)";
 		// String passRegEx = "[^^]{8,15}";
@@ -89,7 +87,6 @@ public class RegistrarUsuarioActivity extends Activity {
 		}
 
 		protected String doInBackground(String... params) {
-			SystemClock.sleep(500);
 			u = new Usuario(editTextNombreUsuario.getText().toString());
 			if (!u.getExisteUsuario()) {
 				u.setNombreCompleto(editTextNombreCompleto.getText().toString());
@@ -112,7 +109,7 @@ public class RegistrarUsuarioActivity extends Activity {
 			Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
 			if (exito) {
 				Intent intent = new Intent("at.MAPA");
-				intent.putExtra("usuario", (Serializable) u);
+				Comunicador.getInstancia().setUsuario(u);
 				startActivity(intent);
 				setResult(Activity.RESULT_OK);
 				finish();
