@@ -22,6 +22,7 @@ public class GrupoFamiliarSQL {
 	}
 
 	public Boolean cargarGrupoFamiliar(GrupoFamiliar grupoFamiliar, final Usuario usuario) {
+		Log.e(TAG, "cargando grupo familiar...");
 		try {
 			Parametros postParametersToSend = new Parametros();
 			postParametersToSend.add("nombre", usuario.getNombreUsuario());

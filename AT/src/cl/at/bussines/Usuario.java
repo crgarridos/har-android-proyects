@@ -28,8 +28,6 @@ public class Usuario {
 		this(nombre, null, pass, null);
 		UsuarioSQL uSQL = new UsuarioSQL();
 		existeUsuario = uSQL.cargarUsuario(this);
-		grupoFamiliar = new GrupoFamiliar(this);
-		// externo = false;
 	}
 
 	public Usuario(String nombre) {
@@ -67,13 +65,10 @@ public class Usuario {
 		this.nombreUsuario = nombreUsuario;
 		this.nombreCompleto = nombreCompleto;
 		this.email = email;
-		if (!externo) {
-			this.password = password;
-			dispositivo = new Dispositivo(this);// TODO ,externo); debe cargar
-												// de la bd
-			comentarios = new ArrayList<Comentario>();
-			invitaciones = new ArrayList<Invitacion>();
-		}
+		this.password = password;
+		dispositivo = new Dispositivo(this);
+//			comentarios = new ArrayList<Comentario>();
+//			invitaciones = new ArrayList<Invitacion>();
 	}
 
 	protected Usuario(Usuario usuario) {
@@ -187,26 +182,22 @@ public class Usuario {
 	}
 
 	public void esLider(int esLider) {
-		if (esLider == 1)
-			this.esLider = true;
-		else
-			this.esLider = false;
+		this.esLider = (esLider == 1);
 	}
 
 	public Boolean existe(String nombreUsuario) {
 		return false;
 	}
 
-	// OJO YA NO VA
-	// public Boolean existe(String nombre, String pass){
-	// return false;
-	// }
-
 	public ArrayList<Comentario> getComentarios() {
+		//TODO cargar de la bd
 		return comentarios;
 	}
 
 	public GrupoFamiliar getGrupoFamiliar() {
+		grupoFamiliar = new GrupoFamiliar(this);
+		if(grupoFamiliar.getId()==null)
+				grupoFamiliar = null;
 		return grupoFamiliar;
 	}
 
@@ -216,7 +207,7 @@ public class Usuario {
 	}
 
 	public ArrayList<Invitacion> getInvitaciones() {
-		if (invitaciones == null || invitaciones.size() == 0)// TODO lo dejo asi?? xD :D
+		if (invitaciones == null || invitaciones.size() == 0)
 			invitaciones = new InvitacionSQL().cargarInvitaciones(this);
 		return invitaciones;
 	}

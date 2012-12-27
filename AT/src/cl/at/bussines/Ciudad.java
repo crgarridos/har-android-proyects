@@ -13,6 +13,7 @@ import cl.at.data.DispositivoSQL;
 import cl.at.util.Comunicador;
 import cl.at.util.Util;
 import cl.at.view.IniciarSesionActivity;
+import cl.at.view.MarkItemizedOverlay;
 
 import com.google.android.maps.MapView;
 
@@ -181,15 +182,21 @@ public class Ciudad {
 		this.id = id;
 	}
 	
+	public void actualizarPosiciones(){
+		new AsyncMapa().execute();
+	}
+	
 
 	class AsyncMapa extends AsyncTask<String, String, String> {
 
 		@Override
 		protected String doInBackground(String... params) {
+			
 			dispositivo.actualizarPosicion();
-			for(int i = 0; i < dispositivo.getUsuario().getGrupoFamiliar().getIntegrantes().size(); i++)
-				gMapsAPI.dibujarPunto(dispositivo.getUsuario());
-//				gMapsAPI.dibujarPunto(dispositivo.getUsuario().getGrupoFamiliar().getIntegrantes().get(i).getDispositivo().getPosicion(), 1);
+			gMapsAPI.borrarPuntos();
+			ArrayList<Usuario> integrantes = dispositivo.getUsuario().getGrupoFamiliar().getIntegrantes();
+			for(int i = 0; i < integrantes.size(); i++)
+				gMapsAPI.dibujarPunto(integrantes.get(i));
 			DispositivoSQL dSQL = new DispositivoSQL();
 			dSQL.actualizarPosicion(dispositivo);
 			return null;
