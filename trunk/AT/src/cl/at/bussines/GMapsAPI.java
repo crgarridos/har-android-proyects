@@ -165,42 +165,65 @@ public class GMapsAPI {
 
 	}
 
-	public void dibujarPunto(Usuario usuario) {
-		// setCentro(c);
-		// try {
-		// Coordenada coordenada = new
-		// Coordenada(usuario.getDispositivo().getPosicion().getLatitud(),
-		// usuario.getDispositivo().getPosicion().getLongitud());
-		// GeoPoint posicion = new GeoPoint((int) (coordenada.getLatitud() *
-		// 1E6), (int) (coordenada.getLongitud() * 1E6));
-		// Drawable drawable = mapView.getContext().getResources()
-		// .getDrawable(usuario.getDispositivo().estaSeguro() ?
-		// R.drawable.icono_persona_segura : R.drawable.icono_persona_riesgo);
-		// MarkItemizedOverlay itemizedoverlay = new
-		// MarkItemizedOverlay(drawable, mapView.getContext());
-		// OverlayItem overlayItem = new OverlayItem(posicion,
-		// usuario.getNombreUsuario(), "Posicion: " +
-		// coordenada.getLatitud().toString() + " / "
-		// + coordenada.getLongitud().toString());//TODO
-		// Log.i(TAG, "integrante: " + usuario.getNombreUsuario() +
-		// posicion.getLatitudeE6()/1E6+ " - " + posicion.getLongitudeE6()/1E6);
-		// itemizedoverlay.addOverlay(overlayItem);
-		// mapOverlays.add(itemizedoverlay);
-		// this.mapView.postInvalidate();
-		// } catch (Exception e) {
-		// Log.e(TAG, "dibujarPunto," + e.toString() + " " + e.getCause());
-		// }
+	public void dibujarPunto(ArrayList<PuntoRiesgo> puntosRiesgo) {
+		dibujando = true;// Entra en el metodo
+		try {
+			ArrayList<PuntoRiesgo> puntosRiesgoAlto = new ArrayList<PuntoRiesgo>();
+			ArrayList<PuntoRiesgo> puntosRiesgoMedio = new ArrayList<PuntoRiesgo>();
+			ArrayList<PuntoRiesgo> puntosRiesgoBajo = new ArrayList<PuntoRiesgo>();
+			
+			for(int i = 0; i < puntosRiesgo.size(); i++){
+				if(puntosRiesgo.get(i).getCategoria() == 1)
+					puntosRiesgoAlto.add(puntosRiesgo.get(i));
+				else if(puntosRiesgo.get(i).getCategoria() == 2)
+					puntosRiesgoMedio.add(puntosRiesgo.get(i));
+				else puntosRiesgoBajo.add(puntosRiesgo.get(i));
+			}
+			
+			// Dibujamos puntos de riesgo alto
+			Drawable drawable = mapView.getContext().getResources().getDrawable(R.drawable.punto_riesgo_alto);
+			MarkItemizedOverlay itemizedoverlay = new MarkItemizedOverlay(drawable, mapView.getContext());
+			for (int i = 0; i < puntosRiesgoAlto.size(); i++) {
+				itemizedoverlay.addPuntoRiesgo(puntosRiesgoAlto.get(i));
+			}
+			itemizedoverlay.grabar();
+			mapView.getOverlays().add(itemizedoverlay);
+			
+			//Dibujamos puntos de riesgo medio
+			drawable = mapView.getContext().getResources().getDrawable(R.drawable.punto_riesgo_medio);
+			itemizedoverlay = new MarkItemizedOverlay(drawable, mapView.getContext());
+			for (int i = 0; i < puntosRiesgoMedio.size(); i++) {
+				itemizedoverlay.addPuntoRiesgo(puntosRiesgoMedio.get(i));
+			}
+			itemizedoverlay.grabar();
+			mapView.getOverlays().add(itemizedoverlay);
+			
+			//Dibujamos puntos de riesgo bajo
+			drawable = mapView.getContext().getResources().getDrawable(R.drawable.punto_riesgo_bajo);
+			itemizedoverlay = new MarkItemizedOverlay(drawable, mapView.getContext());
+			for (int i = 0; i < puntosRiesgoBajo.size(); i++) {
+				itemizedoverlay.addPuntoRiesgo(puntosRiesgoMedio.get(i));
+			}
+			itemizedoverlay.grabar();
+			mapView.getOverlays().add(itemizedoverlay);
+			
+			
+		} catch (Exception e) {
+			Log.e(TAG, "dibujarPuntoIntegrantes," + e.toString() + " " + e.getCause());
+		}
+		dibujando = false;// Al salir del metodo
 	}
 
 	public void dibujarPunto(ArrayList<Usuario> integrantes, Usuario usuario) {
+		dibujando = true;// Entra en el metodo
 		try {
 			ArrayList<Usuario> integrantesSeguros = new ArrayList<Usuario>();
 			ArrayList<Usuario> integrantesRiesgo = new ArrayList<Usuario>();
-
-			// Evitamos que se dibuje el usuario interno
-			for (int i = 0; i < integrantes.size(); i++) {
-				if (usuario.getNombreUsuario().compareTo(integrantes.get(i).getNombreUsuario()) != 0) {
-					if (integrantes.get(i).getDispositivo().getEstadoDeRiesgo())
+			
+			//Evitamos que se dibuje el usuario interno
+			for(int i = 0; i < integrantes.size(); i++){
+				if(!usuario.getNombreUsuario().equalsIgnoreCase(integrantes.get(i).getNombreUsuario())){
+					if(integrantes.get(i).getDispositivo().getEstadoDeRiesgo())
 						integrantesRiesgo.add(integrantes.get(i));
 					else
 						integrantesSeguros.add(integrantes.get(i));
@@ -217,11 +240,6 @@ public class GMapsAPI {
 			mapView.getOverlays().add(itemizedoverlay);
 
 			// Dibujamos integrantes seguros
-			mapView.getOverlays().add(itemizedoverlay);// 2: posicion de los
-														// integrantes seguros
-														// dentro del ArrayList
-														// de overlay
-			// Dibujamos integrantes seguros
 			drawable = mapView.getContext().getResources().getDrawable(R.drawable.icono_persona_segura);
 			itemizedoverlay = new MarkItemizedOverlay(drawable, mapView.getContext());
 			for (int i = 0; i < integrantesSeguros.size(); i++) {
@@ -232,6 +250,7 @@ public class GMapsAPI {
 		} catch (Exception e) {
 			Log.e(TAG, "dibujarPuntoIntegrantes," + e.toString() + " " + e.getCause());
 		}
+		dibujando = false;// Al salir del metodo
 	}
 
 	public void borrarPuntos() {

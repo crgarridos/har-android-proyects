@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 
 import cl.at.bussines.Coordenada;
 import cl.at.bussines.PuntoEncuentro;
+import cl.at.bussines.PuntoRiesgo;
 import cl.at.bussines.Usuario;
 
 import com.google.android.maps.GeoPoint;
@@ -73,6 +74,12 @@ public class MarkItemizedOverlay extends ItemizedOverlay<OverlayItem>{
 	  dialog.setMessage(item.getSnippet());
 	  dialog.show();
 	  return true;
+	}
+
+	public void addPuntoRiesgo(PuntoRiesgo puntoRiesgo) {
+		GeoPoint posicion = new GeoPoint((int)(puntoRiesgo.getCoordenada().getLatitud()*1E6), (int)(puntoRiesgo.getCoordenada().getLongitud()*1E6));
+		OverlayItem overlayItem = new OverlayItem(posicion, "Punto de riesgo", puntoRiesgo.getDescripcion());
+		addOverlay(overlayItem);
 	}
 	
 }
