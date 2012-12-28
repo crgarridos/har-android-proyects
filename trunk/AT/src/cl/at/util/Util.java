@@ -139,6 +139,13 @@ public abstract class Util {
 		SharedPreferences.Editor editar = prefs.edit();
 		editar.putString("dispositivo", dispositivo.getId().toString());
 		editar.commit();
-		
+	}
+
+	
+    public static void guardarIntervalo(String intervalo) {
+		SharedPreferences prefs = AlertTsunamiApplication.getAppContext().getSharedPreferences("Prefs", Context.MODE_PRIVATE);
+		SharedPreferences.Editor editar = prefs.edit();
+		editar.putString("intervalo", intervalo);
+		editar.commit();		
 	}
 }

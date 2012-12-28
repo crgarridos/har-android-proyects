@@ -14,12 +14,12 @@ public class BienvenidaActivity extends Activity {
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		if(Util.getPreferencia("usuario")!=null){
 			startActivity(new Intent("at.MAPA"));
 			finish();
 		}
-		
+		Util.guardarIntervalo("15000");
 		setContentView(R.layout.bienvenida);
 		btnRegistrar = (Button) findViewById(R.id.bienvenida_btnRegistrar);
 		btnIniciarSesion = (Button) findViewById(R.id.bienvenida_btnIniciarSesion);

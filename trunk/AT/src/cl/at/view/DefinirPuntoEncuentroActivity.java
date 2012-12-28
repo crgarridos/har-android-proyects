@@ -71,14 +71,10 @@ public class DefinirPuntoEncuentroActivity extends Activity {
 		Pattern p = Pattern.compile(descripcionRegEx);
 		Matcher m = p.matcher(editTextDescripcion.getText().toString());
 		if (!m.matches()) {
-			Toast.makeText(getApplicationContext(), "La descripcion debe tener entre 3 y 20 caracteres", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getApplicationContext(), "La descripcion debe tener entre 3 y 30 caracteres", Toast.LENGTH_SHORT).show();
 			return false;
 		}
 		return true;
-	}
-
-	public DefinirPuntoEncuentroActivity() {
-		// TODO Auto-generated constructor stub
 	}
 
 	class crearGrupoAsync extends AsyncTask<String, String, String> {

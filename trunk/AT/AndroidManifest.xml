@@ -9,13 +9,16 @@
         android:minSdkVersion="8"
         android:targetSdkVersion="16" />
 
-    <permission android:name="cl.at.view.permission.C2D_MESSAGE" android:protectionLevel="signature" />
+    <permission
+        android:name="cl.at.view.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
 
     <uses-permission android:name="cl.at.view.permission.C2D_MESSAGE" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    
+    <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
@@ -33,7 +36,6 @@
             android:theme="@android:style/Theme.NoTitleBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -44,14 +46,13 @@
             android:theme="@android:style/Theme.NoTitleBar" >
             <intent-filter>
                 <action android:name="at.MAPA" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
             android:name="cl.at.view.DefinirPuntoEncuentroMapActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="at.DEFINIR_PUNTO_ENCUENTRO_MAP" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -61,7 +62,7 @@
             android:name="cl.at.view.DefinirPuntoEncuentroActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar">
+            android:theme="@android:style/Theme.NoTitleBar" >
             <intent-filter>
                 <action android:name="at.DEFINIR_PUNTO_ENCUENTRO" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -71,7 +72,7 @@
             android:name="cl.at.view.PublicarComentarioActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar">
+            android:theme="@android:style/Theme.NoTitleBar" >
             <intent-filter>
                 <action android:name="at.PUBLICAR_COMENTARIO" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -84,6 +85,7 @@
             android:windowSoftInputMode="stateHidden" >
             <intent-filter>
                 <action android:name="at.INGRESAR_PUNTO_DE_RIESGO" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -105,6 +107,7 @@
             android:windowSoftInputMode="stateHidden" >
             <intent-filter>
                 <action android:name="at.INVITAR_FAMILIAR" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -126,7 +129,6 @@
             android:windowSoftInputMode="stateHidden" >
             <intent-filter>
                 <action android:name="at.MODIFICAR_USUARIO" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -151,6 +153,13 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity 
+            android:name="ListComentariosActivity">
+            <intent-filter>
+                <action android:name="at.LISTA_COMENTARIOS" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
 
         <receiver
             android:name="com.google.android.gcm.GCMBroadcastReceiver"
@@ -159,10 +168,20 @@
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
 
-                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="cl.at.view" />
             </intent-filter>
         </receiver>
 
+        <activity
+            android:name="cl.at.view.Test"
+            android:theme="@android:style/Theme.Dialog"
+            android:windowSoftInputMode="stateHidden" >
+            <intent-filter>
+                <action android:name="at.TEST" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <service android:name=".GCMIntentService" />
     </application>
 

@@ -11,11 +11,14 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.text.InputType;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 import cl.at.bussines.Ciudad;
@@ -36,6 +39,7 @@ public class MainActivity extends MapActivity {
 	private MyLocationOverlay mOverlayLocation;
 	private MapView mapView;
 	private ImageButton btnCentrar;
+	private EditText editText;
 	private ProgressDialog pDialog;
 	private Context context;
 	private Comunicador com;
@@ -61,7 +65,7 @@ public class MainActivity extends MapActivity {
 	private static final int MNU_OPC3 = 3;
 	private static final int SMNU_OPC31 = 31;
 	private static final int SMNU_OPC32 = 32;
-	private static final int SMNU_OPC33 = 33;
+//	private static final int SMNU_OPC33 = 33;
 	private static final int SMNU_OPC34 = 34;
 	private static final int SMNU_OPC35 = 35;
 
@@ -126,13 +130,13 @@ public class MainActivity extends MapActivity {
 			smnu2.add(Menu.NONE, SMNU_OPC24, Menu.NONE, "Crear grupo familiar");
 		smnu2.add(Menu.NONE, SMNU_OPC25, Menu.NONE, "Eliminar cuenta");
 		smnu2.add(Menu.NONE, SMNU_OPC26, Menu.NONE, "Cerrar sesion");
-
+		
 		if(usuario.getGrupoFamiliar() != null){
 			SubMenu smnu3 = menu.addSubMenu(Menu.NONE, MNU_OPC3, Menu.NONE, "Grupo familiar").setIcon(R.drawable.grupo_familiar);
 			smnu3.add(Menu.NONE, SMNU_OPC31, Menu.NONE, "Invitar familiar");
 			if(usuario.getEsLider() == true)
 			smnu3.add(Menu.NONE, SMNU_OPC32, Menu.NONE, "Definir punto de encuentro");
-			smnu3.add(Menu.NONE, SMNU_OPC33, Menu.NONE, "Publicar comentario");
+//			smnu3.add(Menu.NONE, SMNU_OPC33, Menu.NONE, "Publicar comentario");
 			smnu3.add(Menu.NONE, SMNU_OPC34, Menu.NONE, "Visualizar comentarios");
 			smnu3.add(Menu.NONE, SMNU_OPC35, Menu.NONE, "Abandonar grupo");
 		}
@@ -179,12 +183,56 @@ public class MainActivity extends MapActivity {
 		case 33:
 			startActivity(new Intent("at.PUBLICAR_COMENTARIO"));
 			return true;
+		case SMNU_OPC34:
+			mostrarComentarios();
+			return true;
+		case 41:
+			configGeolocalizacion();
+			return true;
 		case 42:
 			ciudad.actualizarPosiciones();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+	}
+
+	private void configGeolocalizacion() {
+		LayoutInflater factory = LayoutInflater.from(this);
+		final View viewComentario = factory.inflate(R.layout.ingresar_comentario_riesgo, null);
+		editText = (EditText) viewComentario.findViewById(R.id.ingresar_comentario_riesgo);
+		editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+		editText.setText(String.valueOf(Integer.parseInt(Util.getPreferencia("intervalo"))/1000));
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+		alert.setTitle("Cambiar configuracion");
+		alert.setMessage("Ingrese el intervalo de tiempo que desea actualizar su posicion (en seg):");
+		alert.setView(viewComentario);
+		alert.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				if(editText.getText().toString().length()<3){
+					Toast.makeText(getApplicationContext(), "El tiempo minimo debe ser de 100 segundos", Toast.LENGTH_SHORT).show();
+				}
+				else {
+					Toast.makeText(getApplicationContext(), "Configuracion cambiada exitosamente", Toast.LENGTH_SHORT).show();
+					Util.guardarIntervalo(String.valueOf(Integer.parseInt(editText.getText().toString())*1000));
+				}
+			}
+		});
+
+		alert.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface arg0, int arg1) {
+			}
+
+		});
+		alert.create().show();
+
+	}
+
+	private void mostrarComentarios() {
+		Intent intent = new Intent("at.LISTA_COMENTARIOS");
+		startActivity(intent);
 	}
 
 	private void mostrarInvitaciones() {
