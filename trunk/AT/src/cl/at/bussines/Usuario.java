@@ -199,7 +199,6 @@ public class Usuario {
 	}
 
 	public ArrayList<Comentario> getComentarios() {
-		//TODO cargar de la bd
 		return comentarios;
 	}
 

@@ -1,7 +1,6 @@
 package cl.at.view;
 
 import java.io.IOException;
-import java.io.Serializable;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -299,7 +298,6 @@ public class MainActivity extends MapActivity {
 		}
 
 		protected String doInBackground(String... params) {
-			SystemClock.sleep(300);
 			if (usuario.getGrupoFamiliar() != null) {
 				// TODO Abandonar grupo familiar CDU - 07
 			}
@@ -314,7 +312,7 @@ public class MainActivity extends MapActivity {
 		protected void onPostExecute(String s) {
 			Util.reiniciarPreferencias(context);
 			Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
-			pDialog.dismiss();// ocultamos progess dialog.
+			pDialog.dismiss();
 			finish();
 
 		}
@@ -338,9 +336,6 @@ public class MainActivity extends MapActivity {
 						|| !Util.encriptaEnMD5(usuario.getNombreUsuario() + usuario.getPassword()).equals(Util.getPreferencia("login"))) {
 					Util.reiniciarPreferencias(context);
 					return false;
-					// TODO se debe cambiar el encriptado de login en
-					// preferences cuando el usuario cambie la contrasena
-					// (Util.guardarUsuario(usuario)), se entiende? : se se se
 				}
 			}
 			dispositivo = usuario != null ? usuario.getDispositivo() : new Dispositivo(null);
@@ -353,7 +348,6 @@ public class MainActivity extends MapActivity {
 			}
 			return true;
 		}
-		
 		protected void onPostExecute(Boolean result) {
 			ciudad.actualizarPosiciones();
 			if (result)
