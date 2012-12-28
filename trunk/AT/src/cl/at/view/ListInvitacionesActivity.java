@@ -25,18 +25,15 @@ import cl.at.bussines.GrupoFamiliar;
 import cl.at.bussines.Invitacion;
 import cl.at.bussines.Usuario;
 import cl.at.util.Comunicador;
-import cl.at.view.R.menu;
 
 public class ListInvitacionesActivity extends Activity {
 
 	ProgressDialog pDialog;
 
-	Usuario usuario;
-	ArrayList<Invitacion> invitaciones;
-	ListView lv;
-	TextView seleccionado;
-	Button btn;
-	int posicionSeleccionada;
+	private Usuario usuario;
+	private ListView lv;
+	private Button btn;
+	private int posicionSeleccionada;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +87,6 @@ public class ListInvitacionesActivity extends Activity {
 	class AsyncInvitaciones extends AsyncTask<String, String, ArrayList<Invitacion>> {
 
 		ProgressDialog pDialog;
-		private final String TAG = ListInvitacionesActivity.class.getName();
 
 		protected void onPreExecute() {
 			pDialog = new ProgressDialog(ListInvitacionesActivity.this);
