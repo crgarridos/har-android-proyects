@@ -351,7 +351,6 @@ public class MainActivity extends MapActivity {
 			} catch (IOException e) {
 				Log.e(TAG, "AsyncCargar.doInBackground, " + e.toString() + e.getCause());
 			}
-			// dispositivo.actualizarPosicion();
 			return true;
 		}
 		
@@ -365,7 +364,6 @@ public class MainActivity extends MapActivity {
 			}
 			
 			dispositivo.inicializar(ciudad.getLocationListener());
-			
 			com.setUsuario(usuario);
 			com.setCiudad(ciudad);
 			com.setDispositivo(dispositivo);

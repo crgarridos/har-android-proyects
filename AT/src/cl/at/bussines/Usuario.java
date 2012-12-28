@@ -119,8 +119,16 @@ public class Usuario {
 		this.password = password;
 	}
 
-	public void setEstadoLlegada(boolean llego) {
-		this.estadoDeLlegada = llego;
+	public Boolean setEstadoLlegada(boolean llego) {
+		Comentario comentario = new Comentario(this.nombreUsuario+" ha llegado al punto de encuentro", this);
+		try{
+			comentario.persistir();
+			this.estadoDeLlegada = llego;
+			return true;
+		}catch(Exception e){
+			Log.e(TAG, "setEstadoLlegada"+e.toString());
+			return false;
+		}
 	}
 
 	public Boolean isEstadoLlegada() {
@@ -201,7 +209,7 @@ public class Usuario {
 			if(grupoFamiliar.getId()==null)
 					grupoFamiliar = null;
 		}
-		return grupoFamiliar;
+ 		return grupoFamiliar;
 	}
 
 	public Boolean setGrupoFamiliar(GrupoFamiliar grupoFamiliar) {

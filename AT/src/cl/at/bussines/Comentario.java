@@ -48,7 +48,6 @@ public class Comentario {
 		this.remitente = remitente;
 	}
 
-	//destructor
 	public void persistir() throws Exception{
 		ComentarioSQL comentarioSQL = new ComentarioSQL();
 		if(!comentarioSQL.persistir(this))

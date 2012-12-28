@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -17,6 +18,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import cl.at.bussines.Ciudad;
 import cl.at.bussines.Coordenada;
+import cl.at.bussines.GMapsAPI;
 import cl.at.bussines.GrupoFamiliar;
 import cl.at.bussines.Lider;
 import cl.at.bussines.PuntoEncuentro;
@@ -78,12 +80,16 @@ public class DefinirPuntoEncuentroMapActivity extends MapActivity {
 		mapView = (MapView) findViewById(R.id.definir_punto_encuentro_mapView);
 		this.setTitle("Seleccione un punto de seguridad en el mapa");
 		Bundle bundle = getIntent().getExtras();
-		if (grupoFamiliar == null)
-			nombreGrupo = bundle.getString("nombreGrupo");
+		GMapsAPI gMapsAPI = new GMapsAPI(mapView);
 		MapOverlay mapOverlay = new MapOverlay();
 		List<Overlay> listOfOverlays = mapView.getOverlays();
-		listOfOverlays.clear();
-		listOfOverlays.add(mapOverlay);
+		if (grupoFamiliar == null)
+			nombreGrupo = bundle.getString("nombreGrupo");
+		else{
+			gMapsAPI.dibujarPunto(grupoFamiliar.getPuntoEncuentro());
+			listOfOverlays.add(mapOverlay);
+		}
+		gMapsAPI.dibujarPolilinea(ciudad.getAreaInundacion());
 		LayoutInflater factory = LayoutInflater.from(this);
 		final View viewComentario = factory.inflate(R.layout.ingresar_comentario, null);
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
