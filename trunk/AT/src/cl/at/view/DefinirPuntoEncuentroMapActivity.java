@@ -87,8 +87,8 @@ public class DefinirPuntoEncuentroMapActivity extends MapActivity {
 		LayoutInflater factory = LayoutInflater.from(this);
 		final View viewComentario = factory.inflate(R.layout.ingresar_comentario, null);
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
-		alert.setTitle("Descripci�n");
-		alert.setMessage("Ingrese una descripci�n del punto de encuentro familiar");
+		alert.setTitle("Descripcion");
+		alert.setMessage("Ingrese una descripcion del punto de encuentro familiar");
 		alert.setView(viewComentario);
 		editTextComentario = (EditText) viewComentario.findViewById(R.id.ingresar_comentario);
 		alert.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
@@ -119,6 +119,7 @@ public class DefinirPuntoEncuentroMapActivity extends MapActivity {
 
 		Boolean existe;
 		Boolean exito = false;
+		Boolean salir = false;
 
 		protected void onPreExecute() {
 			existe = true;
@@ -155,6 +156,7 @@ public class DefinirPuntoEncuentroMapActivity extends MapActivity {
 						puntoEncuentro.setGrupoFamiliar(grupoFamiliar);
 						grupoFamiliar.setPuntoEncuentro(puntoEncuentro);
 						puntoEncuentro.persistir();
+						salir = true;
 						return "Punto de encuentro definido exitosamente";
 				} else
 					return "El punto de encuentro debe estar dentro de la zona de seguridad";
@@ -166,9 +168,9 @@ public class DefinirPuntoEncuentroMapActivity extends MapActivity {
 
 		protected void onPostExecute(String s) {
 			Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
+			if(salir) finish();
 			if (exito) {
-				Intent i = new Intent("at.INVITAR_FAMILIAR");
-				startActivityForResult(i, 777);
+				startActivityForResult(new Intent("at.INVITAR_FAMILIAR"), 777);
 				setResult(Activity.RESULT_OK);
 				finish();
 			}
