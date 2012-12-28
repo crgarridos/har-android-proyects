@@ -92,6 +92,10 @@ public class GrupoFamiliar {
 	}
 
 	public PuntoEncuentro getPuntoEncuentro() {
+		if (puntoEncuentro == null){
+			PuntoEncuentroSQL ptoEncuentro = new PuntoEncuentroSQL();
+			puntoEncuentro = ptoEncuentro.cargarPtoEncuentro(this);
+		}
 		return puntoEncuentro;
 	}
 

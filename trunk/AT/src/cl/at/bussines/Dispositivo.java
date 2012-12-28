@@ -116,11 +116,11 @@ public class Dispositivo {
 			} catch (Exception e) {
 				Log.e(TAG, "actualizarPosicion: "+e.toString());
 			}
+		
 		if (!estaSeguro()) {
 			// TODO comprobar estado de dispositivoa
+			
 		}
-//		DispositivoSQL dSQL = new DispositivoSQL();
-//		dSQL.cargarDispositivo(this);
 	}
 
 	public Boolean estaSeguro() {

@@ -7,6 +7,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.widget.Toast;
 import cl.at.data.DispositivoSQL;
@@ -189,22 +190,31 @@ public class Ciudad {
 		protected void onPreExecute() {
 			super.onPreExecute();
 			Toast.makeText(AlertTsunamiApplication.getAppContext(), "Actualizando...", Toast.LENGTH_LONG).show();
-			if(gMapsAPI.dibujando())
+			if(gMapsAPI.dibujando()){
+				SystemClock.sleep(1000);
 				this.cancel(true);
+			}
+				
 		}
 		
 		@Override
 		protected String doInBackground(String... params) {
 			if(!gMapsAPI.dibujando()){
 				gMapsAPI.dibujando(true);
+				GrupoFamiliar grupoFamiliar = dispositivo.getUsuario().getGrupoFamiliar();
+				PuntoEncuentro puntoEncuentro = null;
 				dispositivo.actualizarPosicion();
 				gMapsAPI.borrarPuntos();
-				gMapsAPI.dibujarPolilinea(areaInundacion);
-				GrupoFamiliar grupoFamiliar = dispositivo.getUsuario().getGrupoFamiliar();
 				if(grupoFamiliar != null){
-					gMapsAPI.dibujarPunto(grupoFamiliar.getIntegrantes());
-					gMapsAPI.dibujarPunto(grupoFamiliar.getPuntoEncuentro());
+					puntoEncuentro = grupoFamiliar.getPuntoEncuentro();
+					gMapsAPI.dibujarPunto(grupoFamiliar.getIntegrantes(), dispositivo.getUsuario());
+					gMapsAPI.dibujarPunto(puntoEncuentro);
+					if(gMapsAPI.compararPunto(dispositivo.getPosicion(), puntoEncuentro)){
+						int intentos = 0;
+						while(!dispositivo.getUsuario().setEstadoLlegada(true)&&intentos++ == 5);
+					}
 				}
+				gMapsAPI.dibujarPolilinea(areaInundacion);
 				DispositivoSQL dSQL = new DispositivoSQL();
 				dSQL.actualizarPosicion(dispositivo);
 				gMapsAPI.dibujando(false);
