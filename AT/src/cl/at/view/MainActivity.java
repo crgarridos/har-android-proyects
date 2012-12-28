@@ -290,6 +290,8 @@ public class MainActivity extends MapActivity {
 	
 	class AsyncDelete extends AsyncTask<String, String, String> {
 
+		ProgressDialog pDialog = new ProgressDialog(MainActivity.this);
+		
 		protected void onPreExecute() {
 			pDialog = new ProgressDialog(MainActivity.this);
 			pDialog.setIndeterminate(false);
@@ -299,7 +301,7 @@ public class MainActivity extends MapActivity {
 
 		protected String doInBackground(String... params) {
 			if (usuario.getGrupoFamiliar() != null) {
-				// TODO Abandonar grupo familiar CDU - 07
+				usuario.setGrupoFamiliar(null);
 			}
 			try {
 				usuario.eliminar();
@@ -321,6 +323,7 @@ public class MainActivity extends MapActivity {
 
 	class AsyncCargar extends AsyncTask<String, String, Boolean> {
 
+		ProgressDialog pDialog = new ProgressDialog(MainActivity.this);
 		protected void onPreExecute() {
 			pDialog = new ProgressDialog(MainActivity.this);
 			pDialog.setIndeterminate(false);
@@ -363,5 +366,34 @@ public class MainActivity extends MapActivity {
 			com.setDispositivo(dispositivo);
 			registrarDispositivo();
 		}
+	}
+	
+	class AsyncAbandonar extends AsyncTask<String, String, Boolean> {
+
+		ProgressDialog pDialog = new ProgressDialog(MainActivity.this);
+		
+		protected void onPreExecute() {
+			pDialog = new ProgressDialog(MainActivity.this);
+			pDialog.setIndeterminate(false);
+			pDialog.setCancelable(false);
+			pDialog.setMessage("Abandonando grupo...");
+			pDialog.show();
+		}
+
+		protected Boolean doInBackground(String... params) {
+			return usuario.setGrupoFamiliar(null);
+			
+		}
+
+		protected void onPostExecute(Boolean s) {
+			if(s){
+				Util.reiniciarPreferencias(context);
+				finish();
+			}
+			Toast.makeText(getApplicationContext(), s?"Se ha abandonado el grupo":"No se ha podido abandonar, intentelo mas tarde.", Toast.LENGTH_SHORT).show();
+			pDialog.dismiss();
+
+		}
+
 	}
 }
