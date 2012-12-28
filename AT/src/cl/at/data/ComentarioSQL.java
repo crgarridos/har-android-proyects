@@ -31,7 +31,7 @@ public class ComentarioSQL {
 		try {
 			Parametros postParametersToSend = new Parametros();
 			postParametersToSend.add("nombreFamiliar", c.getUsuario().getGrupoFamiliar().getNombre());
-			postParametersToSend.add("nombreUsuario", c.getUsuario().getNombreCompleto());
+			postParametersToSend.add("nombreUsuario", c.getUsuario().getNombreUsuario());
 			postParametersToSend.add("contenidoComentario", c.getContenido());
 			JSONArray jdata = null;
 			jdata = post.getServerData(postParametersToSend, ConexionHttp.URL_CONNECT + "ingresarComentario.php");
@@ -55,7 +55,7 @@ public class ComentarioSQL {
 				ArrayList<Comentario> comentarios = new ArrayList<Comentario>();
 				for (int i = 0; i < jdata.length(); i++) {
 					JSONObject jsonData = jdata.getJSONObject(i);
-					Comentario com = new Comentario(new Usuario(jsonData.getString(CAMPO_FK_NOMBRE_USUARIO),true));
+					Comentario com = new Comentario( new Usuario(jsonData.getString(CAMPO_FK_NOMBRE_USUARIO),true ) );
 					com.setContenido(jsonData.getString(CAMPO_CONTENIDO));
 					com.setFecha(Util.StringDBToDate(jsonData.getString(CAMPO_FECHA)));
 					comentarios.add(com);

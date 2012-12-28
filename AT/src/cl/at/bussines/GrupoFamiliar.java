@@ -2,6 +2,7 @@ package cl.at.bussines;
 
 import java.util.ArrayList;
 
+import android.util.Log;
 import cl.at.data.ComentarioSQL;
 import cl.at.data.GrupoFamiliarSQL;
 import cl.at.data.PuntoEncuentroSQL;
@@ -9,6 +10,7 @@ import cl.at.data.UsuarioSQL;
 
 public class GrupoFamiliar {
 
+	private static final String TAG = GrupoFamiliar.class.getName();
 	private Integer id;
 	private String nombre;
 	private ArrayList<Comentario> comentarios;
@@ -21,7 +23,7 @@ public class GrupoFamiliar {
 		integrantes = new ArrayList<Usuario>();
 	}
 
-	public GrupoFamiliar(String nombre, PuntoEncuentro puntoEncuentro, Lider lider) throws Exception{
+	public GrupoFamiliar(String nombre, PuntoEncuentro puntoEncuentro, Lider lider) throws Exception {
 		lider.setGrupoFamiliar(this);
 		comentarios = new ArrayList<Comentario>();
 		integrantes = new ArrayList<Usuario>();
@@ -65,21 +67,31 @@ public class GrupoFamiliar {
 		return nombre;
 	}
 
-	public void addComentario(Comentario comentario) {
-		this.comentarios.add(comentario);
+	public Boolean addComentario(Comentario comentario) {
+		if (this.comentarios == null)
+			this.comentarios = new ArrayList<Comentario>();
+		try {
+			comentario.persistir();
+			this.comentarios.add(comentario);
+			return true;
+		} catch (Exception e) {
+			Log.e(TAG, "addComentario, " + e.toString());
+			return false;
+		}
+
 	}
 
 	public ArrayList<Comentario> getComentarios() {
-		ComentarioSQL cSQL = new ComentarioSQL();
-		comentarios = cSQL.cargarComentarios(this);
-		return this.comentarios;
+		// if (comentarios == null || comentarios.size() == 0)
+		comentarios = new ComentarioSQL().cargarComentarios(this);
+		return comentarios;
 	}
 
 	public void setPuntoEncuentro(PuntoEncuentro puntoEncuentro) {
 		this.puntoEncuentro = puntoEncuentro;
 	}
 
-	public PuntoEncuentro getPuntoEncuentro(){
+	public PuntoEncuentro getPuntoEncuentro() {
 		return puntoEncuentro;
 	}
 
@@ -89,8 +101,8 @@ public class GrupoFamiliar {
 	}
 
 	public ArrayList<Usuario> getIntegrantes() {
-		if (integrantes == null || integrantes.size() == 0){
-			integrantes= new UsuarioSQL().cargarIntegrantes(this);
+		if (integrantes == null || integrantes.size() == 0) {
+			integrantes = new UsuarioSQL().cargarIntegrantes(this);
 			PuntoEncuentroSQL ptoEncuentro = new PuntoEncuentroSQL();
 			puntoEncuentro = ptoEncuentro.cargarPtoEncuentro(this);
 		}
@@ -117,15 +129,15 @@ public class GrupoFamiliar {
 
 	}
 
-	public void persistir() throws Exception{
-			GrupoFamiliarSQL grupoFamiliarSQL = new GrupoFamiliarSQL();
-			if(!grupoFamiliarSQL.persistir(this))
-				throw new Exception("Error");
+	public void persistir() throws Exception {
+		GrupoFamiliarSQL grupoFamiliarSQL = new GrupoFamiliarSQL();
+		if (!grupoFamiliarSQL.persistir(this))
+			throw new Exception("Error");
 	}
 
 	public void notificar() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

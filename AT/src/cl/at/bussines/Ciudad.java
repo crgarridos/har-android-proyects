@@ -211,6 +211,12 @@ public class Ciudad {
 			}
 			return null;
 		}
+		
+		@Override
+		protected void onPostExecute(String result) {
+			super.onPostExecute(result);
+//			gMapsAPI.dibujarPolilinea(areaInundacion);
+		}
 
 	}
 

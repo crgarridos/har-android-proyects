@@ -39,7 +39,7 @@ public class Dispositivo {
 		this.context = AlertTsunamiApplication.getAppContext();
 		setUsuario(usuario);
 		if(!usuario.esExterno()){
-			this.intervalo = Util.getPreferencia("intervalo") != null ? Integer.parseInt(Util.getPreferencia("intervalo")) : 5000;// TODO cambiar tiempo default
+			this.intervalo = Util.getPreferencia("intervalo") != null ? Integer.parseInt(Util.getPreferencia("intervalo")) : 10000;
 			this.locManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
 			this.location = this.locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 			if(this.location!=null){
@@ -136,8 +136,8 @@ public class Dispositivo {
 	}
 
 	public void inicializar(LocationListener locListener) {
-//		this.locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, this.intervalo, 0, locListener);
-		this.locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 0, locListener);
+		this.locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, this.intervalo, 0, locListener);
+//		this.locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 0, locListener);
 	}
 
 	public void onAlertaRecibida(Alerta a) {

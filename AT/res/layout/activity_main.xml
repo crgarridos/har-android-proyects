@@ -8,7 +8,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:clickable="true"
-    android:apiKey="0PnjzMHY2-8stH9P5ee60Z3PuXmwU3cbbnGeThg"/>
+    android:apiKey="0NDpcj4-69wkPNQIcANwZ1CgA3Fl7nNCBjsGUzw"/>
 <!-- Cristian 0NDpcj4-69wkPNQIcANwZ1CgA3Fl7nNCBjsGUzw"/> -->
 <!-- Juanfra 0PnjzMHY2-8stH9P5ee60Z3PuXmwU3cbbnGeThg"/> -->
 <!-- Damian 0kAv3RXafKopBZ6pRBW7iEea3WQsHL92hC0jRCg -->
@@ -17,8 +17,8 @@
 
 <ImageButton
     android:id="@+id/ActivityMain_btnCentrar"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="48dip"
+    android:layout_height="48dip"
     android:layout_alignParentRight="true"
     android:layout_alignParentTop="true"
     android:layout_margin="5dip"

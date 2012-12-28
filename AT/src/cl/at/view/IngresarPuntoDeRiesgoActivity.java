@@ -5,9 +5,10 @@ import java.util.List;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,7 +49,6 @@ public class IngresarPuntoDeRiesgoActivity extends MapActivity {
 
 	@Override
 	protected boolean isRouteDisplayed() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -87,11 +87,11 @@ public class IngresarPuntoDeRiesgoActivity extends MapActivity {
 		alert.setMessage("Ingrese una descripcion del punto de riesgo");
 		alert.setView(viewComentario);
 		editTextComentario = (EditText) viewComentario.findViewById(R.id.ingresar_comentario_riesgo);
-		
+		editTextComentario.setInputType(InputType.TYPE_CLASS_NUMBER);
 		LayoutInflater factory1 = LayoutInflater.from(this);
 		final View viewCategoria = factory1.inflate(R.layout.ingresar_categoria_riesgo, null);
 		AlertDialog.Builder alert1 = new AlertDialog.Builder(this);
-		alert1.setTitle("Categoría");
+		alert1.setTitle("Categoria");
 		alert1.setMessage("Seleccione una categoria del punto de riesgo");
 		alert1.setView(viewCategoria);
 		btnRojo = (Button) viewCategoria.findViewById(R.id.ingresarCategoria_btnRojo);
@@ -123,14 +123,17 @@ public class IngresarPuntoDeRiesgoActivity extends MapActivity {
 			public void onClick(DialogInterface dialog, int which) {
 			}
 		});
+		btnRojo.setBackgroundColor(Color.DKGRAY);
+		btnNaranjo.setBackgroundColor(Color.DKGRAY);
+		btnAmarillo.setBackgroundColor(Color.DKGRAY);
 		
 		btnRojo.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				color = 1;
-				btnRojo.setBackgroundColor(RESULT_OK);
-				btnNaranjo.setBackgroundColor(RESULT_CANCELED);
-				btnAmarillo.setBackgroundColor(RESULT_CANCELED);
+				btnRojo.setBackgroundColor(Color.LTGRAY);
+				btnNaranjo.setBackgroundColor(Color.DKGRAY);
+				btnAmarillo.setBackgroundColor(Color.DKGRAY);
 			}
 		});
 		
@@ -138,9 +141,9 @@ public class IngresarPuntoDeRiesgoActivity extends MapActivity {
 			@Override
 			public void onClick(View v) {
 				color = 2;
-				btnRojo.setBackgroundColor(RESULT_CANCELED);
-				btnNaranjo.setBackgroundColor(RESULT_OK);
-				btnAmarillo.setBackgroundColor(RESULT_CANCELED);
+				btnRojo.setBackgroundColor(Color.DKGRAY);
+				btnNaranjo.setBackgroundColor(Color.LTGRAY);
+				btnAmarillo.setBackgroundColor(Color.DKGRAY);
 			}
 		});
 		
@@ -148,9 +151,9 @@ public class IngresarPuntoDeRiesgoActivity extends MapActivity {
 			@Override
 			public void onClick(View v) {
 				color = 3;
-				btnRojo.setBackgroundColor(RESULT_CANCELED);
-				btnNaranjo.setBackgroundColor(RESULT_CANCELED);
-				btnAmarillo.setBackgroundColor(RESULT_OK);
+				btnRojo.setBackgroundColor(Color.DKGRAY);
+				btnNaranjo.setBackgroundColor(Color.DKGRAY);
+				btnAmarillo.setBackgroundColor(Color.LTGRAY);
 			}
 		});
 		
