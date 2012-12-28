@@ -18,7 +18,6 @@ import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
-import com.google.android.maps.OverlayItem;
 
 public class GMapsAPI {
 
@@ -113,17 +112,14 @@ public class GMapsAPI {
 
 	public void dibujarPolilinea(ArrayList<Coordenada> areaInundacion) {
 		try {
+			Drawable drawable = mapView.getContext().getResources().getDrawable(R.drawable.punto);
+			MarkItemizedOverlay itemizedoverlay = new MarkItemizedOverlay(drawable, mapView.getContext());
 			for(int i = 0; i < areaInundacion.size(); i++){
-				Coordenada coordenada = areaInundacion.get(i);
-				GeoPoint posicion = new GeoPoint((int) (coordenada.getLatitud() * 1E6), (int) (coordenada.getLongitud() * 1E6));
-				Drawable drawable = mapView.getContext().getResources().getDrawable(R.drawable.punto);
-				MarkItemizedOverlay itemizedoverlay = new MarkItemizedOverlay(drawable, mapView.getContext());
-				OverlayItem overlayItem = new OverlayItem(posicion, "punto "+i, "Posicion: " + coordenada.getLatitud().toString() + " / "
-						+ coordenada.getLongitud().toString());
-				itemizedoverlay.addOverlay(overlayItem);
-				mapOverlays.add(itemizedoverlay);
+				itemizedoverlay.addPunto(areaInundacion.get(i));
 			}
-			this.mapView.postInvalidate();
+			itemizedoverlay.grabar();
+			mapView.getOverlays().add(itemizedoverlay);//1: posicion de los integrantes seguros dentro del ArrayList de overlay
+//			this.mapView.postInvalidate();
 		} catch (Exception e) {
 			Log.e(TAG, "dibujarPolilinea," + e.toString() + " " + e.getCause());
 		}
@@ -135,20 +131,51 @@ public class GMapsAPI {
 
 	public void dibujarPunto(Usuario usuario) {
 		// setCentro(c);
+//		try {
+//			Coordenada coordenada = new Coordenada(usuario.getDispositivo().getPosicion().getLatitud(), usuario.getDispositivo().getPosicion().getLongitud());
+//			GeoPoint posicion = new GeoPoint((int) (coordenada.getLatitud() * 1E6), (int) (coordenada.getLongitud() * 1E6));
+//			Drawable drawable = mapView.getContext().getResources()
+//					.getDrawable(usuario.getDispositivo().estaSeguro() ? R.drawable.icono_persona_segura : R.drawable.icono_persona_riesgo);
+//			MarkItemizedOverlay itemizedoverlay = new MarkItemizedOverlay(drawable, mapView.getContext());
+//			OverlayItem overlayItem = new OverlayItem(posicion, usuario.getNombreUsuario(), "Posicion: " + coordenada.getLatitud().toString() + " / "
+//					+ coordenada.getLongitud().toString());//TODO
+//			Log.i(TAG, "integrante: " + usuario.getNombreUsuario() + posicion.getLatitudeE6()/1E6+ " - " + posicion.getLongitudeE6()/1E6);
+//			itemizedoverlay.addOverlay(overlayItem);
+//			mapOverlays.add(itemizedoverlay);
+//			this.mapView.postInvalidate();
+//		} catch (Exception e) {
+//			Log.e(TAG, "dibujarPunto," + e.toString() + " " + e.getCause());
+//		}
+	}
+	
+	public void dibujarPunto(ArrayList<Usuario> integrantes) {
 		try {
-			Coordenada coordenada = new Coordenada(usuario.getDispositivo().getPosicion().getLatitud(), usuario.getDispositivo().getPosicion().getLongitud());
-			GeoPoint posicion = new GeoPoint((int) (coordenada.getLatitud() * 1E6), (int) (coordenada.getLongitud() * 1E6));
-			Drawable drawable = mapView.getContext().getResources()
-					.getDrawable(usuario.getDispositivo().estaSeguro() ? R.drawable.icono_persona_segura : R.drawable.icono_persona_riesgo);
+			ArrayList<Usuario> integrantesSeguros = new ArrayList<Usuario>();
+			ArrayList<Usuario> integrantesRiesgo = new ArrayList<Usuario>();
+			for(int i = 0; i < integrantes.size(); i++){
+				if(integrantes.get(i).getDispositivo().getEstadoDeRiesgo())
+					integrantesRiesgo.add(integrantes.get(i));
+				else integrantesSeguros.add(integrantes.get(i));
+			}
+			//Dibujamos integrantes en riesgo
+			Drawable drawable = mapView.getContext().getResources().getDrawable(R.drawable.icono_persona_riesgo);
 			MarkItemizedOverlay itemizedoverlay = new MarkItemizedOverlay(drawable, mapView.getContext());
-			OverlayItem overlayItem = new OverlayItem(posicion, usuario.getNombreUsuario(), "Posicion: " + coordenada.getLatitud().toString() + " / "
-					+ coordenada.getLongitud().toString());//TODO
-			Log.i(TAG, "integrante: " + usuario.getNombreUsuario() + posicion.getLatitudeE6()/1E6+ " - " + posicion.getLongitudeE6()/1E6);
-			itemizedoverlay.addOverlay(overlayItem);
-			mapOverlays.add(itemizedoverlay);
-			this.mapView.postInvalidate();
+			for(int i = 0; i < integrantesRiesgo.size(); i++){
+				itemizedoverlay.addIntegrante(integrantesRiesgo.get(i));
+			}
+			itemizedoverlay.grabar();
+			mapView.getOverlays().add(itemizedoverlay);//2: posicion de los integrantes seguros dentro del ArrayList de overlay
+			//Dibujamos integrantes seguros
+			drawable = mapView.getContext().getResources().getDrawable(R.drawable.icono_persona_segura);
+			itemizedoverlay = new MarkItemizedOverlay(drawable, mapView.getContext());
+			for(int i = 0; i < integrantesSeguros.size(); i++){
+				itemizedoverlay.addIntegrante(integrantesSeguros.get(i));
+			}
+			itemizedoverlay.grabar();
+			mapView.getOverlays().add(itemizedoverlay);//3: posicion de los integrantes seguros dentro del ArrayList de overlay
+//			this.mapView.postInvalidate();
 		} catch (Exception e) {
-			Log.e(TAG, "dibujarPunto," + e.toString() + " " + e.getCause());
+			Log.e(TAG, "dibujarPuntoIntegrantes," + e.toString() + " " + e.getCause());
 		}
 	}
 
@@ -167,16 +194,14 @@ public class GMapsAPI {
 	public void dibujarPunto(PuntoEncuentro puntoEncuentro) {
 		dibujando = true;// Entra en el metodo
 		try {
-			GeoPoint posicion = new GeoPoint((int) (puntoEncuentro.getCoordenada().getLatitud() * 1E6), (int) (puntoEncuentro.getCoordenada().getLongitud() * 1E6));
-			Drawable drawable = null;
-			drawable = mapView.getContext().getResources().getDrawable(R.drawable.zona_segura);
+			Drawable drawable = mapView.getContext().getResources().getDrawable(R.drawable.punto_encuentro);
 			MarkItemizedOverlay itemizedoverlay = new MarkItemizedOverlay(drawable, mapView.getContext());
-			OverlayItem overlayItem = new OverlayItem(posicion, "Punto de encuentro", puntoEncuentro.getReferencia());
-			itemizedoverlay.addOverlay(overlayItem);
-			mapOverlays.add(itemizedoverlay);
-			this.mapView.postInvalidate();
+			itemizedoverlay.addPuntoEncuentro(puntoEncuentro);
+			itemizedoverlay.grabar();
+			mapView.getOverlays().add(itemizedoverlay);//4: posicion de los integrantes seguros dentro del ArrayList de overlay
+//			this.mapView.postInvalidate();
 		} catch (Exception e) {
-			Log.e(TAG, "dibujarPunto," + e.toString() + " " + e.getCause());
+			Log.e(TAG, "dibujarPuntoEncuentro," + e.toString() + " " + e.getCause());
 		}
 
 		// Lo que hace el metodo...
@@ -201,6 +226,8 @@ public class GMapsAPI {
 	}
 
 	public void dibujando(Boolean estado) {
+		if(!estado)
+			this.mapView.postInvalidate();
 		this.dibujando = estado;
 	}
 
