@@ -31,6 +31,7 @@ public class GMapsAPI {
 	private MapController mapController;
 	private List<Overlay> mapOverlays;
 	private boolean dibujando = false;
+	private RouteSegmentOverlay route;
 
 	public GMapsAPI(MapView m, Coordenada centro, float zoom) {
 		this.mapView = m;
@@ -78,15 +79,15 @@ public class GMapsAPI {
 
 	public boolean compararPunto(Coordenada origen, Punto destino) {
 		Location l = new Location("mi punto");
-        l.setLatitude(origen.getLatitud());
-        l.setLongitude(origen.getLongitud());
-        Location ld = new Location("punto de encuentro");
-        ld.setLatitude(destino.getCoordenada().getLatitud());
-        ld.setLongitude(destino.getCoordenada().getLongitud());
-        Log.e(TAG, " "+ l.distanceTo(ld));
-        if(l.distanceTo(ld) <= 50000)
-        	return true;
-        return false;
+		l.setLatitude(origen.getLatitud());
+		l.setLongitude(origen.getLongitud());
+		Location ld = new Location("punto de encuentro");
+		ld.setLatitude(destino.getCoordenada().getLatitud());
+		ld.setLongitude(destino.getCoordenada().getLongitud());
+		Log.e(TAG, " " + l.distanceTo(ld));
+		if (l.distanceTo(ld) <= 50000)
+			return true;
+		return false;
 	}
 
 	public void determinarCiudad(Ciudad ciudad) {
@@ -104,7 +105,7 @@ public class GMapsAPI {
 		ciudad.setAreaInundacion(new PuntoSQL().cargarAreaInundacion(ciudad));
 		dibujarPolilinea(ciudad.getAreaInundacion());
 		GrupoFamiliar grupoFamiliar = ciudad.getDispositivo().getUsuario().getGrupoFamiliar();
-		if(grupoFamiliar!=null){
+		if (grupoFamiliar != null) {
 			ciudad.setPuntoEncuentro(grupoFamiliar.getPuntoEncuentro());
 			dibujarPunto(ciudad.getPuntoEncuentro());
 		}
@@ -121,49 +122,41 @@ public class GMapsAPI {
 	}
 
 	public void dibujarPolilinea(ArrayList<Coordenada> area) {
+		boolean routeIsDisplayed = false;
+		int numberRoutePoints;
+		GeoPoint routePoints[];
+		int routeGrade[];
 		if (!routeIsDisplayed) {
 			routeIsDisplayed = true;
 		} else {
 			if (route != null)
 				route.setRouteView(false);
-			route = null; // To prevent multiple route instances if key toggled
-							// rapidly (see line 235)
+			route = null;
 			routeIsDisplayed = false;
 			mapView.postInvalidate();
 		}
 		int pointCounter = -1;
-		int wptCounter = -1;
-		int totalWaypoints = -1;
 		int lat = -1;
 		int lon = -1;
-		String wptDescription = "";
 		int grade = -1;
-
-		numberRoutePoints = area.size()-2;
+		numberRoutePoints = area.size() - 2;//se le restan los extrenmos del area de inundacion
 		routePoints = new GeoPoint[numberRoutePoints];
 		routeGrade = new int[numberRoutePoints];
 		for (int i = 1; i < area.size() - 1; i++) {
-			String latStg = area.get(i).getLatitud().toString().replace(".", "")+"000";
-			String lonStg = area.get(i).getLongitud().toString().replace(".", "")+"000";
+			String latStg = area.get(i).getLatitud().toString().replace(".", "") + "000";
+			String lonStg = area.get(i).getLongitud().toString().replace(".", "") + "000";
 			lat = Integer.valueOf(latStg.substring(0, 9));
 			lon = Integer.valueOf(lonStg.substring(0, 9));
 			grade = 1;
-//			if(i!=13){
-				pointCounter++;
-				routePoints[pointCounter] = new GeoPoint(lat, lon);
-				routeGrade[pointCounter] = grade;
-				Log.i(TAG, "   trackpoint=" + pointCounter + " latitude=" + lat + " longitude=" + lon + " grade=" + grade);
-//			}
+			pointCounter++;
+			routePoints[pointCounter] = new GeoPoint(lat, lon);
+			routeGrade[pointCounter] = grade;
+			// Log.i(TAG, "   trackpoint=" + pointCounter + " latitude=" + lat +
+			// " longitude=" + lon + " grade=" + grade);
 		}
 		if (route != null)
-			return; // To prevent multiple route instances if key toggled
-					// rapidly (see also line 116)
-		// Set up the overlay controller
-		route = new RouteSegmentOverlay(routePoints, routeGrade); // My
-																	// class
-																	// defining
-																	// route
-																	// overlay
+			return;
+		route = new RouteSegmentOverlay(routePoints, routeGrade);
 		mapOverlays = mapView.getOverlays();
 		mapOverlays.add(route);
 	}
@@ -203,16 +196,17 @@ public class GMapsAPI {
 		try {
 			ArrayList<Usuario> integrantesSeguros = new ArrayList<Usuario>();
 			ArrayList<Usuario> integrantesRiesgo = new ArrayList<Usuario>();
-			
-			//Evitamos que se dibuje el usuario interno
-			for(int i = 0; i < integrantes.size(); i++){
-				if(usuario.getNombreUsuario().compareTo(integrantes.get(i).getNombreUsuario())!=0){
-					if(integrantes.get(i).getDispositivo().getEstadoDeRiesgo())
+
+			// Evitamos que se dibuje el usuario interno
+			for (int i = 0; i < integrantes.size(); i++) {
+				if (usuario.getNombreUsuario().compareTo(integrantes.get(i).getNombreUsuario()) != 0) {
+					if (integrantes.get(i).getDispositivo().getEstadoDeRiesgo())
 						integrantesRiesgo.add(integrantes.get(i));
-					else integrantesSeguros.add(integrantes.get(i));
+					else
+						integrantesSeguros.add(integrantes.get(i));
 				}
 			}
-			
+
 			// Dibujamos integrantes en riesgo
 			Drawable drawable = mapView.getContext().getResources().getDrawable(R.drawable.icono_persona_riesgo);
 			MarkItemizedOverlay itemizedoverlay = new MarkItemizedOverlay(drawable, mapView.getContext());
@@ -221,8 +215,8 @@ public class GMapsAPI {
 			}
 			itemizedoverlay.grabar();
 			mapView.getOverlays().add(itemizedoverlay);
-			
-			//Dibujamos integrantes seguros
+
+			// Dibujamos integrantes seguros
 			mapView.getOverlays().add(itemizedoverlay);// 2: posicion de los
 														// integrantes seguros
 														// dentro del ArrayList
@@ -288,10 +282,4 @@ public class GMapsAPI {
 		this.dibujando = estado;
 	}
 
-	// TODO correr esta wea
-	boolean routeIsDisplayed = false;
-	int numberRoutePoints;
-	GeoPoint routePoints[]; // Dimension will be set in class RouteLoader below
-	int routeGrade[]; // Index for slope of route from point i to point i+1
-	RouteSegmentOverlay route; // This will hold the route segments
 }

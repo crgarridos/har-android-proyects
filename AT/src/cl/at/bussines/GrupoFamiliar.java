@@ -140,7 +140,6 @@ public class GrupoFamiliar {
 	}
 
 	public void notificar() {
-		// TODO Auto-generated method stub
 
 	}
 

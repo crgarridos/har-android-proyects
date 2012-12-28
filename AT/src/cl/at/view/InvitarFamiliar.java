@@ -67,7 +67,6 @@ public class InvitarFamiliar extends Activity {
 			@Override
 			public void onClick(View v) {
 				new buscarUsuarioAsync().execute();
-				// TODO CDU05 - Buscar usuario
 			}
 		});
 	}
