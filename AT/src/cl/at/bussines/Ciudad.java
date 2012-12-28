@@ -11,6 +11,8 @@ import android.os.SystemClock;
 import android.util.Log;
 import android.widget.Toast;
 import cl.at.data.DispositivoSQL;
+import cl.at.data.PuntoEncuentroSQL;
+import cl.at.data.PuntoRiesgoSQL;
 import cl.at.util.AlertTsunamiApplication;
 
 import com.google.android.maps.MapView;
@@ -96,6 +98,10 @@ public class Ciudad {
 	}
 
 	public ArrayList<PuntoRiesgo> getPuntosRiesgo() {
+		if(this.puntosRiesgo == null || this.puntosRiesgo.size() == 0){
+			PuntoRiesgoSQL pSQL = new PuntoRiesgoSQL();
+			pSQL.cargarPuntosRiesgo(this);
+		}
 		return puntosRiesgo;
 	}
 
@@ -104,7 +110,11 @@ public class Ciudad {
 	}
 	
 	public PuntoEncuentro getPuntoEncuentro(){
-		return puntoEncuentro;
+//		if(this.puntoEncuentro == null){
+//			PuntoEncuentroSQL pSQL = new PuntoEncuentroSQL();
+//			pSQL.cargarPuntosRiesgo(this);
+//		}
+		return this.puntoEncuentro;
 	}
 
 	public void setPuntoEncuentro(PuntoEncuentro puntoEncuentro) {
@@ -215,6 +225,8 @@ public class Ciudad {
 					}
 				}
 				gMapsAPI.dibujarPolilinea(areaInundacion);
+				puntosRiesgo = getPuntosRiesgo();
+				gMapsAPI.dibujarPunto(puntosRiesgo);
 				DispositivoSQL dSQL = new DispositivoSQL();
 				dSQL.actualizarPosicion(dispositivo);
 				gMapsAPI.dibujando(false);
