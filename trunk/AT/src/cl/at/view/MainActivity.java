@@ -67,7 +67,6 @@ public class MainActivity extends MapActivity {
 	private static final int MNU_OPC3 = 3;
 	private static final int SMNU_OPC31 = 31;
 	private static final int SMNU_OPC32 = 32;
-	// private static final int SMNU_OPC33 = 33;
 	private static final int SMNU_OPC34 = 34;
 	private static final int SMNU_OPC35 = 35;
 
@@ -167,10 +166,8 @@ public class MainActivity extends MapActivity {
 		if (usuario.getGrupoFamiliar() != null) {
 			SubMenu smnu3 = menu.addSubMenu(Menu.NONE, MNU_OPC3, Menu.NONE, "Grupo familiar").setIcon(R.drawable.grupo_familiar);
 			smnu3.add(Menu.NONE, SMNU_OPC31, Menu.NONE, "Invitar familiar");
-			if (usuario.getEsLider() == true)
-				smnu3.add(Menu.NONE, SMNU_OPC32, Menu.NONE, "Definir punto de encuentro");
-			// smnu3.add(Menu.NONE, SMNU_OPC33, Menu.NONE,
-			// "Publicar comentario");
+			if(usuario.getEsLider() == true)
+			smnu3.add(Menu.NONE, SMNU_OPC32, Menu.NONE, "Definir punto de encuentro");
 			smnu3.add(Menu.NONE, SMNU_OPC34, Menu.NONE, "Visualizar comentarios");
 			smnu3.add(Menu.NONE, SMNU_OPC35, Menu.NONE, "Abandonar grupo");
 		}
@@ -184,10 +181,10 @@ public class MainActivity extends MapActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case 11:
-			Toast.makeText(getApplicationContext(), "Grupo Familiar", Toast.LENGTH_SHORT).show();
-			return true;
+			ciudad.mostrarCapas(0); // Grupo Familiar
+			return true;		    
 		case 12:
-			Toast.makeText(getApplicationContext(), "Puntos de Riesgo", Toast.LENGTH_SHORT).show();
+			ciudad.mostrarCapas(1); // Puntos de riesgo
 			return true;
 		case 21:
 			startActivity(new Intent("at.INGRESAR_PUNTO_DE_RIESGO"));
@@ -220,6 +217,9 @@ public class MainActivity extends MapActivity {
 		case SMNU_OPC34:
 			mostrarComentarios();
 			return true;
+		case 35:
+			abandonarGrupo();
+			return true;
 		case 41:
 			configGeolocalizacion();
 			return true;
@@ -229,6 +229,23 @@ public class MainActivity extends MapActivity {
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+	}
+
+	private void abandonarGrupo() {
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+		alert.setTitle("Abandonar grupo familiar");
+		alert.setMessage("Esta seguro que desea abandonar su grupo familiar?");
+		alert.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				new AsyncAbandonar().execute();
+			}
+		});
+		alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+			}
+		});
+		final AlertDialog dialog = alert.create();
+		dialog.show();
 	}
 
 	private void configGeolocalizacion() {
@@ -316,11 +333,7 @@ public class MainActivity extends MapActivity {
 	}
 
 	public void validarGrupoFamiliar() {
-		// if (usuario.getGrupoFamiliar() == null) {
 		startActivity(new Intent("at.CREAR_GRUPO_FAMILIAR"));
-		// } else
-		// Toast.makeText(getApplicationContext(),
-		// "Ya pertenece a un grupo familiar", Toast.LENGTH_SHORT).show();
 	}
 
 	private boolean estadoGPS() {
@@ -332,7 +345,6 @@ public class MainActivity extends MapActivity {
 		Intent actividad = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
 		startActivityForResult(actividad,777);
 	}
-
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
