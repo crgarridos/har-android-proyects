@@ -176,7 +176,7 @@ public class UsuarioSQL {
 			postParametersToSend.add("grupo_familiar", grupoFamiliar!=null?grupoFamiliar.getId().toString():null);
 			JSONArray jdata = null;
 			jdata = post.getServerData(postParametersToSend, ConexionHttp.URL_CONNECT + "enlazarGrupoFamiliar.php");
-			if (jdata != null) {
+			if (jdata != null) {	
 				return true;
 			}
 		} catch (Exception e) {

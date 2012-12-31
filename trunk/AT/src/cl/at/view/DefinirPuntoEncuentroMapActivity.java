@@ -8,8 +8,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -20,12 +22,15 @@ import cl.at.bussines.GrupoFamiliar;
 import cl.at.bussines.Lider;
 import cl.at.bussines.PuntoEncuentro;
 import cl.at.bussines.Usuario;
+import cl.at.data.GrupoFamiliarSQL;
 import cl.at.util.Comunicador;
+import cl.at.view.MainActivity.AsyncCargar;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
+import com.google.android.maps.Projection;
 
 public class DefinirPuntoEncuentroMapActivity extends MapActivity {
 
@@ -46,6 +51,7 @@ public class DefinirPuntoEncuentroMapActivity extends MapActivity {
 
 	@Override
 	protected boolean isRouteDisplayed() {
+		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -67,14 +73,15 @@ public class DefinirPuntoEncuentroMapActivity extends MapActivity {
 
 		com = Comunicador.getInstancia();
 		usuario = com.getUsuario();
+		grupoFamiliar = com.getUsuario().getGrupoFamiliar();
 		ciudad = com.getCiudad();
 
 		mapView = (MapView) findViewById(R.id.definir_punto_encuentro_mapView);
 		this.setTitle("Seleccione un punto de seguridad en el mapa");
-		Bundle bundle = getIntent().getExtras();
 		GMapsAPI gMapsAPI = new GMapsAPI(mapView);
 		MapOverlay mapOverlay = new MapOverlay();
 		List<Overlay> listOfOverlays = mapView.getOverlays();
+		Bundle bundle = getIntent().getExtras();
 		if (grupoFamiliar == null)
 			nombreGrupo = bundle.getString("nombreGrupo");
 		else gMapsAPI.dibujarPunto(grupoFamiliar.getPuntoEncuentro());
@@ -86,7 +93,7 @@ public class DefinirPuntoEncuentroMapActivity extends MapActivity {
 		alert.setTitle("Descripcion");
 		alert.setMessage("Ingrese una descripcion del punto de encuentro familiar");
 		alert.setView(viewComentario);
-		editTextComentario = (EditText) viewComentario.findViewById(R.id.ingresar_comentario_riesgo);
+		editTextComentario = (EditText) viewComentario.findViewById(R.id.ingresar_comentario);
 		alert.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
 				new definirPuntoEncuentroAsync().execute();
@@ -120,19 +127,17 @@ public class DefinirPuntoEncuentroMapActivity extends MapActivity {
 		protected void onPreExecute() {
 			existe = true;
 			pDialog = new ProgressDialog(DefinirPuntoEncuentroMapActivity.this);
-//			if (grupoFamiliar == null)
-//				pDialog.setMessage("Creando grupo familiar....");
-//			else
-//				pDialog.setMessage("Definiendo punto de encuentro ...");
+			if (grupoFamiliar == null)
+				pDialog.setMessage("Creando grupo familiar....");
+			else
+				pDialog.setMessage("Definiendo punto de encuentro ...");
 			pDialog.setIndeterminate(false);
-			pDialog.setMessage("Espere un momento...");
 			pDialog.setCancelable(false);
 			pDialog.show();
 		}
 
 		protected String doInBackground(String... params) {
 			try {
-				grupoFamiliar = com.getUsuario().getGrupoFamiliar();
 				if (grupoFamiliar == null) {
 					lider = new Lider(usuario);
 					usuario.setEsLider(true);

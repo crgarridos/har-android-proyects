@@ -340,5 +340,9 @@ public class GMapsAPI {
 	public void setMapView(MapView mapView) {
 		this.mapView = mapView;
 	}
-	
+
+	public void refresh() {
+		mapView.postInvalidate();
+		
+	}
 }
