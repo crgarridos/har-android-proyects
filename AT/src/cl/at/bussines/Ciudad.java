@@ -216,6 +216,7 @@ public class Ciudad {
 			try{
 				GrupoFamiliar grupoFamiliar = dispositivo.getUsuario().getGrupoFamiliar();
 				PuntoEncuentro puntoEncuentro = null;
+
 				//TODO solo lo comente para poder hacer la parte de punto de seguridad sin cargar tanta wea....
 //				dispositivo.actualizarPosicion();
 //				gMapsAPI.borrarPuntos(Ciudad.this);

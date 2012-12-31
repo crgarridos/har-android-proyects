@@ -53,12 +53,12 @@ public class GCMIntentService extends GCMBaseIntentService {
 			CharSequence titulo = "Notificacion";
 			Intent notIntent = new Intent("at.MAPA");
 			if(tipo.equalsIgnoreCase("invitacion")){
-//				icono = R.drawable.grupo_familiar;
+				icono = R.drawable.grupo_familiar;
 				titulo = "Invitacion recibida";
 				notIntent = new Intent("at.LISTA_INVITACIONES");
 			}
 			else if(tipo.equalsIgnoreCase("comentario")){
-				icono = R.drawable.grupo_familiar;
+//				icono = R.drawable.grupo_familiar;
 				titulo = "Nuevo Comentario";
 				notIntent = new Intent("at.LISTA_COMENTARIOS");
 			}

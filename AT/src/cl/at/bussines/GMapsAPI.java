@@ -372,6 +372,6 @@ public class GMapsAPI {
 
 	public void refresh() {
 		mapView.postInvalidate();
-		
 	}
+
 }

@@ -104,7 +104,7 @@ public class ListInvitacionesActivity extends Activity {
 		}
 
 		protected void onPostExecute(ArrayList<Invitacion> invs) {
-			if (invs != null)
+			if (invs != null && invs.size()>0 )
 				lv.setAdapter(new InvitacionAdapter(ListInvitacionesActivity.this, invs));
 			else
 				Toast.makeText(getApplicationContext(), "No hay invitaciones por el momento.", Toast.LENGTH_LONG).show();
@@ -165,6 +165,7 @@ public class ListInvitacionesActivity extends Activity {
 			} else
 				Toast.makeText(getApplicationContext(), "No se ha podido realizar la operacion, intentelo mas tarde", Toast.LENGTH_LONG).show();
 			pDialog.dismiss();
+			setResult(Activity.RESULT_OK);
 			finish();
 		}
 	}

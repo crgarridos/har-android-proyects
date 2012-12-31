@@ -173,14 +173,13 @@ public class UsuarioSQL {
 		try {
 			Parametros postParametersToSend = new Parametros();
 			postParametersToSend.add("usuario", usuario.getNombreUsuario());
-			postParametersToSend.add("grupo_familiar", grupoFamiliar!=null?grupoFamiliar.getId().toString():null);
+			postParametersToSend.add("grupo_familiar", grupoFamiliar!=null?grupoFamiliar.getId().toString():"null");
 			JSONArray jdata = null;
 			jdata = post.getServerData(postParametersToSend, ConexionHttp.URL_CONNECT + "enlazarGrupoFamiliar.php");
-			if (jdata != null) {	
-				return true;
-			}
+			return jdata != null;
+
 		} catch (Exception e) {
-			Log.e(TAG, "persistir, " + e.toString());
+			Log.e(TAG, "enlazarGrupoFamiliar, " + e.toString());
 		}
 		return false;
 	}
@@ -192,9 +191,7 @@ public class UsuarioSQL {
 			postParametersToSend.add("remitente", invitacion.getRemitente().getNombreUsuario());
 			JSONArray jdata = null;
 			jdata = post.getServerData(postParametersToSend, ConexionHttp.URL_CONNECT + "enviarInvitacion.php");
-			if (jdata != null) {
-				return true;
-			}
+			return jdata != null;
 		} catch (Exception e) {
 			Log.e(TAG, "enviarInvitacion, " + e.toString());
 		}
