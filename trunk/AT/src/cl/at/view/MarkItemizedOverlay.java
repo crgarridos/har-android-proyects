@@ -7,6 +7,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 
 import cl.at.bussines.Coordenada;
+import cl.at.bussines.Punto;
 import cl.at.bussines.PuntoEncuentro;
 import cl.at.bussines.PuntoRiesgo;
 import cl.at.bussines.Usuario;
@@ -79,6 +80,12 @@ public class MarkItemizedOverlay extends ItemizedOverlay<OverlayItem>{
 	public void addPuntoRiesgo(PuntoRiesgo puntoRiesgo) {
 		GeoPoint posicion = new GeoPoint((int)(puntoRiesgo.getCoordenada().getLatitud()*1E6), (int)(puntoRiesgo.getCoordenada().getLongitud()*1E6));
 		OverlayItem overlayItem = new OverlayItem(posicion, "Punto de riesgo", puntoRiesgo.getDescripcion());
+		addOverlay(overlayItem);
+	}
+	
+	public void addPuntoSeguro(Punto puntoSeguro, float distancia) {
+		GeoPoint posicion = new GeoPoint((int)(puntoSeguro.getCoordenada().getLatitud()*1E6), (int)(puntoSeguro.getCoordenada().getLongitud()*1E6));
+		OverlayItem overlayItem = new OverlayItem(posicion, "Punto de seguro", "Distancia: "+distancia+" metros");
 		addOverlay(overlayItem);
 	}
 	
