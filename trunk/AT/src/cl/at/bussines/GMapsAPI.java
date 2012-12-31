@@ -166,7 +166,6 @@ public class GMapsAPI {
 	}
 
 	public void dibujarPunto(ArrayList<PuntoRiesgo> puntosRiesgo) {
-		dibujando = true;// Entra en el metodo
 		try {
 			ArrayList<PuntoRiesgo> puntosRiesgoAlto = new ArrayList<PuntoRiesgo>();
 			ArrayList<PuntoRiesgo> puntosRiesgoMedio = new ArrayList<PuntoRiesgo>();
@@ -211,11 +210,9 @@ public class GMapsAPI {
 		} catch (Exception e) {
 			Log.e(TAG, "dibujarPuntoIntegrantes," + e.toString() + " " + e.getCause());
 		}
-		dibujando = false;// Al salir del metodo
 	}
 
 	public void dibujarPunto(ArrayList<Usuario> integrantes, Usuario usuario) {
-		dibujando = true;// Entra en el metodo
 		try {
 			ArrayList<Usuario> integrantesSeguros = new ArrayList<Usuario>();
 			ArrayList<Usuario> integrantesRiesgo = new ArrayList<Usuario>();
@@ -250,15 +247,17 @@ public class GMapsAPI {
 		} catch (Exception e) {
 			Log.e(TAG, "dibujarPuntoIntegrantes," + e.toString() + " " + e.getCause());
 		}
-		dibujando = false;// Al salir del metodo
 	}
 
-	public void borrarPuntos() {
+	public void borrarPuntos(Ciudad ciudad) {
 		try {
 			this.mapOverlays = mapView.getOverlays();
-			for (int i = 0; i < this.mapOverlays.size(); i++) {
-				if (mapOverlays.get(i).getClass() != MyLocationOverlay.class && mapOverlays.get(i).getClass() != RouteSegmentOverlay.class)
-					this.mapOverlays.remove(i);
+			List<Overlay> temp = new ArrayList<Overlay>(this.mapOverlays);
+			this.mapOverlays.clear();
+			for (Overlay ov : temp) {
+				if (ov.getClass() == MyLocationOverlay.class || ov.getClass() == RouteSegmentOverlay.class){
+					this.mapOverlays.add(ov);
+				}				
 			}
 		} catch (Exception e) {
 			Log.e(TAG, "borrarPuntos," + e.toString() + " " + e.getCause());
@@ -266,7 +265,6 @@ public class GMapsAPI {
 	}
 
 	public void dibujarPunto(PuntoEncuentro puntoEncuentro) {
-		dibujando = true;// Entra en el metodo
 		try {
 			Drawable drawable = mapView.getContext().getResources().getDrawable(R.drawable.punto_encuentro);
 			MarkItemizedOverlay itemizedoverlay = new MarkItemizedOverlay(drawable, mapView.getContext());
@@ -276,7 +274,6 @@ public class GMapsAPI {
 		} catch (Exception e) {
 			Log.e(TAG, "dibujarPuntoEncuentro," + e.toString() + " " + e.getCause());
 		}
-		dibujando = false;// Al salir del metodo
 	}
 
 	public boolean estaEnElMedio(Coordenada c, ArrayList<Coordenada> zona) {
@@ -290,15 +287,4 @@ public class GMapsAPI {
 	public void setMapView(MapView mapView) {
 		this.mapView = mapView;
 	}
-
-	public boolean dibujando() {
-		return dibujando;
-	}
-
-	public void dibujando(Boolean estado) {
-		if (!estado)
-			this.mapView.postInvalidate();
-		this.dibujando = estado;
-	}
-
 }

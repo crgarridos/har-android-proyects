@@ -19,7 +19,7 @@ public class BienvenidaActivity extends Activity {
 			startActivity(new Intent("at.MAPA"));
 			finish();
 		}
-		Util.guardarIntervalo("15000");
+		Util.guardarIntervalo("600000");
 		setContentView(R.layout.bienvenida);
 		btnRegistrar = (Button) findViewById(R.id.bienvenida_btnRegistrar);
 		btnIniciarSesion = (Button) findViewById(R.id.bienvenida_btnIniciarSesion);

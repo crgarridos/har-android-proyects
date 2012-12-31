@@ -90,7 +90,6 @@ public class DefinirPuntoEncuentroActivity extends Activity {
 		}
 
 		protected String doInBackground(String... params) {
-			SystemClock.sleep(100);
 			try {
 				GrupoFamiliar grupoFamiliar = new GrupoFamiliar(nombreGrupo, puntoEncuentro, lider);
 				exito = true;
