@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.provider.Settings;
 import android.text.InputType;
 import android.util.Log;
@@ -42,7 +41,6 @@ public class MainActivity extends MapActivity {
 	private MapView mapView;
 	private ImageButton btnCentrar;
 	private EditText editText;
-	private ProgressDialog pDialog;
 	private Context context;
 	private Comunicador com;
 	private boolean traerUsuario = false;
@@ -277,7 +275,6 @@ public class MainActivity extends MapActivity {
 
 		});
 		alert.create().show();
-
 	}
 
 	private void mostrarComentarios() {
@@ -287,8 +284,14 @@ public class MainActivity extends MapActivity {
 
 	private void mostrarInvitaciones() {
 		Intent intent = new Intent("at.LISTA_INVITACIONES");
-		startActivity(intent);
+		startActivityForResult(intent,999);
 		// ArrayList<Invitacion> invitaciones = usuario.getInvitaciones();
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+//		if (!estadoGPS()) validarGPS();
 	}
 
 	@Override
@@ -339,7 +342,7 @@ public class MainActivity extends MapActivity {
 	private boolean estadoGPS() {
 		LocationManager servicio = (LocationManager) getSystemService(LOCATION_SERVICE);
 		return servicio.isProviderEnabled(LocationManager.GPS_PROVIDER);
-	}
+	}	
 
 	public void abrirConfigGPS() {
 		Intent actividad = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
@@ -354,6 +357,10 @@ public class MainActivity extends MapActivity {
 				validarGPS();
 			} else
 				comenzar();
+		}
+		else if(requestCode == 999 && resultCode == Activity.RESULT_OK){
+			finish();
+			startActivity(getIntent());
 		}
 	}
 	
@@ -457,8 +464,9 @@ public class MainActivity extends MapActivity {
 
 		protected void onPostExecute(Boolean s) {
 			if (s) {
-				Util.reiniciarPreferencias(context);
+//				Util.reiniciarPreferencias(context);
 				finish();
+				startActivity(getIntent());
 			}
 			Toast.makeText(getApplicationContext(), s ? "Se ha abandonado el grupo" : "No se ha podido abandonar, intentelo mas tarde.", Toast.LENGTH_SHORT).show();
 			pDialog.dismiss();
