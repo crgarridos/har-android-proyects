@@ -218,7 +218,7 @@ public class Ciudad {
 					puntoEncuentro = grupoFamiliar.getPuntoEncuentro();
 					gMapsAPI.dibujarPunto(grupoFamiliar.getIntegrantes(), dispositivo.getUsuario());
 					gMapsAPI.dibujarPunto(puntoEncuentro);
-					if(gMapsAPI.compararPunto(dispositivo.getPosicion(), puntoEncuentro)){
+					if(gMapsAPI.compararPunto(dispositivo.getPosicion(), puntoEncuentro.getCoordenada()) < 5000){
 						int intentos = 0;
 						while(!dispositivo.getUsuario().setEstadoLlegada(true)&&intentos++ < 5);
 					}
@@ -228,6 +228,7 @@ public class Ciudad {
 				gMapsAPI.dibujarPunto(puntosRiesgo);
 				DispositivoSQL dSQL = new DispositivoSQL();
 				dSQL.actualizarPosicion(dispositivo);
+				ArrayList<Coordenada> punto = gMapsAPI.getCoordenadaMasCercana(dispositivo.getPosicion(), areaInundacion);
 			}catch(Exception e){
 				Log.e(TAG, "Error en dibujando "+e);
 			}
