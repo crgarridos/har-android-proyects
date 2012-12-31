@@ -27,7 +27,7 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+            android:theme="@android:style/Theme.NoTitleBar">
         <uses-library android:name="com.google.android.maps" />
 
         <activity
@@ -52,6 +52,7 @@
         <activity
             android:name="cl.at.view.DefinirPuntoEncuentroMapActivity"
             android:label="@string/app_name"
+            android:theme="@android:style/Theme.Dialog"
             android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="at.DEFINIR_PUNTO_ENCUENTRO_MAP" />
@@ -82,6 +83,7 @@
             android:name="cl.at.view.IngresarPuntoDeRiesgoActivity"
             android:label="Seleccione en el mapa un punto de riesgo"
             android:theme="@android:style/Theme.Dialog"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" >
             <intent-filter>
                 <action android:name="at.INGRESAR_PUNTO_DE_RIESGO" />
@@ -104,6 +106,7 @@
             android:name="cl.at.view.InvitarFamiliar"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.NoTitleBar"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" >
             <intent-filter>
                 <action android:name="at.INVITAR_FAMILIAR" />
@@ -115,6 +118,7 @@
             android:name="cl.at.view.RegistrarUsuarioActivity"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.NoTitleBar"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" >
             <intent-filter>
                 <action android:name="at.REGISTRAR_USUARIO" />
@@ -126,6 +130,7 @@
             android:name="cl.at.view.ModificarUsuarioActivity"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.NoTitleBar"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" >
             <intent-filter>
                 <action android:name="at.MODIFICAR_USUARIO" />
@@ -136,6 +141,7 @@
             android:name="cl.at.view.CrearGrupoFamiliarActivity"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.NoTitleBar"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" >
             <intent-filter>
                 <action android:name="at.CREAR_GRUPO_FAMILIAR" />
@@ -147,6 +153,7 @@
             android:name="cl.at.view.ListInvitacionesActivity"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.NoTitleBar"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" >
             <intent-filter>
                 <action android:name="at.LISTA_INVITACIONES" />
@@ -154,7 +161,8 @@
             </intent-filter>
         </activity>
         <activity 
-            android:name="ListComentariosActivity">
+            android:name="ListComentariosActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="at.LISTA_COMENTARIOS" />
                 <category android:name="android.intent.category.DEFAULT" />

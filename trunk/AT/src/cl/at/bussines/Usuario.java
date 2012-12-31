@@ -223,7 +223,7 @@ public class Usuario {
 	}
 
 	public void onInvitacionRecibida(Invitacion invitacion) {
-
+		new UsuarioSQL().enviarInvitacion(this,invitacion);
 	}
 
 	public void persistir() throws Exception {

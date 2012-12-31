@@ -1,13 +1,13 @@
 package cl.at.data;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import android.util.Log;
 import cl.at.bussines.GrupoFamiliar;
+import cl.at.bussines.Invitacion;
 import cl.at.bussines.Lider;
 import cl.at.bussines.Usuario;
 import cl.at.util.Parametros;
@@ -181,6 +181,22 @@ public class UsuarioSQL {
 			}
 		} catch (Exception e) {
 			Log.e(TAG, "persistir, " + e.toString());
+		}
+		return false;
+	}
+
+	public boolean enviarInvitacion(Usuario usuario, Invitacion invitacion) {
+		try {
+			Parametros postParametersToSend = new Parametros();
+			postParametersToSend.add("invitado", usuario.getNombreUsuario());
+			postParametersToSend.add("remitente", invitacion.getRemitente().getNombreUsuario());
+			JSONArray jdata = null;
+			jdata = post.getServerData(postParametersToSend, ConexionHttp.URL_CONNECT + "enviarInvitacion.php");
+			if (jdata != null) {
+				return true;
+			}
+		} catch (Exception e) {
+			Log.e(TAG, "enviarInvitacion, " + e.toString());
 		}
 		return false;
 	}
