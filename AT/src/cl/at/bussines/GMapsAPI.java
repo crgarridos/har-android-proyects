@@ -276,64 +276,93 @@ public class GMapsAPI {
 			Log.e(TAG, "dibujarPuntoEncuentro," + e.toString() + " " + e.getCause());
 		}
 	}
+	
+	public void dibujarPunto(Punto puntoSeguro, float distancia){
+		try {
+			Drawable drawable = mapView.getContext().getResources().getDrawable(R.drawable.punto_seguro);
+			MarkItemizedOverlay itemizedoverlay = new MarkItemizedOverlay(drawable, mapView.getContext());
+			itemizedoverlay.addPuntoSeguro(puntoSeguro, distancia);
+			itemizedoverlay.grabar();
+			mapView.getOverlays().add(itemizedoverlay);
+		} catch (Exception e) {
+			Log.e(TAG, "dibujarPuntoEncuentro," + e.toString() + " " + e.getCause());
+		}
+	}
 
 	public boolean estaEnElMedio(Coordenada c, ArrayList<Coordenada> zona) {
 		return false;
 	}
 
 	public ArrayList<Coordenada> getCoordenadaMasCercana(Coordenada origen, ArrayList<Coordenada> polilinea) {
-		final int NORTE = 0;
-		final int ESTE = 1;
-		final int SUR = 21;
-		final int OESTE = 3;
 		
 		Float distancia = null;
-		Float distanciaPunto1 = 50000f;
-		Float distanciaPunto2 = 50000f;
+		Float distanciaPunto = 50000f;
 		Coordenada punto1 = null;
 		Coordenada punto2 = null;
-		int indicePunto1=0,indicePunto2=0,orientacion=ESTE;
+		Coordenada punto3 = null;
+		int indicePunto=0;
 		for(int i = 0; i<polilinea.size(); i++){
 			distancia = compararPunto(origen, polilinea.get(i));
-			if(distancia < distanciaPunto1 && origen.getLongitud() < polilinea.get(i).getLongitud()){
-				distanciaPunto1 = distancia;
-				punto1 = polilinea.get(i);
-				indicePunto1 = i;
-			}
-			else if(distancia < distanciaPunto2 && origen.getLongitud() < polilinea.get(i).getLongitud()){
-				distanciaPunto2 = distancia;
+			if(distancia < distanciaPunto){
+				distanciaPunto = distancia;
 				punto2 = polilinea.get(i);
-				indicePunto2 = i;
+				indicePunto = i;
 			}
 		}
-		if(indicePunto1+1<indicePunto2){
-			punto2 = polilinea.get(indicePunto1+1);
-			
-		}
-
+		punto1 = polilinea.get(indicePunto-1);//pto anterior al pto de la cota mas cercano
+		punto3 = polilinea.get(indicePunto+1);//pto posterior al pto de la cota mas cercano
+		
+		//Calculando primer pto seguro
 		Double dx = punto2.getLongitud() - punto1.getLongitud();
 		Double dy = punto2.getLatitud() - punto1.getLatitud();
 		Float dm = (float) (dy / dx);
 		Float fm = (-1 / dm);
 		Double x = (origen.getLatitud() - fm * origen.getLongitud() + dm * punto1.getLongitud() - punto1.getLatitud()) / (dm - fm);
 		Double y = dm * (x - punto1.getLongitud()) + punto1.getLatitud();
+		Coordenada puntoSeguro1 = new Coordenada(y, x);
 		
-//		if(origen.getLatitud()<punto1.getLatitud() && origen.getLatitud()<punto2.getLatitud()){
+		//Calculando segundo pto seguro
+		dx = punto3.getLongitud() - punto2.getLongitud();
+		dy = punto3.getLatitud() - punto2.getLatitud();
+		dm = (float) (dy / dx);
+		fm = (-1 / dm);
+		x = (origen.getLatitud() - fm * origen.getLongitud() + dm * punto2.getLongitud() - punto2.getLatitud()) / (dm - fm);
+		y = dm * (x - punto2.getLongitud()) + punto2.getLatitud();
+		Coordenada puntoSeguro2 = new Coordenada(y, x);
+		
+		//Calculamos el pto seguro mas seguro
+		Float distanciaPunto1 = compararPunto(origen, puntoSeguro1);
+		Float distanciaPunto2 = compararPunto(origen, puntoSeguro2);
+			
+		
+		if(distanciaPunto1 < distanciaPunto2 && 
+				puntoSeguro1.getLongitud() < punto1.getLongitud() && puntoSeguro1.getLongitud() > punto2.getLongitud() &&
+					puntoSeguro1.getLatitud() > punto1.getLatitud() && puntoSeguro1.getLatitud() < punto2.getLatitud())
+			dibujarPunto(new Punto(puntoSeguro1), distanciaPunto1);
+		else if(puntoSeguro2.getLongitud() < punto3.getLongitud() && puntoSeguro2.getLongitud() > punto3.getLongitud() &&
+					puntoSeguro2.getLatitud() > punto3.getLatitud() && puntoSeguro2.getLatitud() < punto3.getLatitud())
+			dibujarPunto(new Punto(puntoSeguro2), distanciaPunto2);
+		else dibujarPunto(new Punto(punto2), distanciaPunto);
+		
+		
+				
+//		if(origen.getLatitud()<punto1.getLatitud() && origen.getLatitud()<punto2.getLatitud()){//SUR
+//			
 //			orientacion = SUR;
 //		}
-//		else if(origen.getLatitud()>punto1.getLatitud() && origen.getLatitud()>punto2.getLatitud()){
+//		else if(origen.getLatitud()>punto1.getLatitud() && origen.getLatitud()>punto2.getLatitud()){//NORTE
 //			orientacion = NORTE;
 //		}
-//		else if(origen.getLongitud()<punto1.getLongitud() && origen.getLongitud()<punto2.getLongitud()){
+//		else if(origen.getLongitud()<punto1.getLongitud() && origen.getLongitud()<punto2.getLongitud()){//OESTE
 //			orientacion = OESTE;
 //		}
-//		else if(origen.getLongitud()>punto1.getLongitud() && origen.getLongitud()>punto2.getLongitud()){
+//		else if(origen.getLongitud()>punto1.getLongitud() && origen.getLongitud()>punto2.getLongitud()){//ESTE
 //			orientacion = ESTE;
 //		}
 
-		Log.i(TAG, "Coordenada: ("+x+" , "+y+")");
-		Coordenada puntoSeguro = new Coordenada(y, x);
-		dibujarPunto(new PuntoEncuentro(puntoSeguro));
+//		Log.i(TAG, "Coordenada: ("+x+" , "+y+")");
+//		Coordenada puntoSeguro = new Coordenada(y, x);
+//		dibujarPunto(new PuntoEncuentro(puntoSeguro));
 		return null;
 	}
 

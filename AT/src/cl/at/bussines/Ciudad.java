@@ -216,25 +216,24 @@ public class Ciudad {
 			try{
 				GrupoFamiliar grupoFamiliar = dispositivo.getUsuario().getGrupoFamiliar();
 				PuntoEncuentro puntoEncuentro = null;
-				dispositivo.actualizarPosicion();
-				gMapsAPI.borrarPuntos(Ciudad.this);
-				if(grupoFamiliar != null){
-					puntoEncuentro = grupoFamiliar.getPuntoEncuentro();
-					if (capaGrupoFamiliarVisible)
-						gMapsAPI.dibujarPunto(grupoFamiliar.getIntegrantes(), dispositivo.getUsuario());
-					gMapsAPI.dibujarPunto(puntoEncuentro);
-					if(gMapsAPI.compararPunto(dispositivo.getPosicion(), puntoEncuentro.getCoordenada()) < 5000){
-						int intentos = 0;
-						while(!dispositivo.getUsuario().setEstadoLlegada(true)&&intentos++ < 5);
-					}
-				}
-				gMapsAPI.dibujarPolilinea(areaInundacion);
-				puntosRiesgo = getPuntosRiesgo();
-				if (capaPuntoRiesgoVisible)
-				gMapsAPI.dibujarPunto(puntosRiesgo);
-				DispositivoSQL dSQL = new DispositivoSQL();
-				dSQL.actualizarPosicion(dispositivo);
-				//ArrayList<Coordenada> punto = gMapsAPI.getCoordenadaMasCercana(dispositivo.getPosicion(), areaInundacion);
+				//TODO solo lo comente para poder hacer la parte de punto de seguridad sin cargar tanta wea....
+//				dispositivo.actualizarPosicion();
+//				gMapsAPI.borrarPuntos(Ciudad.this);
+//				if(grupoFamiliar != null){
+//					puntoEncuentro = grupoFamiliar.getPuntoEncuentro();
+//					gMapsAPI.dibujarPunto(grupoFamiliar.getIntegrantes(), dispositivo.getUsuario());
+//					gMapsAPI.dibujarPunto(puntoEncuentro);
+//					if(gMapsAPI.compararPunto(dispositivo.getPosicion(), puntoEncuentro.getCoordenada()) < 5000){
+//						int intentos = 0;
+//						while(!dispositivo.getUsuario().setEstadoLlegada(true)&&intentos++ < 5);
+//					}
+//				}
+//				gMapsAPI.dibujarPolilinea(areaInundacion);
+//				puntosRiesgo = getPuntosRiesgo();
+//				gMapsAPI.dibujarPunto(puntosRiesgo);
+//				DispositivoSQL dSQL = new DispositivoSQL();
+//				dSQL.actualizarPosicion(dispositivo);
+				ArrayList<Coordenada> punto = gMapsAPI.getCoordenadaMasCercana(dispositivo.getPosicion(), Ciudad.this.areaInundacion);
 			}catch(Exception e){
 				Log.e(TAG, "Error en dibujando "+e);
 			}
