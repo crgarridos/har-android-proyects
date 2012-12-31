@@ -77,9 +77,7 @@ public class DefinirPuntoEncuentroMapActivity extends MapActivity {
 		List<Overlay> listOfOverlays = mapView.getOverlays();
 		if (grupoFamiliar == null)
 			nombreGrupo = bundle.getString("nombreGrupo");
-		else {
-			gMapsAPI.dibujarPunto(grupoFamiliar.getPuntoEncuentro());
-		}
+		else gMapsAPI.dibujarPunto(grupoFamiliar.getPuntoEncuentro());
 		listOfOverlays.add(mapOverlay);
 		gMapsAPI.dibujarPolilinea(ciudad.getAreaInundacion());
 		LayoutInflater factory = LayoutInflater.from(this);

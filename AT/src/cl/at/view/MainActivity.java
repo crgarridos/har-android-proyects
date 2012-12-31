@@ -267,7 +267,7 @@ public class MainActivity extends MapActivity {
 	public void mostrarMensajeConfirmacion() {
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
 		alert.setTitle("Eliminar cuenta");
-		alert.setMessage("Est�s seguro que desea eliminar su cuenta?");
+		alert.setMessage("Estas seguro que desea eliminar su cuenta?");
 		alert.setPositiveButton("Si", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
 				new AsyncDelete().execute();
@@ -360,7 +360,6 @@ public class MainActivity extends MapActivity {
 				finish();
 			}
 			
-			dispositivo.inicializar(ciudad.getLocationListener());
 			com.setUsuario(usuario);
 			com.setCiudad(ciudad);
 			com.setDispositivo(dispositivo);

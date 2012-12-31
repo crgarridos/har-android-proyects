@@ -29,6 +29,7 @@ public class Ciudad {
 	private PuntoEncuentro puntoEncuentro;
 	private GMapsAPI gMapsAPI;
 	private LocationListener locListener;
+	private boolean ejecutando = false;
 	
 	public Ciudad(MapView mapView, Dispositivo disp, PuntoEncuentro ptoEncuentro) {
 		dispositivo = disp;
@@ -43,7 +44,7 @@ public class Ciudad {
 	    	public void onLocationChanged(Location location) {
 	    		Log.i(TAG, "Localización: "+location.getLatitude()+" - "+location.getLongitude());
 	    		dispositivo.setPosicion(new Coordenada(location.getLatitude(), location.getLongitude()));
-	    		new AsyncMapa().execute();
+	    		actualizarPosiciones();
 	    	}
 	    	public void onProviderDisabled(String provider){
 	    		Log.i(TAG, "GPS Status: OFF");
@@ -190,7 +191,10 @@ public class Ciudad {
 	}
 	
 	public void actualizarPosiciones(){
-		new AsyncMapa().execute();
+		if(!ejecutando ){
+			Log.i(TAG, "dibujando...");
+			new AsyncMapa().execute();
+		}
 	}
 	
 
@@ -199,29 +203,24 @@ public class Ciudad {
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
+			Ciudad.this.ejecutando = true;
 			Toast.makeText(AlertTsunamiApplication.getAppContext(), "Actualizando...", Toast.LENGTH_LONG).show();
-			if(gMapsAPI.dibujando()){
-				SystemClock.sleep(1000);
-				this.cancel(true);
-			}
-				
 		}
 		
 		@Override
 		protected String doInBackground(String... params) {
-			if(!gMapsAPI.dibujando()){
-				gMapsAPI.dibujando(true);
+			try{
 				GrupoFamiliar grupoFamiliar = dispositivo.getUsuario().getGrupoFamiliar();
 				PuntoEncuentro puntoEncuentro = null;
 				dispositivo.actualizarPosicion();
-				gMapsAPI.borrarPuntos();
+				gMapsAPI.borrarPuntos(Ciudad.this);
 				if(grupoFamiliar != null){
 					puntoEncuentro = grupoFamiliar.getPuntoEncuentro();
 					gMapsAPI.dibujarPunto(grupoFamiliar.getIntegrantes(), dispositivo.getUsuario());
 					gMapsAPI.dibujarPunto(puntoEncuentro);
 					if(gMapsAPI.compararPunto(dispositivo.getPosicion(), puntoEncuentro)){
 						int intentos = 0;
-						while(!dispositivo.getUsuario().setEstadoLlegada(true)&&intentos++ == 5);
+						while(!dispositivo.getUsuario().setEstadoLlegada(true)&&intentos++ < 5);
 					}
 				}
 				gMapsAPI.dibujarPolilinea(areaInundacion);
@@ -229,7 +228,8 @@ public class Ciudad {
 				gMapsAPI.dibujarPunto(puntosRiesgo);
 				DispositivoSQL dSQL = new DispositivoSQL();
 				dSQL.actualizarPosicion(dispositivo);
-				gMapsAPI.dibujando(false);
+			}catch(Exception e){
+				Log.e(TAG, "Error en dibujando "+e);
 			}
 			return null;
 		}
@@ -237,7 +237,9 @@ public class Ciudad {
 		@Override
 		protected void onPostExecute(String result) {
 			super.onPostExecute(result);
-//			gMapsAPI.dibujarPolilinea(areaInundacion);
+			dispositivo.inicializar(Ciudad.this.getLocationListener());
+			Ciudad.this.ejecutando = false;
+			Log.i(TAG, "terminando de dibujar...");
 		}
 
 	}
