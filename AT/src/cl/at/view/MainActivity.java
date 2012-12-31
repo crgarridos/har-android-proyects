@@ -2,14 +2,17 @@ package cl.at.view;
 
 import java.io.IOException;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.provider.Settings;
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -64,7 +67,7 @@ public class MainActivity extends MapActivity {
 	private static final int MNU_OPC3 = 3;
 	private static final int SMNU_OPC31 = 31;
 	private static final int SMNU_OPC32 = 32;
-//	private static final int SMNU_OPC33 = 33;
+	// private static final int SMNU_OPC33 = 33;
 	private static final int SMNU_OPC34 = 34;
 	private static final int SMNU_OPC35 = 35;
 
@@ -89,8 +92,38 @@ public class MainActivity extends MapActivity {
 			Util.reiniciarPreferencias(context);
 			finish();
 		}
-		
+
 		mapView = (MapView) findViewById(R.id.mapview);
+
+		if (!estadoGPS()) {
+			validarGPS();
+		} else
+			comenzar();
+	}
+
+	private void validarGPS() {
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+		alert.setTitle("GPS desactivado");
+		String mensaje = "Hemos detectado que el GPS se encuentra actualmente desactivado.\n" + "La aplicacion necesita de el para ejecutarse correctamente.\n"
+				+ "Presione \"Aceptar\" para ir a la configuracion y activarlo (Marque \"Utilizar satelites GPS\" o similar).\n" + "Si selecciona \"Cancelar\" se cerrara la aplicacion";
+		alert.setMessage(mensaje);
+		alert.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				abrirConfigGPS();
+			}
+		});
+		alert.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				finish();
+			}
+		});
+		alert.setCancelable(false);
+		final AlertDialog dialog = alert.create();
+		dialog.show();
+
+	}
+
+	private void comenzar() {
 		btnCentrar = (ImageButton) findViewById(R.id.ActivityMain_btnCentrar);
 		mOverlayLocation = new MyLocationOverlay(mapView.getContext(), mapView);
 		mOverlayLocation.enableMyLocation();
@@ -109,6 +142,7 @@ public class MainActivity extends MapActivity {
 			}
 		});
 		new AsyncCargar().execute();
+
 	}
 
 	protected void centrarEnMiPosicion() {
@@ -117,7 +151,7 @@ public class MainActivity extends MapActivity {
 
 	public boolean onCreateOptionsMenu(Menu menu) {
 		SubMenu smnu1 = menu.addSubMenu(Menu.NONE, MNU_OPC1, Menu.NONE, "Capas").setIcon(R.drawable.capas);
-		if(usuario.getGrupoFamiliar() != null)
+		if (usuario.getGrupoFamiliar() != null)
 			smnu1.add(Menu.NONE, SMNU_OPC11, Menu.NONE, "Grupo familiar");
 		smnu1.add(Menu.NONE, SMNU_OPC12, Menu.NONE, "Puntos de riesgo");
 
@@ -125,17 +159,18 @@ public class MainActivity extends MapActivity {
 		smnu2.add(Menu.NONE, SMNU_OPC21, Menu.NONE, "Ingresar punto de riesgo");
 		smnu2.add(Menu.NONE, SMNU_OPC22, Menu.NONE, "Actualizar datos");
 		smnu2.add(Menu.NONE, SMNU_OPC23, Menu.NONE, "Ver invitaciones");
-		if(usuario.getGrupoFamiliar() == null)
+		if (usuario.getGrupoFamiliar() == null)
 			smnu2.add(Menu.NONE, SMNU_OPC24, Menu.NONE, "Crear grupo familiar");
 		smnu2.add(Menu.NONE, SMNU_OPC25, Menu.NONE, "Eliminar cuenta");
 		smnu2.add(Menu.NONE, SMNU_OPC26, Menu.NONE, "Cerrar sesion");
-		
-		if(usuario.getGrupoFamiliar() != null){
+
+		if (usuario.getGrupoFamiliar() != null) {
 			SubMenu smnu3 = menu.addSubMenu(Menu.NONE, MNU_OPC3, Menu.NONE, "Grupo familiar").setIcon(R.drawable.grupo_familiar);
 			smnu3.add(Menu.NONE, SMNU_OPC31, Menu.NONE, "Invitar familiar");
-			if(usuario.getEsLider() == true)
-			smnu3.add(Menu.NONE, SMNU_OPC32, Menu.NONE, "Definir punto de encuentro");
-//			smnu3.add(Menu.NONE, SMNU_OPC33, Menu.NONE, "Publicar comentario");
+			if (usuario.getEsLider() == true)
+				smnu3.add(Menu.NONE, SMNU_OPC32, Menu.NONE, "Definir punto de encuentro");
+			// smnu3.add(Menu.NONE, SMNU_OPC33, Menu.NONE,
+			// "Publicar comentario");
 			smnu3.add(Menu.NONE, SMNU_OPC34, Menu.NONE, "Visualizar comentarios");
 			smnu3.add(Menu.NONE, SMNU_OPC35, Menu.NONE, "Abandonar grupo");
 		}
@@ -172,7 +207,7 @@ public class MainActivity extends MapActivity {
 		case 26:
 			Util.reiniciarPreferencias(context);
 			finish();
-			return true;   
+			return true;
 		case 31:
 			startActivity(new Intent("at.INVITAR_FAMILIAR"));
 			return true;
@@ -201,19 +236,18 @@ public class MainActivity extends MapActivity {
 		final View viewComentario = factory.inflate(R.layout.ingresar_comentario_riesgo, null);
 		editText = (EditText) viewComentario.findViewById(R.id.ingresar_comentario_riesgo);
 		editText.setInputType(InputType.TYPE_CLASS_NUMBER);
-		editText.setText(String.valueOf(Integer.parseInt(Util.getPreferencia("intervalo"))/1000));
+		editText.setText(String.valueOf(Integer.parseInt(Util.getPreferencia("intervalo")) / 1000));
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
 		alert.setTitle("Cambiar configuracion");
 		alert.setMessage("Ingrese el intervalo de tiempo que desea actualizar su posicion (en seg):");
 		alert.setView(viewComentario);
 		alert.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
-				if(editText.getText().toString().length()<3){
+				if (editText.getText().toString().length() < 3) {
 					Toast.makeText(getApplicationContext(), "El tiempo minimo debe ser de 100 segundos", Toast.LENGTH_SHORT).show();
-				}
-				else {
+				} else {
 					Toast.makeText(getApplicationContext(), "Configuracion cambiada exitosamente", Toast.LENGTH_SHORT).show();
-					Util.guardarIntervalo(String.valueOf(Integer.parseInt(editText.getText().toString())*1000));
+					Util.guardarIntervalo(String.valueOf(Integer.parseInt(editText.getText().toString()) * 1000));
 				}
 			}
 		});
@@ -282,16 +316,39 @@ public class MainActivity extends MapActivity {
 	}
 
 	public void validarGrupoFamiliar() {
-		//if (usuario.getGrupoFamiliar() == null) {
-			startActivity(new Intent("at.CREAR_GRUPO_FAMILIAR"));
-		//} else
-			//	Toast.makeText(getApplicationContext(), "Ya pertenece a un grupo familiar", Toast.LENGTH_SHORT).show();
+		// if (usuario.getGrupoFamiliar() == null) {
+		startActivity(new Intent("at.CREAR_GRUPO_FAMILIAR"));
+		// } else
+		// Toast.makeText(getApplicationContext(),
+		// "Ya pertenece a un grupo familiar", Toast.LENGTH_SHORT).show();
+	}
+
+	private boolean estadoGPS() {
+		LocationManager servicio = (LocationManager) getSystemService(LOCATION_SERVICE);
+		return servicio.isProviderEnabled(LocationManager.GPS_PROVIDER);
+	}
+
+	public void abrirConfigGPS() {
+		Intent actividad = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+		startActivityForResult(actividad,777);
+	}
+
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if(requestCode == 777 && resultCode == Activity.RESULT_CANCELED){
+			if (!estadoGPS()) {
+				validarGPS();
+			} else
+				comenzar();
+		}
 	}
 	
 	class AsyncDelete extends AsyncTask<String, String, String> {
 
 		ProgressDialog pDialog = new ProgressDialog(MainActivity.this);
-		
+
 		protected void onPreExecute() {
 			pDialog = new ProgressDialog(MainActivity.this);
 			pDialog.setIndeterminate(false);
@@ -320,10 +377,11 @@ public class MainActivity extends MapActivity {
 		}
 
 	}
-
+	
 	class AsyncCargar extends AsyncTask<String, String, Boolean> {
 
 		ProgressDialog pDialog = new ProgressDialog(MainActivity.this);
+
 		protected void onPreExecute() {
 			pDialog = new ProgressDialog(MainActivity.this);
 			pDialog.setIndeterminate(false);
@@ -351,6 +409,7 @@ public class MainActivity extends MapActivity {
 			}
 			return true;
 		}
+
 		protected void onPostExecute(Boolean result) {
 			ciudad.actualizarPosiciones();
 			if (result)
@@ -359,18 +418,18 @@ public class MainActivity extends MapActivity {
 				Toast.makeText(context, "Ha ocurrido un error inesperado al iniciar la aplicacion", Toast.LENGTH_LONG).show();
 				finish();
 			}
-			
+
 			com.setUsuario(usuario);
 			com.setCiudad(ciudad);
 			com.setDispositivo(dispositivo);
 			registrarDispositivo();
 		}
 	}
-	
+
 	class AsyncAbandonar extends AsyncTask<String, String, Boolean> {
 
 		ProgressDialog pDialog = new ProgressDialog(MainActivity.this);
-		
+
 		protected void onPreExecute() {
 			pDialog = new ProgressDialog(MainActivity.this);
 			pDialog.setIndeterminate(false);
@@ -381,15 +440,15 @@ public class MainActivity extends MapActivity {
 
 		protected Boolean doInBackground(String... params) {
 			return usuario.setGrupoFamiliar(null);
-			
+
 		}
 
 		protected void onPostExecute(Boolean s) {
-			if(s){
+			if (s) {
 				Util.reiniciarPreferencias(context);
 				finish();
 			}
-			Toast.makeText(getApplicationContext(), s?"Se ha abandonado el grupo":"No se ha podido abandonar, intentelo mas tarde.", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getApplicationContext(), s ? "Se ha abandonado el grupo" : "No se ha podido abandonar, intentelo mas tarde.", Toast.LENGTH_SHORT).show();
 			pDialog.dismiss();
 
 		}

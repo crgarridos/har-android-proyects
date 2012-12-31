@@ -138,7 +138,7 @@ public class ListComentariosActivity extends Activity {
 				Toast.makeText(getApplicationContext(), "El contenido debe ser menor a 120 caracteres", Toast.LENGTH_SHORT).show();
 			else {
 				pDialog = new ProgressDialog(ListComentariosActivity.this);
-				pDialog.setMessage("Integrando al grupo familiar...");
+				pDialog.setMessage("Publicando comentario...");
 				pDialog.setIndeterminate(false);
 				pDialog.setCancelable(false);
 				pDialog.show();

@@ -141,7 +141,6 @@ public class InvitarFamiliar extends Activity {
 			try {
 				if (u.getGrupoFamiliar() == null) {
 					Invitacion invitacion = new Invitacion(u, thisUsuario);
-					invitacion.persistir();
 					exito = true;
 					return "El usuario fue invitado exitosamente!";
 				} else {

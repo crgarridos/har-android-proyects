@@ -30,7 +30,7 @@ public class ComentarioSQL {
 	public Boolean persistir(Comentario c){
 		try {
 			Parametros postParametersToSend = new Parametros();
-			postParametersToSend.add("nombreFamiliar", c.getUsuario().getGrupoFamiliar().getNombre());
+			postParametersToSend.add("idFamiliar", c.getUsuario().getGrupoFamiliar().getId().toString());
 			postParametersToSend.add("nombreUsuario", c.getUsuario().getNombreUsuario());
 			postParametersToSend.add("contenidoComentario", c.getContenido());
 			JSONArray jdata = null;
