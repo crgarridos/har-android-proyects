@@ -77,17 +77,17 @@ public class GMapsAPI {
 
 	}
 
-	public boolean compararPunto(Coordenada origen, Punto destino) {
+	public Float compararPunto(Coordenada origen, Coordenada destino) {
 		Location l = new Location("mi punto");
 		l.setLatitude(origen.getLatitud());
 		l.setLongitude(origen.getLongitud());
 		Location ld = new Location("punto de encuentro");
-		ld.setLatitude(destino.getCoordenada().getLatitud());
-		ld.setLongitude(destino.getCoordenada().getLongitud());
+		ld.setLatitude(destino.getLatitud());
+		ld.setLongitude(destino.getLongitud());
 		Log.e(TAG, " " + l.distanceTo(ld));
-		if (l.distanceTo(ld) <= 50000)
-			return true;
-		return false;
+//		if (l.distanceTo(ld) <= 50000)
+//			return true;
+		return l.distanceTo(ld);
 	}
 
 	public void determinarCiudad(Ciudad ciudad) {
@@ -280,11 +280,57 @@ public class GMapsAPI {
 		return false;
 	}
 
-	public Coordenada getCoordenadaMasCercana(Coordenada origen, ArrayList<Coordenada> destinos) {
+	public ArrayList<Coordenada> getCoordenadaMasCercana(Coordenada origen, ArrayList<Coordenada> polilinea) {
+//		Float distancia = null;
+//		Float distanciaPunto = (float) 50000;
+//		Float distanciaPunto2 = (float) 50000;
+//		ArrayList<Coordenada> puntos = new ArrayList<Coordenada>();
+//		for(int i = 0;i<polilinea.size();i++){
+//			distancia = compararPunto(origen, polilinea.get(i));
+//			if(distancia < distanciaPunto){
+//				distanciaPunto = compararPunto(origen, polilinea.get(i));
+//				puntos.add(0, polilinea.get(i));
+//			}
+//			else if(distancia < distanciaPunto2){
+//				distanciaPunto2 = distancia;
+//				puntos.add(1, polilinea.get(i));
+//			}
+//		}
+//		
+//		//ecuacion 1 -> corresponde a la recta entre los puntos de la cota de seguridad
+//		Double dx = puntos.get(1).getLongitud() - puntos.get(0).getLongitud();
+//		Double dy = puntos.get(1).getLatitud() - puntos.get(0).getLatitud();
+//		Float dm = (float) (dy / dx);
+//		// y - y1 = dm * (x - x1)
+//		Log.i(TAG, "punto1: "+puntos.get(0).getLatitud()+" / "+puntos.get(0).getLongitud());
+//		Log.i(TAG, "punto2: "+puntos.get(1).getLatitud()+" / "+puntos.get(1).getLongitud());
+//		Double entero1 = puntos.get(0).getLatitud() + dm * puntos.get(0).getLongitud();
+//		Log.i(TAG, "ecuacion 1: y - "+dm+"*x = "+entero1);
+//		
+//		//ecuacion 2 -> corresponde a la recta entre la posicion y la posicion imaginaria fuera del area de inundacion
+//		Coordenada puntoFicticio = new Coordenada(origen.getLatitud(), origen.getLongitud()+10);
+//		Double fx = puntoFicticio.getLongitud() - origen.getLongitud();
+//		Double fy = puntoFicticio.getLatitud() - origen.getLatitud();
+//		Float fm = (float) (fy / fx);
+//		Log.i(TAG, "punto3: "+origen.getLatitud()+" / "+origen.getLongitud());
+//		Log.i(TAG, "punto4: "+puntoFicticio.getLatitud()+" / "+puntoFicticio.getLongitud());
+//		Double entero2 = origen.getLatitud() + fm * origen.getLongitud();
+//		Log.i(TAG, "ecuacion 2: y -"+fm+"*x = "+entero2);
+//		
+//		//calculado y
+//		try{
+//			Double y = origen.getLatitud();
+//			Double x = 
+//			
+//			Log.i(TAG, "Coordenada: ("+x+" , "+y);
+//		}catch (Exception e){
+//			Log.e(TAG, "Error: "+e);
+//		}
 		return null;
 	}
 
 	public void setMapView(MapView mapView) {
 		this.mapView = mapView;
 	}
+	
 }
