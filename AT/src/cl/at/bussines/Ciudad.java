@@ -19,6 +19,8 @@ import com.google.android.maps.MapView;
 
 public class Ciudad {
 
+	private static final int CAPA_GRUPO_FAMILIAR = 0;
+	private static final int CAPA_PUNTO_RIESGO = 1;
 	private static final String TAG = Ciudad.class.getName();
 	private Integer id;
 	private Dispositivo dispositivo;
@@ -30,6 +32,8 @@ public class Ciudad {
 	private GMapsAPI gMapsAPI;
 	private LocationListener locListener;
 	private boolean ejecutando = false;
+	private Boolean capaGrupoFamiliarVisible = true;
+	private Boolean capaPuntoRiesgoVisible = true;
 	
 	public Ciudad(MapView mapView, Dispositivo disp, PuntoEncuentro ptoEncuentro) {
 		dispositivo = disp;
@@ -42,7 +46,7 @@ public class Ciudad {
 		// gMapsAPI.setCentro(disp.getPosicion());
 		locListener = new LocationListener() {
 	    	public void onLocationChanged(Location location) {
-	    		Log.i(TAG, "Localización: "+location.getLatitude()+" - "+location.getLongitude());
+	    		Log.i(TAG, "Localizaciï¿½n: "+location.getLatitude()+" - "+location.getLongitude());
 	    		dispositivo.setPosicion(new Coordenada(location.getLatitude(), location.getLongitude()));
 	    		actualizarPosiciones();
 	    	}
@@ -212,23 +216,25 @@ public class Ciudad {
 			try{
 				GrupoFamiliar grupoFamiliar = dispositivo.getUsuario().getGrupoFamiliar();
 				PuntoEncuentro puntoEncuentro = null;
-//				dispositivo.actualizarPosicion();
-//				gMapsAPI.borrarPuntos(Ciudad.this);
-//				if(grupoFamiliar != null){
-//					puntoEncuentro = grupoFamiliar.getPuntoEncuentro();
-//					gMapsAPI.dibujarPunto(grupoFamiliar.getIntegrantes(), dispositivo.getUsuario());
-//					gMapsAPI.dibujarPunto(puntoEncuentro);
-//					if(gMapsAPI.compararPunto(dispositivo.getPosicion(), puntoEncuentro.getCoordenada()) < 5000){
-//						int intentos = 0;
-//						while(!dispositivo.getUsuario().setEstadoLlegada(true)&&intentos++ < 5);
-//					}
-//				}
-//				gMapsAPI.dibujarPolilinea(areaInundacion);
-//				puntosRiesgo = getPuntosRiesgo();
-//				gMapsAPI.dibujarPunto(puntosRiesgo);
-//				DispositivoSQL dSQL = new DispositivoSQL();
-//				dSQL.actualizarPosicion(dispositivo);
-				ArrayList<Coordenada> punto = gMapsAPI.getCoordenadaMasCercana(dispositivo.getPosicion(), Ciudad.this.areaInundacion);
+				dispositivo.actualizarPosicion();
+				gMapsAPI.borrarPuntos(Ciudad.this);
+				if(grupoFamiliar != null){
+					puntoEncuentro = grupoFamiliar.getPuntoEncuentro();
+					if (capaGrupoFamiliarVisible)
+						gMapsAPI.dibujarPunto(grupoFamiliar.getIntegrantes(), dispositivo.getUsuario());
+					gMapsAPI.dibujarPunto(puntoEncuentro);
+					if(gMapsAPI.compararPunto(dispositivo.getPosicion(), puntoEncuentro.getCoordenada()) < 5000){
+						int intentos = 0;
+						while(!dispositivo.getUsuario().setEstadoLlegada(true)&&intentos++ < 5);
+					}
+				}
+				gMapsAPI.dibujarPolilinea(areaInundacion);
+				puntosRiesgo = getPuntosRiesgo();
+				if (capaPuntoRiesgoVisible)
+				gMapsAPI.dibujarPunto(puntosRiesgo);
+				DispositivoSQL dSQL = new DispositivoSQL();
+				dSQL.actualizarPosicion(dispositivo);
+				ArrayList<Coordenada> punto = gMapsAPI.getCoordenadaMasCercana(dispositivo.getPosicion(), areaInundacion);
 			}catch(Exception e){
 				Log.e(TAG, "Error en dibujando "+e);
 			}
@@ -243,6 +249,28 @@ public class Ciudad {
 			Log.i(TAG, "terminando de dibujar...");
 		}
 
+	}
+	
+	public void mostrarCapas(int capa) {
+		try {
+			if(capa == CAPA_GRUPO_FAMILIAR)
+				capaGrupoFamiliarVisible = !capaGrupoFamiliarVisible;
+			if(capa == CAPA_PUNTO_RIESGO)
+				capaPuntoRiesgoVisible = !capaPuntoRiesgoVisible;
+			GrupoFamiliar grupoFamiliar = dispositivo.getUsuario().getGrupoFamiliar();
+			gMapsAPI.borrarPuntos(Ciudad.this);
+			if (grupoFamiliar != null) {
+				if (capaGrupoFamiliarVisible)
+					gMapsAPI.dibujarPunto(grupoFamiliar.getIntegrantes(), dispositivo.getUsuario());
+				gMapsAPI.dibujarPunto(puntoEncuentro);
+			}
+			gMapsAPI.dibujarPolilinea(areaInundacion);
+			if (capaPuntoRiesgoVisible)
+				gMapsAPI.dibujarPunto(puntosRiesgo);
+			gMapsAPI.refresh();
+		} catch (Exception e) {
+			Log.e(TAG, "Error en dibujando " + e);
+		}
 	}
 
 
