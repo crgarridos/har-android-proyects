@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
@@ -77,7 +78,6 @@ public class GMapsAPI {
 
 	}
 
-	
 	public Float compararPunto(Coordenada origen, Coordenada destino) {
 		Location l = new Location("mi punto");
 		l.setLatitude(origen.getLatitud());
@@ -85,9 +85,9 @@ public class GMapsAPI {
 		Location ld = new Location("punto de encuentro");
 		ld.setLatitude(destino.getLatitud());
 		ld.setLongitude(destino.getLongitud());
-		Log.e(TAG, " "+ l.distanceTo(ld));
-//		if (l.distanceTo(ld) <= 50000)
-//			return true;
+		Log.e(TAG, " " + l.distanceTo(ld));
+		// if (l.distanceTo(ld) <= 50000)
+		// return true;
 		return l.distanceTo(ld);
 	}
 
@@ -140,7 +140,8 @@ public class GMapsAPI {
 		int lat = -1;
 		int lon = -1;
 		int grade = -1;
-		numberRoutePoints = area.size() - 2;//se le restan los extrenmos del area de inundacion
+		numberRoutePoints = area.size() - 2;// se le restan los extrenmos del
+											// area de inundacion
 		routePoints = new GeoPoint[numberRoutePoints];
 		routeGrade = new int[numberRoutePoints];
 		for (int i = 1; i < area.size() - 1; i++) {
@@ -171,15 +172,16 @@ public class GMapsAPI {
 			ArrayList<PuntoRiesgo> puntosRiesgoAlto = new ArrayList<PuntoRiesgo>();
 			ArrayList<PuntoRiesgo> puntosRiesgoMedio = new ArrayList<PuntoRiesgo>();
 			ArrayList<PuntoRiesgo> puntosRiesgoBajo = new ArrayList<PuntoRiesgo>();
-			
-			for(int i = 0; i < puntosRiesgo.size(); i++){
-				if(puntosRiesgo.get(i).getCategoria() == 1)
+
+			for (int i = 0; i < puntosRiesgo.size(); i++) {
+				if (puntosRiesgo.get(i).getCategoria() == 1)
 					puntosRiesgoAlto.add(puntosRiesgo.get(i));
-				else if(puntosRiesgo.get(i).getCategoria() == 2)
+				else if (puntosRiesgo.get(i).getCategoria() == 2)
 					puntosRiesgoMedio.add(puntosRiesgo.get(i));
-				else puntosRiesgoBajo.add(puntosRiesgo.get(i));
+				else
+					puntosRiesgoBajo.add(puntosRiesgo.get(i));
 			}
-			
+
 			// Dibujamos puntos de riesgo alto
 			Drawable drawable = mapView.getContext().getResources().getDrawable(R.drawable.punto_riesgo_alto);
 			MarkItemizedOverlay itemizedoverlay = new MarkItemizedOverlay(drawable, mapView.getContext());
@@ -188,8 +190,8 @@ public class GMapsAPI {
 			}
 			itemizedoverlay.grabar();
 			mapView.getOverlays().add(itemizedoverlay);
-			
-			//Dibujamos puntos de riesgo medio
+
+			// Dibujamos puntos de riesgo medio
 			drawable = mapView.getContext().getResources().getDrawable(R.drawable.punto_riesgo_medio);
 			itemizedoverlay = new MarkItemizedOverlay(drawable, mapView.getContext());
 			for (int i = 0; i < puntosRiesgoMedio.size(); i++) {
@@ -197,8 +199,8 @@ public class GMapsAPI {
 			}
 			itemizedoverlay.grabar();
 			mapView.getOverlays().add(itemizedoverlay);
-			
-			//Dibujamos puntos de riesgo bajo
+
+			// Dibujamos puntos de riesgo bajo
 			drawable = mapView.getContext().getResources().getDrawable(R.drawable.punto_riesgo_bajo);
 			itemizedoverlay = new MarkItemizedOverlay(drawable, mapView.getContext());
 			for (int i = 0; i < puntosRiesgoBajo.size(); i++) {
@@ -206,8 +208,7 @@ public class GMapsAPI {
 			}
 			itemizedoverlay.grabar();
 			mapView.getOverlays().add(itemizedoverlay);
-			
-			
+
 		} catch (Exception e) {
 			Log.e(TAG, "dibujarPuntoIntegrantes," + e.toString() + " " + e.getCause());
 		}
@@ -217,11 +218,11 @@ public class GMapsAPI {
 		try {
 			ArrayList<Usuario> integrantesSeguros = new ArrayList<Usuario>();
 			ArrayList<Usuario> integrantesRiesgo = new ArrayList<Usuario>();
-			
-			//Evitamos que se dibuje el usuario interno
-			for(int i = 0; i < integrantes.size(); i++){
-				if(!usuario.getNombreUsuario().equalsIgnoreCase(integrantes.get(i).getNombreUsuario())){
-					if(integrantes.get(i).getDispositivo().getEstadoDeRiesgo())
+
+			// Evitamos que se dibuje el usuario interno
+			for (int i = 0; i < integrantes.size(); i++) {
+				if (!usuario.getNombreUsuario().equalsIgnoreCase(integrantes.get(i).getNombreUsuario())) {
+					if (integrantes.get(i).getDispositivo().getEstadoDeRiesgo())
 						integrantesRiesgo.add(integrantes.get(i));
 					else
 						integrantesSeguros.add(integrantes.get(i));
@@ -256,9 +257,9 @@ public class GMapsAPI {
 			List<Overlay> temp = new ArrayList<Overlay>(this.mapOverlays);
 			this.mapOverlays.clear();
 			for (Overlay ov : temp) {
-				if (ov.getClass() == MyLocationOverlay.class || ov.getClass() == RouteSegmentOverlay.class){
+				if (ov.getClass() == MyLocationOverlay.class || ov.getClass() == RouteSegmentOverlay.class) {
 					this.mapOverlays.add(ov);
-				}				
+				}
 			}
 		} catch (Exception e) {
 			Log.e(TAG, "borrarPuntos," + e.toString() + " " + e.getCause());
@@ -276,8 +277,8 @@ public class GMapsAPI {
 			Log.e(TAG, "dibujarPuntoEncuentro," + e.toString() + " " + e.getCause());
 		}
 	}
-	
-	public void dibujarPunto(Punto puntoSeguro, float distancia){
+
+	public void dibujarPunto(Punto puntoSeguro, float distancia) {
 		try {
 			Drawable drawable = mapView.getContext().getResources().getDrawable(R.drawable.punto_seguro);
 			MarkItemizedOverlay itemizedoverlay = new MarkItemizedOverlay(drawable, mapView.getContext());
@@ -294,25 +295,27 @@ public class GMapsAPI {
 	}
 
 	public ArrayList<Coordenada> getCoordenadaMasCercana(Coordenada origen, ArrayList<Coordenada> polilinea) {
-		
+
 		Float distancia = null;
 		Float distanciaPunto = 50000f;
 		Coordenada punto1 = null;
 		Coordenada punto2 = null;
 		Coordenada punto3 = null;
-		int indicePunto=0;
-		for(int i = 0; i<polilinea.size(); i++){
+		int indicePunto = 0;
+		for (int i = 0; i < polilinea.size(); i++) {
 			distancia = compararPunto(origen, polilinea.get(i));
-			if(distancia < distanciaPunto){
+			if (distancia < distanciaPunto) {
 				distanciaPunto = distancia;
 				punto2 = polilinea.get(i);
 				indicePunto = i;
 			}
 		}
-		punto1 = polilinea.get(indicePunto-1);//pto anterior al pto de la cota mas cercano
-		punto3 = polilinea.get(indicePunto+1);//pto posterior al pto de la cota mas cercano
-		
-		//Calculando primer pto seguro
+		punto1 = polilinea.get(indicePunto - 1);// pto anterior al pto de la
+												// cota mas cercano
+		punto3 = polilinea.get(indicePunto + 1);// pto posterior al pto de la
+												// cota mas cercano
+
+		// Calculando primer pto seguro
 		Double dx = punto2.getLongitud() - punto1.getLongitud();
 		Double dy = punto2.getLatitud() - punto1.getLatitud();
 		Float dm = (float) (dy / dx);
@@ -320,8 +323,8 @@ public class GMapsAPI {
 		Double x = (origen.getLatitud() - fm * origen.getLongitud() + dm * punto1.getLongitud() - punto1.getLatitud()) / (dm - fm);
 		Double y = dm * (x - punto1.getLongitud()) + punto1.getLatitud();
 		Coordenada puntoSeguro1 = new Coordenada(y, x);
-		
-		//Calculando segundo pto seguro
+
+		// Calculando segundo pto seguro
 		dx = punto3.getLongitud() - punto2.getLongitud();
 		dy = punto3.getLatitud() - punto2.getLatitud();
 		dm = (float) (dy / dx);
@@ -329,40 +332,54 @@ public class GMapsAPI {
 		x = (origen.getLatitud() - fm * origen.getLongitud() + dm * punto2.getLongitud() - punto2.getLatitud()) / (dm - fm);
 		y = dm * (x - punto2.getLongitud()) + punto2.getLatitud();
 		Coordenada puntoSeguro2 = new Coordenada(y, x);
-		
-		//Calculamos el pto seguro mas seguro
+
+		// Calculamos el pto seguro mas seguro
 		Float distanciaPunto1 = compararPunto(origen, puntoSeguro1);
 		Float distanciaPunto2 = compararPunto(origen, puntoSeguro2);
-			
-		
-		if(distanciaPunto1 < distanciaPunto2 && 
-				puntoSeguro1.getLongitud() < punto1.getLongitud() && puntoSeguro1.getLongitud() > punto2.getLongitud() &&
-					puntoSeguro1.getLatitud() > punto1.getLatitud() && puntoSeguro1.getLatitud() < punto2.getLatitud())
-			dibujarPunto(new Punto(puntoSeguro1), distanciaPunto1);
-		else if(puntoSeguro2.getLongitud() < punto3.getLongitud() && puntoSeguro2.getLongitud() > punto3.getLongitud() &&
-					puntoSeguro2.getLatitud() > punto3.getLatitud() && puntoSeguro2.getLatitud() < punto3.getLatitud())
-			dibujarPunto(new Punto(puntoSeguro2), distanciaPunto2);
-		else dibujarPunto(new Punto(punto2), distanciaPunto);
-		
-		
-				
-//		if(origen.getLatitud()<punto1.getLatitud() && origen.getLatitud()<punto2.getLatitud()){//SUR
-//			
-//			orientacion = SUR;
-//		}
-//		else if(origen.getLatitud()>punto1.getLatitud() && origen.getLatitud()>punto2.getLatitud()){//NORTE
-//			orientacion = NORTE;
-//		}
-//		else if(origen.getLongitud()<punto1.getLongitud() && origen.getLongitud()<punto2.getLongitud()){//OESTE
-//			orientacion = OESTE;
-//		}
-//		else if(origen.getLongitud()>punto1.getLongitud() && origen.getLongitud()>punto2.getLongitud()){//ESTE
-//			orientacion = ESTE;
+//		Coordenada puntoSeguroMasCercano;
+//		if (distanciaPunto1 > distanciaPunto2)
+//			puntoSeguroMasCercano = puntoSeguro2;
+//		else
+//			puntoSeguroMasCercano = puntoSeguro1;
+
+		// if(distanciaPunto1 < distanciaPunto2 &&
+		// puntoSeguro1.getLongitud() < punto1.getLongitud() &&
+		// puntoSeguro1.getLongitud() > punto2.getLongitud() &&
+		// puntoSeguro1.getLatitud() > punto1.getLatitud() &&
+		// puntoSeguro1.getLatitud() < punto2.getLatitud())
+		// dibujarPunto(new Punto(puntoSeguro1), distanciaPunto1);
+		// else if(puntoSeguro2.getLongitud() < punto3.getLongitud() &&
+		// puntoSeguro2.getLongitud() > punto3.getLongitud() &&
+		// puntoSeguro2.getLatitud() > punto3.getLatitud() &&
+		// puntoSeguro2.getLatitud() < punto3.getLatitud())
+		// dibujarPunto(new Punto(puntoSeguro2), distanciaPunto2);
+		// else dibujarPunto(new Punto(punto2), distanciaPunto);
+//		if (angulo(punto2, punto1, punto3) < angulo(puntoSeguroMasCercano, punto1, punto3)) {
+//			puntoSeguroMasCercano = punto2;
 //		}
 
-//		Log.i(TAG, "Coordenada: ("+x+" , "+y+")");
-//		Coordenada puntoSeguro = new Coordenada(y, x);
-//		dibujarPunto(new PuntoEncuentro(puntoSeguro));
+		// if(origen.getLatitud()<punto1.getLatitud() &&
+		// origen.getLatitud()<punto2.getLatitud()){//SUR
+		//
+		// orientacion = SUR;
+		// }
+		// else if(origen.getLatitud()>punto1.getLatitud() &&
+		// origen.getLatitud()>punto2.getLatitud()){//NORTE
+		// orientacion = NORTE;
+		// }
+		// else if(origen.getLongitud()<punto1.getLongitud() &&
+		// origen.getLongitud()<punto2.getLongitud()){//OESTE
+		// orientacion = OESTE;
+		// }
+		// else if(origen.getLongitud()>punto1.getLongitud() &&
+		// origen.getLongitud()>punto2.getLongitud()){//ESTE
+		// orientacion = ESTE;
+		// }
+
+		// Log.i(TAG, "Coordenada: ("+x+" , "+y+")");
+//		 Coordenada puntoSeguro = new Coordenada(y, x);
+		 dibujarPunto(new PuntoEncuentro(puntoSeguro1));
+		 refresh();
 		return null;
 	}
 
@@ -374,4 +391,42 @@ public class GMapsAPI {
 		mapView.postInvalidate();
 	}
 
+	/**
+	 * Funcion que calcula la diferencia de angulos entre dos rectas formadas
+	 * por tres puntos a->b y a->c , es decir el angulo formado por las dos
+	 * rectas (ang(a->c)-ang(a->b)), pero siempre positivo. Por lo tanto,
+	 * obtenemos el angulo en sentido antihorario.
+	 * 
+	 * @param uno
+	 *            : Primer punto.
+	 * @param dos
+	 *            : Segundo punto.
+	 * @param tres
+	 *            : Tercer punto.
+	 * @return : Angulo en radianes [0-2PI] con la diferencia entre las rectas
+	 *         uno-tres y uno-dos.
+	 */
+	public static double angulo(Coordenada a, Coordenada b, Coordenada c) {
+		Math.a
+		// transladamos al origen de coordenadas los tres puntos
+		Point uno = new Point(a.getLongitud().intValue(), a.getLatitud().intValue());
+		Point dos = new Point(b.getLongitud().intValue(), b.getLatitud().intValue());
+		Point tres = new Point(c.getLongitud().intValue(), c.getLatitud().intValue());
+		Point pi = new Point(dos.x - uno.x, dos.y - uno.y);
+		Point pj = new Point(tres.x - uno.x, tres.y - uno.y);
+		// calculamos su angulo de coordenada polar
+		double ang_pi = Math.atan2((double) pi.x, (double) pi.y);
+		double ang_pj = Math.atan2((double) pj.x, (double) pj.y);
+
+		// hallamos la diferencia
+		double ang = ang_pj - ang_pi;
+
+		// Si el angulo es negativo le sumamos 2PI para obtener el
+		// angulo en el intervalo [0-2PI];
+		// siempre obtenemos ángulos positivos (en sentido antihorario)
+		if (ang < 0.0)
+			return ang + (2.0 * Math.PI);
+		else
+			return ang;
+	}// fin angulo
 }

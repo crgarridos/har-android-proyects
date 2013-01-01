@@ -244,7 +244,7 @@ public class Ciudad {
 		@Override
 		protected void onPostExecute(String result) {
 			super.onPostExecute(result);
-			dispositivo.inicializar(Ciudad.this.getLocationListener());
+//			dispositivo.inicializar(Ciudad.this.getLocationListener());
 			Ciudad.this.ejecutando = false;
 			Log.i(TAG, "terminando de dibujar...");
 		}
