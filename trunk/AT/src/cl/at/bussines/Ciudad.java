@@ -7,11 +7,9 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.util.Log;
 import android.widget.Toast;
 import cl.at.data.DispositivoSQL;
-import cl.at.data.PuntoEncuentroSQL;
 import cl.at.data.PuntoRiesgoSQL;
 import cl.at.util.AlertTsunamiApplication;
 
@@ -66,7 +64,6 @@ public class Ciudad {
 		// Usado para la alerta Don't touch it!!
 	}
 
-	//get y set Dispositivo
 	public Dispositivo getDispositivo(){
 		return dispositivo;
 	}
@@ -75,7 +72,6 @@ public class Ciudad {
 		this.dispositivo = dispositivo;
 	}
 
-	// get y set Coordenada
 	public Coordenada getCoordenada() {
 		return coordenada;
 	}
@@ -84,7 +80,6 @@ public class Ciudad {
 		this.coordenada = coordenada;
 	}
 
-	// get y set Punto de seguridad
 	public Punto getPuntoSeguridad() {
 		return puntoSeguridad;
 	}
@@ -93,7 +88,6 @@ public class Ciudad {
 		this.puntoSeguridad = puntoSeguridad;
 	}
 
-	// get y set Area de inundaci�n
 	public ArrayList<Coordenada> getAreaInundacion() {
 		return areaInundacion;
 	}
@@ -125,22 +119,6 @@ public class Ciudad {
 	public void setPuntoEncuentro(PuntoEncuentro puntoEncuentro) {
 		this.puntoEncuentro = puntoEncuentro;
 	}
-
-	// //get y set GMapsAPI
-	// public GMapsAPI getgMapsAPI() {
-	// return gMapsAPI;
-	// }
-	//
-	// public void setgMapsAPI(GMapsAPI gMapsAPI) {
-	// this.gMapsAPI = gMapsAPI;
-	// }
-	//
-	// //Destructor?
-	// public void finalize() throws Throwable {
-	//
-	// }
-
-	// Otros
 
 	public void definirPuntoEncuentro() {
 		try {
@@ -196,6 +174,7 @@ public class Ciudad {
 	
 	public void actualizarPosiciones(){
 		if(!ejecutando ){
+			ejecutando = true;
 			Log.i(TAG, "dibujando...");
 			new AsyncMapa().execute();
 		}
@@ -206,8 +185,7 @@ public class Ciudad {
 
 		@Override
 		protected void onPreExecute() {
-			super.onPreExecute();
-			Ciudad.this.ejecutando = true;
+//			gMapsAPI.invalidate();
 			Toast.makeText(AlertTsunamiApplication.getAppContext(), "Actualizando...", Toast.LENGTH_LONG).show();
 		}
 		
@@ -216,10 +194,8 @@ public class Ciudad {
 			try{
 				GrupoFamiliar grupoFamiliar = dispositivo.getUsuario().getGrupoFamiliar();
 				PuntoEncuentro puntoEncuentro = null;
-
 				//TODO solo lo comente para poder hacer la parte de punto de seguridad sin cargar tanta wea....
-//				dispositivo.actualizarPosicion();
-				gMapsAPI.borrarPuntos(Ciudad.this);
+				dispositivo.actualizarPosicion();
 //				if(grupoFamiliar != null){
 //					puntoEncuentro = grupoFamiliar.getPuntoEncuentro();
 //					gMapsAPI.dibujarPunto(grupoFamiliar.getIntegrantes(), dispositivo.getUsuario());
@@ -232,9 +208,8 @@ public class Ciudad {
 //				gMapsAPI.dibujarPolilinea(areaInundacion);
 //				puntosRiesgo = getPuntosRiesgo();
 //				gMapsAPI.dibujarPunto(puntosRiesgo);
-//				DispositivoSQL dSQL = new DispositivoSQL();
-//				dSQL.actualizarPosicion(dispositivo);
-				gMapsAPI.getCoordenadaMasCercana(Ciudad.this);
+				DispositivoSQL dSQL = new DispositivoSQL();
+				dSQL.actualizarPosicion(dispositivo);
 			}catch(Exception e){
 				Log.e(TAG, "Error en dibujando "+e);
 			}
@@ -244,13 +219,14 @@ public class Ciudad {
 		@Override
 		protected void onPostExecute(String result) {
 			super.onPostExecute(result);
+			gMapsAPI.borrarPuntos(Ciudad.this);
+			gMapsAPI.getCoordenadaMasCercana(Ciudad.this);
 			dispositivo.inicializar(Ciudad.this.getLocationListener());
 			Ciudad.this.ejecutando = false;
 			Log.i(TAG, "terminando de dibujar...");
 		}
-
 	}
-	
+
 	public void mostrarCapas(int capa) {
 		try {
 			if(capa == CAPA_GRUPO_FAMILIAR)
@@ -275,5 +251,10 @@ public class Ciudad {
 
 	public void setEstadoRiesgo(Boolean estadoRiesgo) {
 		this.getDispositivo().setEstadoDeRiesgo(estadoRiesgo);
+	}
+
+	
+	public boolean ejecutando() {
+		return ejecutando;
 	}
 }

@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.provider.Settings;
 import android.text.InputType;
 import android.util.Log;
@@ -144,6 +145,10 @@ public class MainActivity extends MapActivity {
 
 	protected void centrarEnMiPosicion() {
 		mapView.getController().animateTo(mOverlayLocation.getMyLocation());
+		while(mapView.getZoomLevel()<15){
+			mapView.getController().zoomIn();
+			SystemClock.sleep(50);
+		}
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -459,7 +464,6 @@ public class MainActivity extends MapActivity {
 
 		protected Boolean doInBackground(String... params) {
 			return usuario.setGrupoFamiliar(null);
-
 		}
 
 		protected void onPostExecute(Boolean s) {
