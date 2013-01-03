@@ -234,7 +234,7 @@ public class Ciudad {
 //				gMapsAPI.dibujarPunto(puntosRiesgo);
 //				DispositivoSQL dSQL = new DispositivoSQL();
 //				dSQL.actualizarPosicion(dispositivo);
-				ArrayList<Coordenada> punto = gMapsAPI.getCoordenadaMasCercana(dispositivo.getPosicion(), Ciudad.this.areaInundacion);
+				gMapsAPI.getCoordenadaMasCercana(Ciudad.this);
 			}catch(Exception e){
 				Log.e(TAG, "Error en dibujando "+e);
 			}
@@ -244,7 +244,7 @@ public class Ciudad {
 		@Override
 		protected void onPostExecute(String result) {
 			super.onPostExecute(result);
-//			dispositivo.inicializar(Ciudad.this.getLocationListener());
+			dispositivo.inicializar(Ciudad.this.getLocationListener());
 			Ciudad.this.ejecutando = false;
 			Log.i(TAG, "terminando de dibujar...");
 		}
@@ -273,5 +273,7 @@ public class Ciudad {
 		}
 	}
 
-
+	public void setEstadoRiesgo(Boolean estadoRiesgo) {
+		this.getDispositivo().setEstadoDeRiesgo(estadoRiesgo);
+	}
 }

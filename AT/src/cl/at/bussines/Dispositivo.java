@@ -183,4 +183,8 @@ public class Dispositivo {
 		new DispositivoSQL().registrarEnGCM(this);
 	}
 
+	public void setEstadoDeRiesgo(Boolean estadoRiesgo) {
+		this.estadoDeRiesgo = estadoRiesgo;
+	}
+
 }
