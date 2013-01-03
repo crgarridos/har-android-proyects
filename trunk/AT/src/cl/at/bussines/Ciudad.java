@@ -219,7 +219,7 @@ public class Ciudad {
 
 				//TODO solo lo comente para poder hacer la parte de punto de seguridad sin cargar tanta wea....
 //				dispositivo.actualizarPosicion();
-//				gMapsAPI.borrarPuntos(Ciudad.this);
+				gMapsAPI.borrarPuntos(Ciudad.this);
 //				if(grupoFamiliar != null){
 //					puntoEncuentro = grupoFamiliar.getPuntoEncuentro();
 //					gMapsAPI.dibujarPunto(grupoFamiliar.getIntegrantes(), dispositivo.getUsuario());
