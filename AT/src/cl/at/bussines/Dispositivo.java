@@ -151,7 +151,6 @@ public class Dispositivo {
 		context = AlertTsunamiApplication.getAppContext();
 		NotificationManager notManager = (NotificationManager) context.getSystemService(ns);
 
-		// Configuramos la notificaci�n
 		int icono = android.R.drawable.stat_sys_warning;
 		CharSequence textoEstado = "Alerta de Tsunami";
 		long hora = System.currentTimeMillis();

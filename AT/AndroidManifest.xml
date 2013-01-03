@@ -62,8 +62,7 @@
         <activity
             android:name="cl.at.view.DefinirPuntoEncuentroActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" >
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="at.DEFINIR_PUNTO_ENCUENTRO" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -72,8 +71,7 @@
         <activity
             android:name="cl.at.view.PublicarComentarioActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" >
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="at.PUBLICAR_COMENTARIO" />
                 <category android:name="android.intent.category.DEFAULT" />

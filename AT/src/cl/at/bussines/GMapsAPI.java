@@ -343,20 +343,16 @@ public class GMapsAPI {
 		Punto puntoSeguroMasCercano;
 		
 		if (distanciaPunto1.isNaN() || distanciaPunto2.isNaN())
-		{// TODO si los dos son NaN, cagamos D: xD
 			puntoSeguroMasCercano = distanciaPunto1.isNaN() ? new Punto(puntoSeguro2) : new Punto(puntoSeguro1);
-		}
-		else if (distanciaPunto1 < distanciaPunto2 || angulo(puntoSeguro2, punto1, punto3) < angulo(puntoSeguro1, punto1, punto3)){
+		else if (distanciaPunto1 < distanciaPunto2 || angulo(puntoSeguro2, punto1, punto3) < angulo(puntoSeguro1, punto1, punto3))
 			puntoSeguroMasCercano = new Punto(puntoSeguro1);
-		}
-		else
-			puntoSeguroMasCercano = new Punto(puntoSeguro2);
-		
+		else puntoSeguroMasCercano = new Punto(puntoSeguro2);
+
 		Log.d(TAG, angulo(puntoSeguroMasCercano.getCoordenada(), punto1, punto3)+" "+ angulo(punto2, punto1, punto3));
 		if (angulo(puntoSeguroMasCercano.getCoordenada(), punto1, punto3) < angulo(punto2, punto1, punto3))
 			puntoSeguroMasCercano = new Punto(punto2);
 
-		dibujarPunto(new Punto(puntoSeguroMasCercano.getCoordenada()), 00);
+		dibujarPunto(new Punto(puntoSeguroMasCercano.getCoordenada()), compararPunto(origen,puntoSeguroMasCercano.getCoordenada()));
 		Log.d(TAG, puntoSeguroMasCercano.getCoordenada().toString());
 //		dibujarPunto(new Punto(new Coordenada(puntoSeguroMasCercano.getCoordenada().getLongitud(),puntoSeguroMasCercano.getCoordenada().getLatitud()-1.0)), 10);
 //		refresh();
@@ -546,11 +542,14 @@ public class GMapsAPI {
 
 	private static Double norma(Coordenada a) {
 		return Math.sqrt(Math.pow(a.getLongitud(), 2d) + Math.pow(a.getLatitud(), 2d));
-
 	}
 
 	private static Double productoPunto(Coordenada a, Coordenada b){
 		return a.getLongitud() * b.getLongitud() + a.getLatitud() * b.getLatitud();
 	}
+//
+//	public void invalidate() {
+//		mapView.invalidate();
+//	}
 
 }
