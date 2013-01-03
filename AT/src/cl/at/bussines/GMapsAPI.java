@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
@@ -333,9 +332,44 @@ public class GMapsAPI {
 		y = dm * (x - punto2.getLongitud()) + punto2.getLatitud();
 		Coordenada puntoSeguro2 = new Coordenada(y, x);
 
-		// Calculamos el pto seguro mas seguro
 		Float distanciaPunto1 = compararPunto(origen, puntoSeguro1);
 		Float distanciaPunto2 = compararPunto(origen, puntoSeguro2);
+		
+		dibujarPunto(new Punto(puntoSeguro1), 10);
+		dibujarPunto(new Punto(puntoSeguro2), 20);
+		
+
+		Punto puntoSeguroMasCercano;
+		
+		if (distanciaPunto1.isNaN() || distanciaPunto2.isNaN())
+		{// TODO si los dos son NaN, cagamos D: xD
+			puntoSeguroMasCercano = distanciaPunto1.isNaN() ? new Punto(puntoSeguro2) : new Punto(puntoSeguro1);
+		}
+		else if (distanciaPunto1 < distanciaPunto2 || angulo(puntoSeguro2, punto1, punto3) < angulo(puntoSeguro1, punto1, punto3)){
+			puntoSeguroMasCercano = new Punto(puntoSeguro1);
+		}
+		else
+			puntoSeguroMasCercano = new Punto(puntoSeguro2);
+
+		if (punto2.getLatitud() > punto1.getLatitud()) {
+			intercambiar(punto2, punto1);
+		}
+		if (punto3.getLatitud() > punto2.getLatitud()) {
+			intercambiar(punto3, punto2);
+		}
+		if (punto3.getLatitud() > punto1.getLatitud()) {
+			intercambiar(punto3, punto1);
+		}
+		
+		Log.d(TAG, angulo(puntoSeguroMasCercano.getCoordenada(), punto1, punto3)+" "+ angulo(punto2, punto1, punto3));
+		if (angulo(puntoSeguroMasCercano.getCoordenada(), punto1, punto3) < angulo(punto2, punto1, punto3))
+			puntoSeguroMasCercano = new Punto(punto2);
+
+		dibujarPunto(new Punto(puntoSeguroMasCercano.getCoordenada()), 00);
+		Log.d(TAG, puntoSeguroMasCercano.getCoordenada().toString());
+//		dibujarPunto(new Punto(new Coordenada(puntoSeguroMasCercano.getCoordenada().getLongitud(),puntoSeguroMasCercano.getCoordenada().getLatitud()-1.0)), 10);
+		refresh();
+/**=======
 		
 		//TODO en caso de que la weaita del cristian falle
 		if(distanciaPunto1 < distanciaPunto2){
@@ -411,7 +445,14 @@ public class GMapsAPI {
 			//Si no esta en ninguna de las rectas
 			else dibujarPunto(new Punto(punto2), distanciaPunto);
 		refresh();
+>>>>>>> .r133*/
 		return null;
+	}
+
+	private void intercambiar(Coordenada punto2, Coordenada punto1) {
+		Coordenada aux = punto1;
+		punto2 = aux;
+		punto1 = punto2;
 	}
 
 	public void setMapView(MapView mapView) {
@@ -422,41 +463,37 @@ public class GMapsAPI {
 		mapView.postInvalidate();
 	}
 
-	/**
-	 * Funcion que calcula la diferencia de angulos entre dos rectas formadas
-	 * por tres puntos a->b y a->c , es decir el angulo formado por las dos
-	 * rectas (ang(a->c)-ang(a->b)), pero siempre positivo. Por lo tanto,
-	 * obtenemos el angulo en sentido antihorario.
-	 * 
-	 * @param uno
-	 *            : Primer punto.
-	 * @param dos
-	 *            : Segundo punto.
-	 * @param tres
-	 *            : Tercer punto.
-	 * @return : Angulo en radianes [0-2PI] con la diferencia entre las rectas
-	 *         uno-tres y uno-dos.
-	 */
-	public static double angulo(Coordenada a, Coordenada b, Coordenada c) {
-		// transladamos al origen de coordenadas los tres puntos
-		Point uno = new Point(a.getLongitud().intValue(), a.getLatitud().intValue());
-		Point dos = new Point(b.getLongitud().intValue(), b.getLatitud().intValue());
-		Point tres = new Point(c.getLongitud().intValue(), c.getLatitud().intValue());
-		Point pi = new Point(dos.x - uno.x, dos.y - uno.y);
-		Point pj = new Point(tres.x - uno.x, tres.y - uno.y);
-		// calculamos su angulo de coordenada polar
-		double ang_pi = Math.atan2((double) pi.x, (double) pi.y);
-		double ang_pj = Math.atan2((double) pj.x, (double) pj.y);
+	public static Double angulo(Coordenada p1, Coordenada p2, Coordenada p3) {
+		Coordenada a = new Coordenada(p1.getLongitud() - p2.getLongitud(), p1.getLatitud() - p2.getLatitud());
+		Coordenada b = new Coordenada(p1.getLongitud() - p3.getLongitud(), p1.getLatitud() - p3.getLatitud());
+		double pr = productoPunto(a, b);
+		double na = (norma(a) );
+		double nb = (norma(b) );
+		double nab = (norma(a) * norma(b));
+		double l = Math.acos( productoPunto(a, b) / (norma(a) * norma(b)) );
+		double l1 = ( productoPunto(a, b) / (norma(a) * norma(b)) );
+		
+		return Math.acos( productoPunto(a, b) / (norma(a) * norma(b)) );
+//		return angle(p1,p3,p2);
+	}
+	
+	public static Double angle(Coordenada p0,Coordenada p1,Coordenada c) {
+		Double p0c = Math.sqrt(Math.pow(c.getLongitud()-p0.getLongitud(),2)+
+	                        Math.pow(c.getLatitud()-p0.getLatitud(),2)); // p0->c (b)   
+		Double p1c = Math.sqrt(Math.pow(c.getLongitud()-p1.getLongitud(),2)+
+	                        Math.pow(c.getLatitud()-p1.getLatitud(),2)); // p1->c (a)
+		Double p0p1 = Math.sqrt(Math.pow(p1.getLongitud()-p0.getLongitud(),2)+
+	                         Math.pow(p1.getLatitud()-p0.getLatitud(),2)); // p0->p1 (c)
+	    return Math.acos((p1c*p1c+p0c*p0c-p0p1*p0p1)/(2*p1c*p0c));
+	}
 
-		// hallamos la diferencia
-		double ang = ang_pj - ang_pi;
+	private static Double norma(Coordenada a) {
+		return Math.sqrt(Math.pow(a.getLongitud(), 2d) + Math.pow(a.getLatitud(), 2d));
 
-		// Si el angulo es negativo le sumamos 2PI para obtener el
-		// angulo en el intervalo [0-2PI];
-		// siempre obtenemos ángulos positivos (en sentido antihorario)
-		if (ang < 0.0)
-			return ang + (2.0 * Math.PI);
-		else
-			return ang;
-	}// fin angulo
+	}
+
+	private static Double productoPunto(Coordenada a, Coordenada b){
+		return a.getLongitud() * b.getLongitud() + a.getLatitud() * b.getLatitud();
+	}
+
 }
