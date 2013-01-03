@@ -337,7 +337,7 @@ public class GMapsAPI {
 		Float distanciaPunto1 = compararPunto(origen, puntoSeguro1);
 		Float distanciaPunto2 = compararPunto(origen, puntoSeguro2);
 		
-		//TODO en caso de que la weaita del cristian falla
+		//TODO en caso de que la weaita del cristian falle
 		if(distanciaPunto1 < distanciaPunto2){
 			//comparamos con la primera recta
 			//caso 1
