@@ -50,11 +50,6 @@ public class Usuario {
 	}
 
 	public Usuario() {
-		// if(externo)
-		// dispositivo = new Dispositivo(this);// TODO ,externo); debe cargar de
-		// la bd
-		// comentarios = new ArrayList<Comentario>();
-		// invitaciones = new ArrayList<Invitacion>();
 	}
 
 	protected Usuario(String nombreUsuario, String nombreCompleto, String password, String email) {

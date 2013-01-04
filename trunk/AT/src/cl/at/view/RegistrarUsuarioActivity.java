@@ -47,7 +47,7 @@ public class RegistrarUsuarioActivity extends Activity {
 
 	private Boolean validarCoherencia(String nombreCompleto, String email) {
 		return true;
-		//TODO descomentar
+		//TODO Descomentar validaciones
 		// String nombreCompletoRegEx = "[a-z A-Z]{3,20}";
 		// String emailRegEx = "([a-z._]{3,64})@([a-z._]{3,255}).(com|cl)";
 		// String passRegEx = "[^^]{8,15}";

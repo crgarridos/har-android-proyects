@@ -97,10 +97,12 @@ public class Ciudad {
 	}
 
 	public ArrayList<PuntoRiesgo> getPuntosRiesgo() {
-		if(this.puntosRiesgo == null || this.puntosRiesgo.size() == 0){
-			PuntoRiesgoSQL pSQL = new PuntoRiesgoSQL();
-			pSQL.cargarPuntosRiesgo(this);
-		}
+//		if(this.puntosRiesgo == null || this.puntosRiesgo.size() == 0){
+//			PuntoRiesgoSQL pSQL = new PuntoRiesgoSQL();
+//			pSQL.cargarPuntosRiesgo(this);
+//		}
+		PuntoRiesgoSQL pSQL = new PuntoRiesgoSQL();
+		pSQL.cargarPuntosRiesgo(this);
 		return puntosRiesgo;
 	}
 
@@ -226,6 +228,7 @@ public class Ciudad {
 				gMapsAPI.dibujarPunto(integrantes, dispositivo.getUsuario());
 			}
 			gMapsAPI.getCoordenadaMasCercana(Ciudad.this);
+			gMapsAPI.refresh();
 			Ciudad.this.ejecutando = false;
 			Log.i(TAG, "terminando de dibujar...");
 		}
