@@ -219,9 +219,9 @@ public class Ciudad {
 		@Override
 		protected void onPostExecute(String result) {
 			super.onPostExecute(result);
+//			dispositivo.inicializar(Ciudad.this.getLocationListener());
 			gMapsAPI.borrarPuntos(Ciudad.this);
 			gMapsAPI.getCoordenadaMasCercana(Ciudad.this);
-			dispositivo.inicializar(Ciudad.this.getLocationListener());
 			Ciudad.this.ejecutando = false;
 			Log.i(TAG, "terminando de dibujar...");
 		}
