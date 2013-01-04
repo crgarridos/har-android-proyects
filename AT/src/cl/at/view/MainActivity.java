@@ -154,8 +154,12 @@ public class MainActivity extends MapActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		SubMenu smnu1 = menu.addSubMenu(Menu.NONE, MNU_OPC1, Menu.NONE, "Capas").setIcon(R.drawable.capas);
 //		if (usuario.getGrupoFamiliar() != null)
-			smnu1.add(Menu.NONE, SMNU_OPC11, Menu.NONE, "Grupo familiar");
+		smnu1.add(Menu.NONE, SMNU_OPC11, Menu.NONE, "Grupo familiar");
+		smnu1.getItem(0).setCheckable(true);
+		smnu1.getItem(0).setChecked(true);
 		smnu1.add(Menu.NONE, SMNU_OPC12, Menu.NONE, "Puntos de riesgo");
+		smnu1.getItem(1).setCheckable(true);
+		smnu1.getItem(1).setChecked(true);
 
 		SubMenu smnu2 = menu.addSubMenu(Menu.NONE, MNU_OPC2, Menu.NONE, "Usuario").setIcon(R.drawable.user);
 		smnu2.add(Menu.NONE, SMNU_OPC21, Menu.NONE, "Ingresar punto de riesgo");
@@ -185,9 +189,17 @@ public class MainActivity extends MapActivity {
 		switch (item.getItemId()) {
 		case 11:
 			ciudad.mostrarCapas(0); // Grupo Familiar
+			if(item.isChecked()) 
+				item.setChecked(false);
+			else
+				item.setChecked(true);
 			return true;		    
 		case 12:
 			ciudad.mostrarCapas(1); // Puntos de riesgo
+			if(item.isChecked()) 
+				item.setChecked(false);
+			else
+				item.setChecked(true);
 			return true;
 		case 21:
 			startActivity(new Intent("at.INGRESAR_PUNTO_DE_RIESGO"));

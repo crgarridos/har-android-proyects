@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/buscarUsuarioDatos_imagen"
+        android:layout_width="64dip"
+        android:layout_height="64dip"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="10dip"
+        android:src="@drawable/icono_persona_segura" />
+
+    <LinearLayout
+        android:id="@+id/buscarUsuarioDatos_layoutTexts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dip"
+        android:layout_toRightOf="@id/buscarUsuarioDatos_imagen"
+        android:textColor="#FF0000"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/buscarUsuarioDatos_nombreUsuario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Large Text"
+            android:textStyle="bold"
+            android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+        <TextView
+            android:id="@+id/buscarUsuarioDatos_nombreCompleto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dip"
+            android:textStyle="bold"
+            android:text="Invitado por: "/>
+
+        <TextView
+            android:id="@+id/buscarUsuarioDatos_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dip"
+            android:text="TextView"
+            android:textSize="10sp" />
+    </LinearLayout>
+
+</RelativeLayout>
