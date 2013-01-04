@@ -44,7 +44,7 @@ public class Ciudad {
 		// gMapsAPI.setCentro(disp.getPosicion());
 		locListener = new LocationListener() {
 	    	public void onLocationChanged(Location location) {
-	    		Log.i(TAG, "Localizaci�n: "+location.getLatitude()+" - "+location.getLongitude());
+	    		Log.i(TAG, "Localizaciofn: "+location.getLatitude()+" - "+location.getLongitude());
 	    		dispositivo.setPosicion(new Coordenada(location.getLatitude(), location.getLongitude()));
 	    		actualizarPosiciones();
 	    	}
@@ -197,7 +197,6 @@ public class Ciudad {
 			try{
 				grupoFamiliar = dispositivo.getUsuario().getGrupoFamiliar();
 				puntoEncuentro = null;
-				//TODO solo lo comente para poder hacer la parte de punto de seguridad sin cargar tanta wea....
 				dispositivo.actualizarPosicion();
 				if(grupoFamiliar != null){
 					puntoEncuentro = grupoFamiliar.getPuntoEncuentro();
@@ -207,7 +206,6 @@ public class Ciudad {
 						while(!dispositivo.getUsuario().setEstadoLlegada(true)&&intentos++ < 5);
 					}
 				}
-//				gMapsAPI.dibujarPolilinea(areaInundacion);
 				puntosRiesgo = getPuntosRiesgo();
 				DispositivoSQL dSQL = new DispositivoSQL();
 				dSQL.actualizarPosicion(dispositivo);
@@ -220,7 +218,7 @@ public class Ciudad {
 		@Override
 		protected void onPostExecute(String result) {
 			super.onPostExecute(result);
-//			dispositivo.inicializar(Ciudad.this.getLocationListener());
+			dispositivo.inicializar(Ciudad.this.getLocationListener());
 			gMapsAPI.borrarPuntos(Ciudad.this);
 			gMapsAPI.dibujarPunto(puntosRiesgo);
 			if(grupoFamiliar != null){

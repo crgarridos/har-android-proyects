@@ -83,9 +83,9 @@ public class MarkItemizedOverlay extends ItemizedOverlay<OverlayItem>{
 		addOverlay(overlayItem);
 	}
 	
-	public void addPuntoSeguro(Punto puntoSeguro, float distancia) {
+	public void addPuntoSeguro(Punto puntoSeguro, Float punto) {
 		GeoPoint posicion = new GeoPoint((int)(puntoSeguro.getCoordenada().getLatitud()*1E6), (int)(puntoSeguro.getCoordenada().getLongitud()*1E6));
-		OverlayItem overlayItem = new OverlayItem(posicion, "Punto de seguro", "Distancia: "+distancia+" metros");
+		OverlayItem overlayItem = new OverlayItem(posicion, ""+punto.toString(), ""+punto.toString());
 		addOverlay(overlayItem);
 	}
 	
