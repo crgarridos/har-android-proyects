@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 import cl.at.data.DispositivoSQL;
+import cl.at.data.PuntoEncuentroSQL;
 import cl.at.data.PuntoRiesgoSQL;
 import cl.at.util.AlertTsunamiApplication;
 
@@ -111,10 +112,6 @@ public class Ciudad {
 	}
 	
 	public PuntoEncuentro getPuntoEncuentro(){
-//		if(this.puntoEncuentro == null){
-//			PuntoEncuentroSQL pSQL = new PuntoEncuentroSQL();
-//			pSQL.cargarPuntosRiesgo(this);
-//		}
 		return this.puntoEncuentro;
 	}
 

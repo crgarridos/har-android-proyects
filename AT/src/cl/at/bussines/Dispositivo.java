@@ -138,15 +138,12 @@ public class Dispositivo {
 
 	public void inicializar(LocationListener locListener) {
 		if(!suscrito){
-//			this.locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, this.intervalo, 0, locListener);
-			this.locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 15000, 0, locListener);
+			this.locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, this.intervalo, 0, locListener);
 			suscrito = true;
 		}
-//		this.locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 0, locListener);
 	}
 
 	public void onAlertaRecibida(Alerta a) {
-		// ciudad.visualizarMapa();
 		// Obtenemos una referencia al servicio de notificaciones
 		String ns = Context.NOTIFICATION_SERVICE;
 		context = AlertTsunamiApplication.getAppContext();
