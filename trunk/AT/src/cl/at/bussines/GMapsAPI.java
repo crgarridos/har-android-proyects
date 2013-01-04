@@ -94,11 +94,13 @@ public class GMapsAPI {
 		String nombreCiudad = null;
 		Geocoder geoCoder = new Geocoder(this.mapView.getContext(), Locale.getDefault());
 		try {
-			List<Address> direccion = geoCoder.getFromLocation(ciudad.getDispositivo().getPosicion().getLatitud(), ciudad.getDispositivo().getPosicion().getLongitud(), 1);
+			List<Address> direccion = geoCoder.getFromLocation(ciudad.getDispositivo().getPosicion().getLatitud(), ciudad.getDispositivo()
+					.getPosicion().getLongitud(), 1);
 			if (direccion.size() > 0)
 				nombreCiudad = direccion.get(0).getLocality();
 		} catch (IOException e) {
-			nombreCiudad = new CiudadSQL().getNombre(ciudad.getDispositivo().getPosicion().getLatitud(), ciudad.getDispositivo().getPosicion().getLongitud());
+			nombreCiudad = new CiudadSQL().getNombre(ciudad.getDispositivo().getPosicion().getLatitud(), ciudad.getDispositivo()
+					.getPosicion().getLongitud());
 		}
 		CiudadSQL cSQL = new CiudadSQL();
 		cSQL.cargarCiudad(ciudad, nombreCiudad);
@@ -303,7 +305,7 @@ public class GMapsAPI {
 		Coordenada punto2 = null;
 		Coordenada punto3 = null;
 		int indicePunto = 0;
-		for (int i = 0; i < polilinea.size(); i++) {
+		for (int i = 1; i < polilinea.size()-1; i++) {
 			distancia = compararPunto(origen, polilinea.get(i));
 			if (distancia < distanciaPunto) {
 				distanciaPunto = distancia;
@@ -311,10 +313,10 @@ public class GMapsAPI {
 				indicePunto = i;
 			}
 		}
-		punto1 = polilinea.get(indicePunto - 1);// pto anterior al pto de la
-												// cota mas cercano
-		punto3 = polilinea.get(indicePunto + 1);// pto posterior al pto de la
-												// cota mas cercano
+			punto1 = polilinea.get(indicePunto - 1);// pto anterior al pto de la
+													// cota mas cercano
+			punto3 = polilinea.get(indicePunto + 1);// pto posterior al pto de la
+													// cota mas cercano
 
 		// Calculando primer pto seguro
 		Double dx = punto2.getLongitud() - punto1.getLongitud();
@@ -333,7 +335,32 @@ public class GMapsAPI {
 		x = (origen.getLatitud() - fm * origen.getLongitud() + dm * punto2.getLongitud() - punto2.getLatitud()) / (dm - fm);
 		y = dm * (x - punto2.getLongitud()) + punto2.getLatitud();
 		Coordenada puntoSeguro2 = new Coordenada(y, x);
-
+		
+		// Calculando recta imaginaria limitada entre [origen.getLongitud() , origen.getLongitud() + 10]
+		y = origen.getLatitud();
+		
+		Double x2 = origen.getLongitud() - 10;
+		int intercepta = 0;
+		dibujarPunto(new PuntoEncuentro(origen));
+		
+		Coordenada p1 = polilinea.get(0);
+		Coordenada p2;
+		for(int i=1; i<=polilinea.size(); i++){
+			p2 = polilinea.get(i % polilinea.size());
+			dx = p2.getLongitud() - p1.getLongitud();
+			dy = p2.getLatitud() - p1.getLatitud();
+			dm = (float) (dy / dx);
+			x2 = (y - p1.getLatitud() + dm * p1.getLongitud()) / dm;
+			if(origen.getLongitud() <= x2 && x2 <= origen.getLongitud()+10){
+				if(p1.getLongitud() <= x2 && x2 <= p2.getLongitud())
+					intercepta++;
+			}
+			p1 = p2;
+		}
+		if(intercepta % 2 != 0)
+			Log.i(TAG, "Seguro...");
+		else Log.i(TAG, "Inseguro...");
+		
 		Float distanciaPunto1 = compararPunto(origen, puntoSeguro1);
 		Float distanciaPunto2 = compararPunto(origen, puntoSeguro2);
 		
@@ -342,164 +369,30 @@ public class GMapsAPI {
 		
 		Punto puntoSeguroMasCercano;
 		
+//		if (distanciaPunto1.isNaN() || distanciaPunto2.isNaN())
+//			puntoSeguroMasCercano = distanciaPunto1.isNaN() ? new Punto(puntoSeguro2) : new Punto(puntoSeguro1);
+//		else if (distanciaPunto1 < distanciaPunto2 || angulo(puntoSeguro2, punto1, punto3) < angulo(puntoSeguro1, punto1, punto3))
+//			puntoSeguroMasCercano = new Punto(puntoSeguro1);
+//		else puntoSeguroMasCercano = new Punto(puntoSeguro2);
+		
 		if (distanciaPunto1.isNaN() || distanciaPunto2.isNaN())
 			puntoSeguroMasCercano = distanciaPunto1.isNaN() ? new Punto(puntoSeguro2) : new Punto(puntoSeguro1);
-		else if (distanciaPunto1 < distanciaPunto2 || angulo(puntoSeguro2, punto1, punto3) < angulo(puntoSeguro1, punto1, punto3))
-			puntoSeguroMasCercano = new Punto(puntoSeguro1);
-		else puntoSeguroMasCercano = new Punto(puntoSeguro2);
-
-		Log.d(TAG, angulo(puntoSeguroMasCercano.getCoordenada(), punto1, punto3)+" "+ angulo(punto2, punto1, punto3));
-		if (angulo(puntoSeguroMasCercano.getCoordenada(), punto1, punto3) < angulo(punto2, punto1, punto3))
+		else if (angulo(puntoSeguro1, punto1, punto3) < angulo(punto2, punto1, punto3) && angulo(puntoSeguro2, punto1, punto3) < angulo(punto2, punto1, punto3))
 			puntoSeguroMasCercano = new Punto(punto2);
+		else if (angulo(puntoSeguro1, punto1, punto3) < angulo(punto2, punto1, punto3) && angulo(puntoSeguro2, punto1, punto3) > angulo(punto2, punto1, punto3))
+			puntoSeguroMasCercano = new Punto(puntoSeguro2);
+		else if (angulo(puntoSeguro1, punto1, punto3) > angulo(punto2, punto1, punto3) && angulo(puntoSeguro2, punto1, punto3) < angulo(punto2, punto1, punto3))
+			puntoSeguroMasCercano = new Punto(puntoSeguro1);
+		else
+			puntoSeguroMasCercano = new Punto((distanciaPunto1 < distanciaPunto2)? puntoSeguro1: puntoSeguro2);
+		
+		Log.d(TAG, angulo(puntoSeguroMasCercano.getCoordenada(), punto1, punto3)+" "+ angulo(punto2, punto1, punto3));
+//		if (angulo(puntoSeguroMasCercano.getCoordenada(), punto1, punto3) < angulo(punto2, punto1, punto3))
+//			puntoSeguroMasCercano = new Punto(punto2);
 
 		dibujarPunto(new Punto(puntoSeguroMasCercano.getCoordenada()), compararPunto(origen,puntoSeguroMasCercano.getCoordenada()));
 		Log.d(TAG, puntoSeguroMasCercano.getCoordenada().toString());
-//		dibujarPunto(new Punto(new Coordenada(puntoSeguroMasCercano.getCoordenada().getLongitud(),puntoSeguroMasCercano.getCoordenada().getLatitud()-1.0)), 10);
-//		refresh();
-
-//		Punto puntoSeguroCercano = null;
-//		
-//		Boolean dibujoPunto = false;
-//		
-//		//TODO en caso de que la weaita del cristian falle
-//		if(distanciaPunto1 < distanciaPunto2){
-//			//comparamos con la primera recta
-//			//caso 1
-//			if(punto2.getLongitud() <= puntoSeguro1.getLongitud() && puntoSeguro1.getLongitud() <= punto1.getLongitud() &&
-//					punto2.getLatitud() <= puntoSeguro1.getLatitud() && puntoSeguro1.getLatitud() <= punto1.getLatitud()){
-//				puntoSeguroCercano = new Punto(puntoSeguro1);
-//				distancia = distanciaPunto1;
-//				dibujoPunto = true;
-//			}
-//			//caso 2
-//			else if(punto2.getLongitud() <= puntoSeguro1.getLongitud() && puntoSeguro1.getLongitud() <= punto1.getLongitud() &&
-//					punto2.getLatitud() >= puntoSeguro1.getLatitud() && puntoSeguro1.getLatitud() >= punto1.getLatitud()){
-//				puntoSeguroCercano = new Punto(puntoSeguro1);
-//				distancia = distanciaPunto1;
-//				dibujoPunto = true;
-//			}
-//			//caso 3
-//			else if(punto1.getLongitud() <= puntoSeguro1.getLongitud() && puntoSeguro1.getLongitud() <= punto2.getLongitud() &&
-//					punto1.getLatitud() >= puntoSeguro1.getLatitud() && puntoSeguro1.getLatitud() >= punto2.getLatitud()){
-//				puntoSeguroCercano = new Punto(puntoSeguro1);
-//				distancia = distanciaPunto1;
-//				dibujoPunto = true;
-//			}
-//			//caso 4
-//			else if(punto1.getLongitud() <= puntoSeguro1.getLongitud() && puntoSeguro1.getLongitud() <= punto2.getLongitud() &&
-//					punto1.getLatitud() <= puntoSeguro1.getLatitud() && puntoSeguro1.getLatitud() <= punto2.getLatitud()){
-//				puntoSeguroCercano = new Punto(puntoSeguro1);
-//				distancia = distanciaPunto1;
-//				dibujoPunto = true;
-//			}
-//			//comparamos con segunda recta 
-//			//caso 1
-//			else if(punto2.getLongitud() <= puntoSeguro1.getLongitud() && puntoSeguro1.getLongitud() <= punto3.getLongitud() &&
-//					punto2.getLatitud() <= puntoSeguro1.getLatitud() && puntoSeguro1.getLatitud() <= punto3.getLatitud()){
-//				puntoSeguroCercano = new Punto(puntoSeguro1);
-//				distancia = distanciaPunto1;
-//				dibujoPunto = true;
-//			}
-//			//caso 2
-//			else if(punto2.getLongitud() <= puntoSeguro1.getLongitud() && puntoSeguro1.getLongitud() <= punto3.getLongitud() &&
-//					punto2.getLatitud() >= puntoSeguro1.getLatitud() && puntoSeguro1.getLatitud() >= punto3.getLatitud()){
-//				puntoSeguroCercano = new Punto(puntoSeguro1);
-//				distancia = distanciaPunto1;
-//				dibujoPunto = true;
-//			}
-//			//caso 3
-//			else if(punto3.getLongitud() <= puntoSeguro1.getLongitud() && puntoSeguro1.getLongitud() <= punto2.getLongitud() &&
-//					punto3.getLatitud() >= puntoSeguro1.getLatitud() && puntoSeguro1.getLatitud() >= punto2.getLatitud()){
-//				puntoSeguroCercano = new Punto(puntoSeguro1);
-//				distancia = distanciaPunto1;
-//				dibujoPunto = true;
-//			}
-//			//caso 4
-//			else if(punto3.getLongitud() <= puntoSeguro1.getLongitud() && puntoSeguro1.getLongitud() <= punto2.getLongitud() &&
-//					punto3.getLatitud() <= puntoSeguro1.getLatitud() && puntoSeguro1.getLatitud() <= punto2.getLatitud()){
-//				puntoSeguroCercano = new Punto(puntoSeguro1);
-//				distancia = distanciaPunto1;
-//				dibujoPunto = true;
-//			}
-//		}
-//		if(!dibujoPunto){
-//			//comparamos el otro punto "puntoSeguro2"
-//			//caso 1
-//			if(punto2.getLongitud() <= puntoSeguro2.getLongitud() && puntoSeguro2.getLongitud() <= punto1.getLongitud() &&
-//					punto2.getLatitud() <= puntoSeguro2.getLatitud() && puntoSeguro2.getLatitud() <= punto1.getLatitud()){
-//					puntoSeguroCercano = new Punto(puntoSeguro2);
-//					distancia = distanciaPunto2;
-//					dibujoPunto = true;
-//			}
-//			//caso 2
-//			else if(punto2.getLongitud() <= puntoSeguro2.getLongitud() && puntoSeguro2.getLongitud() <= punto1.getLongitud() &&
-//					punto2.getLatitud() >= puntoSeguro2.getLatitud() && puntoSeguro2.getLatitud() >= punto1.getLatitud()){
-//				puntoSeguroCercano = new Punto(puntoSeguro2);
-//				distancia = distanciaPunto2;
-//				dibujoPunto = true;
-//			}
-//			//caso 3
-//			else if(punto1.getLongitud() <= puntoSeguro2.getLongitud() && puntoSeguro2.getLongitud() <= punto2.getLongitud() &&
-//					punto1.getLatitud() >= puntoSeguro2.getLatitud() && puntoSeguro2.getLatitud() >= punto2.getLatitud()){
-//				puntoSeguroCercano = new Punto(puntoSeguro2);
-//				distancia = distanciaPunto2;
-//				dibujoPunto = true;
-//			}
-//			//caso 4
-//			else if(punto1.getLongitud() <= puntoSeguro2.getLongitud() && puntoSeguro2.getLongitud() <= punto2.getLongitud() &&
-//					punto1.getLatitud() <= puntoSeguro2.getLatitud() && puntoSeguro2.getLatitud() <= punto2.getLatitud()){
-//				puntoSeguroCercano = new Punto(puntoSeguro2);
-//				distancia = distanciaPunto2;
-//				dibujoPunto = true;
-//			}
-//			//comparamos con segunda recta
-//			//caso 1
-//			else if(punto2.getLongitud() <= puntoSeguro2.getLongitud() && puntoSeguro2.getLongitud() <= punto3.getLongitud() &&
-//					punto2.getLatitud() <= puntoSeguro2.getLatitud() && puntoSeguro2.getLatitud() <= punto3.getLatitud()){
-//				puntoSeguroCercano = new Punto(puntoSeguro2);
-//				distancia = distanciaPunto2;
-//				dibujoPunto = true;
-//			}
-//			//caso 2
-//			else if(punto2.getLongitud() <= puntoSeguro2.getLongitud() && puntoSeguro2.getLongitud() <= punto3.getLongitud() &&
-//					punto2.getLatitud() >= puntoSeguro2.getLatitud() && puntoSeguro2.getLatitud() >= punto3.getLatitud()){
-//				puntoSeguroCercano = new Punto(puntoSeguro2);
-//				distancia = distanciaPunto2;
-//				dibujoPunto = true;
-//			}
-//			//caso 3
-//			else if(punto3.getLongitud() <= puntoSeguro2.getLongitud() && puntoSeguro2.getLongitud() <= punto2.getLongitud() &&
-//					punto3.getLatitud() >= puntoSeguro2.getLatitud() && puntoSeguro2.getLatitud() >= punto2.getLatitud()){
-//				puntoSeguroCercano = new Punto(puntoSeguro2);
-//				distancia = distanciaPunto2;
-//				dibujoPunto = true;
-//			}
-//			//caso 4
-//			else if(punto3.getLongitud() <= puntoSeguro2.getLongitud() && puntoSeguro2.getLongitud() <= punto2.getLongitud() &&
-//					punto3.getLatitud() <= puntoSeguro2.getLatitud() && puntoSeguro2.getLatitud() <= punto2.getLatitud()){
-//				puntoSeguroCercano = new Punto(puntoSeguro2);
-//				distancia = distanciaPunto2;
-//				dibujoPunto = true;
-//			}
-//		}
-//		//Si no esta en ninguna de las rectas
-//		if(!dibujoPunto){
-//			puntoSeguroCercano = new Punto(punto2);
-//			distancia = distanciaPunto;
-//		}
-//		dibujarPunto(new Punto(puntoSeguro1), 1);
-//		dibujarPunto(new Punto(puntoSeguro2), 2);
-		
-//		dibujarPunto(puntoSeguroCercano, distancia);
 		refresh();
-//		if(puntoSeguroCercano.getCoordenada().getLongitud() < origen.getLongitud()){
-		if((puntoSeguro1.getLongitud() < origen.getLongitud() && puntoSeguro2.getLongitud() < origen.getLongitud())
-				|| ( punto2.getLongitud() < origen.getLongitud())){
-			ciudad.setEstadoRiesgo(true);
-			Log.i(TAG, "usuario seguro...");
-		}
-		else
-			Log.i(TAG, "usuario inseguro...");
 	}
 
 	private void intercambiar(Coordenada punto2, Coordenada punto1) {
@@ -519,32 +412,14 @@ public class GMapsAPI {
 	public static Double angulo(Coordenada p1, Coordenada p2, Coordenada p3) {
 		Coordenada a = new Coordenada(p1.getLongitud() - p2.getLongitud(), p1.getLatitud() - p2.getLatitud());
 		Coordenada b = new Coordenada(p1.getLongitud() - p3.getLongitud(), p1.getLatitud() - p3.getLatitud());
-//		double pr = productoPunto(a, b);
-//		double na = (norma(a) );
-//		double nb = (norma(b) );
-//		double nab = (norma(a) * norma(b));
-//		double l = Math.acos( productoPunto(a, b) / (norma(a) * norma(b)) );
-//		double l1 = ( productoPunto(a, b) / (norma(a) * norma(b)) );
-		
-//		if (p2.getLatitud() > p1.getLatitud()) {
-//			intercambiar(punto2, p1);
-//		}
-//		if (punto3.getLatitud() > punto2.getLatitud()) {
-//			intercambiar(punto3, punto2);
-//		}
-//		if (punto3.getLatitud() > punto1.getLatitud()) {
-//			intercambiar(punto3, punto1);
-//		}
-		
-		return Math.acos( productoPunto(a, b) / (norma(a) * norma(b)) );
-//		return angle(p1,p3,p2);
+		return Math.acos(productoPunto(a, b) / (norma(a) * norma(b)));
 	}
 
 	private static Double norma(Coordenada a) {
 		return Math.sqrt(Math.pow(a.getLongitud(), 2d) + Math.pow(a.getLatitud(), 2d));
 	}
 
-	private static Double productoPunto(Coordenada a, Coordenada b){
+	private static Double productoPunto(Coordenada a, Coordenada b) {
 		return a.getLongitud() * b.getLongitud() + a.getLatitud() * b.getLatitud();
 	}
 //

@@ -474,6 +474,7 @@ public class MainActivity extends MapActivity {
 			}
 			Toast.makeText(getApplicationContext(), s ? "Se ha abandonado el grupo" : "No se ha podido abandonar, intentelo mas tarde.", Toast.LENGTH_SHORT).show();
 			pDialog.dismiss();
+			mOverlayLocation.onTap(mOverlayLocation.getMyLocation(), mapView);
 
 		}
 
