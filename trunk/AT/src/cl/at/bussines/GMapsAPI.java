@@ -12,6 +12,7 @@ import android.location.Location;
 import android.util.Log;
 import cl.at.data.CiudadSQL;
 import cl.at.data.PuntoSQL;
+import cl.at.util.Polygon;
 import cl.at.view.MarkItemizedOverlay;
 import cl.at.view.R;
 import cl.at.view.RouteSegmentOverlay;
@@ -392,7 +393,14 @@ public class GMapsAPI {
 
 		dibujarPunto(new Punto(puntoSeguroMasCercano.getCoordenada()), compararPunto(origen,puntoSeguroMasCercano.getCoordenada()));
 		Log.d(TAG, puntoSeguroMasCercano.getCoordenada().toString());
-		refresh();
+
+		  final Polygon polygon = new Polygon(ciudad.getAreaInundacion());
+		if(!polygon.contains(origen.getLongitud(),origen.getLatitud())){
+			ciudad.setEstadoRiesgo(true);
+			Log.i(TAG, "usuario seguro...");
+		}
+		else
+			Log.i(TAG, "usuario inseguro...");
 	}
 
 	private void intercambiar(Coordenada punto2, Coordenada punto1) {
@@ -409,7 +417,8 @@ public class GMapsAPI {
 		mapView.postInvalidate();
 	}
 
-	public static Double angulo(Coordenada p1, Coordenada p2, Coordenada p3) {
+	public static 
+	Double angulo(Coordenada p1, Coordenada p2, Coordenada p3) {
 		Coordenada a = new Coordenada(p1.getLongitud() - p2.getLongitud(), p1.getLatitud() - p2.getLatitud());
 		Coordenada b = new Coordenada(p1.getLongitud() - p3.getLongitud(), p1.getLatitud() - p3.getLatitud());
 		return Math.acos(productoPunto(a, b) / (norma(a) * norma(b)));
