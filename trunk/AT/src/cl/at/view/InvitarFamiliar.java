@@ -1,10 +1,13 @@
 package cl.at.view;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -32,6 +35,7 @@ public class InvitarFamiliar extends Activity {
 	private ProgressDialog pDialog;
 
 	private Boolean exito = false;
+	private AlertDialog dialog;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -41,9 +45,6 @@ public class InvitarFamiliar extends Activity {
 		thisUsuario = com.getUsuario();
 
 		editTextCadenaBusqueda = (EditText) findViewById(R.id.invitarFamiliar_editTextCadenaBusqueda);
-		textViewNombreUsuario = (TextView) findViewById(R.id.invitarFamiliar_textViewNombreUsuario);
-		textViewNombreCompleto = (TextView) findViewById(R.id.invitarFamiliar_textViewNombreCompleto);
-		textViewEmail = (TextView) findViewById(R.id.invitarFamiliar_textViewEmail);
 		btnSalir = (Button) findViewById(R.id.invitarFamiliar_btnSalir);
 		btnInvitarFamiliar = (Button) findViewById(R.id.invitarFamiliar_btnInvitarFamiliar);
 		btnBuscar = (Button) findViewById(R.id.invitarFamiliar_btnBuscar);
@@ -69,6 +70,26 @@ public class InvitarFamiliar extends Activity {
 				new buscarUsuarioAsync().execute();
 			}
 		});
+	
+		LayoutInflater factory = LayoutInflater.from(InvitarFamiliar.this);
+		final View viewComentario = factory.inflate(R.layout.buscar_usuario_datos, null);
+		AlertDialog.Builder alert = new AlertDialog.Builder(InvitarFamiliar.this);
+		alert.setTitle("Invitar familiar");
+		alert.setView(viewComentario);
+		textViewNombreUsuario = (TextView) viewComentario.findViewById(R.id.buscarUsuarioDatos_nombreUsuario);
+		textViewNombreCompleto = (TextView) viewComentario.findViewById(R.id.buscarUsuarioDatos_nombreCompleto);
+		textViewEmail = (TextView) viewComentario.findViewById(R.id.buscarUsuarioDatos_email);
+		alert.setPositiveButton("Invitar", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+					new InvitarFamiliarAsync().execute();
+			}
+		});
+
+		alert.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+			}
+		});
+		dialog = alert.create();
 	}
 
 	class buscarUsuarioAsync extends AsyncTask<String, String, String> {
@@ -112,15 +133,13 @@ public class InvitarFamiliar extends Activity {
 		protected void onPostExecute(String s) {
 			if (!s.equals("existe"))
 				Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
-			if (exito) {
-				textViewNombreUsuario.setText("Nombre usuario: " + u.getNombreUsuario());
+			if (exito){
+				textViewNombreUsuario.setText(u.getNombreUsuario());
 				textViewNombreCompleto.setText("Nombre completo: " + u.getNombreCompleto());
-				textViewEmail.setText("Email: " + u.getEmail());
-				btnInvitarFamiliar.setVisibility(0);
-			} else {
-				btnInvitarFamiliar.setVisibility(8);
+				textViewEmail.setText(u.getEmail());
+				dialog.show();
 			}
-			pDialog.dismiss();// ocultamos progess dialog.
+			pDialog.dismiss();
 		}
 	}
 
@@ -154,7 +173,7 @@ public class InvitarFamiliar extends Activity {
 
 		protected void onPostExecute(String s) {
 			Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
-			pDialog.dismiss();// ocultamos progess dialog.
+			pDialog.dismiss();
 			if (exito)
 				finish();
 		}
