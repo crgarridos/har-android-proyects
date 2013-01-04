@@ -106,7 +106,7 @@ public class UsuarioSQL {
 					try {
 						JSONObject jsonData = jdata.getJSONObject(i);
 
-						// TODO if(jsonData.getInt(CAMPO_ES_LIDER) != 1){
+						// TODO if(jsonData.getInt(CAMPO_ES_LIDER) != 1){<
 						Usuario u = new Usuario(jsonData.getString(CAMPO_NOMBRE_USUARIO), true);
 						u.setEmail(jsonData.getString(CAMPO_EMAIL));
 						u.setNombreCompleto(jsonData.getString(CAMPO_NOMBRE_COMPLETO));

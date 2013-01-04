@@ -207,7 +207,7 @@ public class GMapsAPI {
 			drawable = mapView.getContext().getResources().getDrawable(R.drawable.punto_riesgo_bajo);
 			itemizedoverlay = new MarkItemizedOverlay(drawable, mapView.getContext());
 			for (int i = 0; i < puntosRiesgoBajo.size(); i++) {
-				itemizedoverlay.addPuntoRiesgo(puntosRiesgoMedio.get(i));
+				itemizedoverlay.addPuntoRiesgo(puntosRiesgoBajo.get(i));
 			}
 			itemizedoverlay.grabar();
 			mapView.getOverlays().add(itemizedoverlay);
@@ -315,10 +315,8 @@ public class GMapsAPI {
 				indicePunto = i;
 			}
 		}
-			punto1 = polilinea.get(indicePunto - 1);// pto anterior al pto de la
-													// cota mas cercano
-			punto3 = polilinea.get(indicePunto + 1);// pto posterior al pto de la
-													// cota mas cercano
+		punto1 = polilinea.get(indicePunto - 1);// pto anterior al pto de la cota mas cercano
+		punto3 = polilinea.get(indicePunto + 1);// pto posterior al pto de la cota mas cercano
 
 		// Calculando primer pto seguro
 		Double dx = punto2.getLongitud() - punto1.getLongitud();
@@ -337,32 +335,7 @@ public class GMapsAPI {
 		x = (origen.getLatitud() - fm * origen.getLongitud() + dm * punto2.getLongitud() - punto2.getLatitud()) / (dm - fm);
 		y = dm * (x - punto2.getLongitud()) + punto2.getLatitud();
 		Coordenada puntoSeguro2 = new Coordenada(y, x);
-		
-		// Calculando recta imaginaria limitada entre [origen.getLongitud() , origen.getLongitud() + 10]
-		y = origen.getLatitud();
-		
-		Double x2 = origen.getLongitud() - 10;
-		int intercepta = 0;
-		dibujarPunto(new PuntoEncuentro(origen));
-		
-		Coordenada p1 = polilinea.get(0);
-		Coordenada p2;
-		for(int i=1; i<=polilinea.size(); i++){
-			p2 = polilinea.get(i % polilinea.size());
-			dx = p2.getLongitud() - p1.getLongitud();
-			dy = p2.getLatitud() - p1.getLatitud();
-			dm = (float) (dy / dx);
-			x2 = (y - p1.getLatitud() + dm * p1.getLongitud()) / dm;
-			if(origen.getLongitud() <= x2 && x2 <= origen.getLongitud()+10){
-				if(p1.getLongitud() <= x2 && x2 <= p2.getLongitud())
-					intercepta++;
-			}
-			p1 = p2;
-		}
-		if(intercepta % 2 != 0)
-			Log.i(TAG, "Seguro...");
-		else Log.i(TAG, "Inseguro...");
-		
+
 		Float distanciaPunto1 = compararPunto(origen, puntoSeguro1);
 		Float distanciaPunto2 = compararPunto(origen, puntoSeguro2);
 //<<<<<<< .mine
