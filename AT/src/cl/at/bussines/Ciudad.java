@@ -2,6 +2,7 @@ package cl.at.bussines;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import android.location.Location;
 import android.location.LocationListener;
@@ -33,7 +34,7 @@ public class Ciudad {
 	private boolean ejecutando = false;
 	private Boolean capaGrupoFamiliarVisible = true;
 	private Boolean capaPuntoRiesgoVisible = true;
-	
+
 	public Ciudad(MapView mapView, Dispositivo disp, PuntoEncuentro ptoEncuentro) {
 		dispositivo = disp;
 
@@ -44,28 +45,31 @@ public class Ciudad {
 		gMapsAPI = new GMapsAPI(mapView);
 		// gMapsAPI.setCentro(disp.getPosicion());
 		locListener = new LocationListener() {
-	    	public void onLocationChanged(Location location) {
-	    		Log.i(TAG, "Localizaciofn: "+location.getLatitude()+" - "+location.getLongitude());
-	    		dispositivo.setPosicion(new Coordenada(location.getLatitude(), location.getLongitude()));
-	    		actualizarPosiciones();
-	    	}
-	    	public void onProviderDisabled(String provider){
-	    		Log.i(TAG, "GPS Status: OFF");
-	    	}
-	    	public void onProviderEnabled(String provider){
-	    		Log.i(TAG, "GPS Status: ON");
-	    	}
-	    	public void onStatusChanged(String provider, int status, Bundle extras){
-	    		Log.i(TAG, "Provider Status: " + status);
-	    	}
-    	};
+			public void onLocationChanged(Location location) {
+				Log.i(TAG, "Localizacion: " + location.getLatitude() + " - " + location.getLongitude());
+				dispositivo.setPosicion(new Coordenada(location.getLatitude(), location.getLongitude()));
+				actualizarPosiciones();
+			}
+
+			public void onProviderDisabled(String provider) {
+				Log.i(TAG, "GPS Status: OFF");
+			}
+
+			public void onProviderEnabled(String provider) {
+				Log.i(TAG, "GPS Status: ON");
+			}
+
+			public void onStatusChanged(String provider, int status, Bundle extras) {
+				Log.i(TAG, "Provider Status: " + status);
+			}
+		};
 	}
 
 	public Ciudad() {
 		// Usado para la alerta Don't touch it!!
 	}
 
-	public Dispositivo getDispositivo(){
+	public Dispositivo getDispositivo() {
 		return dispositivo;
 	}
 
@@ -98,10 +102,6 @@ public class Ciudad {
 	}
 
 	public ArrayList<PuntoRiesgo> getPuntosRiesgo() {
-//		if(this.puntosRiesgo == null || this.puntosRiesgo.size() == 0){
-//			PuntoRiesgoSQL pSQL = new PuntoRiesgoSQL();
-//			pSQL.cargarPuntosRiesgo(this);
-//		}
 		PuntoRiesgoSQL pSQL = new PuntoRiesgoSQL();
 		pSQL.cargarPuntosRiesgo(this);
 		return puntosRiesgo;
@@ -110,8 +110,8 @@ public class Ciudad {
 	public void setPuntosRiesgo(ArrayList<PuntoRiesgo> puntosRiesgo) {
 		this.puntosRiesgo = puntosRiesgo;
 	}
-	
-	public PuntoEncuentro getPuntoEncuentro(){
+
+	public PuntoEncuentro getPuntoEncuentro() {
 		return this.puntoEncuentro;
 	}
 
@@ -126,11 +126,11 @@ public class Ciudad {
 				// TODO CDU14 - Visualizar punto de encuentro
 			}
 		} catch (Exception e) {
-			Log.d(TAG,"Error");
+			Log.d(TAG, "Error");
 		}
 	}
 
-	public Punto determinarPuntoSeguridad(Coordenada c){
+	public Punto determinarPuntoSeguridad(Coordenada c) {
 		return puntoSeguridad;
 	}
 
@@ -158,69 +158,70 @@ public class Ciudad {
 	public void ingresarPuntoRiesgo(PuntoRiesgo puntoRiesgo) {
 		puntosRiesgo.add(puntoRiesgo);
 	}
-	
 
 	public void visualizarMapa() {
-		
-	}	
+
+	}
+
 	public Integer getId() {
 		return id;
 	}
-	
+
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	
-	public void actualizarPosiciones(){
-		if(!ejecutando ){
+
+	public void actualizarPosiciones() {
+		if (!ejecutando) {
 			ejecutando = true;
 			Log.i(TAG, "dibujando...");
 			new AsyncMapa().execute();
 		}
 	}
-	
+
 	class AsyncMapa extends AsyncTask<String, String, String> {
 
 		GrupoFamiliar grupoFamiliar;
 		PuntoEncuentro puntoEncuentro;
 		ArrayList<Usuario> integrantes;
-		
+
 		@Override
 		protected void onPreExecute() {
-//			gMapsAPI.invalidate();
+			// gMapsAPI.invalidate();
 			Toast.makeText(AlertTsunamiApplication.getAppContext(), "Actualizando...", Toast.LENGTH_LONG).show();
 		}
-		
+
 		@Override
 		protected String doInBackground(String... params) {
-			try{
+			try {
 				grupoFamiliar = dispositivo.getUsuario().getGrupoFamiliar();
 				puntoEncuentro = null;
 				dispositivo.actualizarPosicion();
-				if(grupoFamiliar != null){
+				if (grupoFamiliar != null) {
 					puntoEncuentro = grupoFamiliar.getPuntoEncuentro();
 					integrantes = grupoFamiliar.getIntegrantes();
-					if(gMapsAPI.compararPunto(dispositivo.getPosicion(), puntoEncuentro.getCoordenada()) < 5000){
+					if (gMapsAPI.compararPunto(dispositivo.getPosicion(), puntoEncuentro.getCoordenada()) < 50) {
 						int intentos = 0;
-						while(!dispositivo.getUsuario().setEstadoLlegada(true)&&intentos++ < 5);
+						while (!dispositivo.getUsuario().setEstadoLlegada(true) && intentos++ < 5)
+							;
 					}
 				}
 				puntosRiesgo = getPuntosRiesgo();
 				DispositivoSQL dSQL = new DispositivoSQL();
 				dSQL.actualizarPosicion(dispositivo);
-			}catch(Exception e){
-				Log.e(TAG, "Error en dibujando "+e);
+			} catch (Exception e) {
+				Log.e(TAG, "Error en dibujando " + e);
 			}
 			return null;
 		}
-		
+
 		@Override
 		protected void onPostExecute(String result) {
 			super.onPostExecute(result);
 			dispositivo.inicializar(Ciudad.this.getLocationListener());
 			gMapsAPI.borrarPuntos(Ciudad.this);
 			gMapsAPI.dibujarPunto(puntosRiesgo);
-			if(grupoFamiliar != null){
+			if (grupoFamiliar != null) {
 				gMapsAPI.dibujarPunto(puntoEncuentro);
 				gMapsAPI.dibujarPunto(integrantes, dispositivo.getUsuario());
 			}
@@ -233,9 +234,9 @@ public class Ciudad {
 
 	public void mostrarCapas(int capa) {
 		try {
-			if(capa == CAPA_GRUPO_FAMILIAR)
+			if (capa == CAPA_GRUPO_FAMILIAR)
 				capaGrupoFamiliarVisible = !capaGrupoFamiliarVisible;
-			if(capa == CAPA_PUNTO_RIESGO)
+			if (capa == CAPA_PUNTO_RIESGO)
 				capaPuntoRiesgoVisible = !capaPuntoRiesgoVisible;
 			GrupoFamiliar grupoFamiliar = dispositivo.getUsuario().getGrupoFamiliar();
 			gMapsAPI.borrarPuntos(Ciudad.this);
@@ -257,8 +258,23 @@ public class Ciudad {
 		this.getDispositivo().setEstadoDeRiesgo(estadoRiesgo);
 	}
 
-	
 	public boolean ejecutando() {
 		return ejecutando;
+	}
+
+	public boolean estaDentro(Coordenada c) {
+		double x = c.getLongitud();
+		double y = c.getLatitud();
+		this.getAreaInundacion().add(this.getAreaInundacion().get(0));
+		boolean impar = false;
+		for (int i = 0, j = this.getAreaInundacion().size() - 1; i < this.getAreaInundacion().size(); j = i++) {
+			if ((this.getAreaInundacion().get(i).getLatitud() < y && this.getAreaInundacion().get(j).getLatitud() >= y)
+					|| (this.getAreaInundacion().get(j).getLatitud() < y && this.getAreaInundacion().get(i).getLatitud() >= y))
+				if (this.getAreaInundacion().get(i).getLongitud() + (y - this.getAreaInundacion().get(i).getLatitud())
+						/ (this.getAreaInundacion().get(j).getLatitud() - this.getAreaInundacion().get(i).getLatitud())
+						* (this.getAreaInundacion().get(j).getLongitud() - this.getAreaInundacion().get(i).getLongitud()) < x)
+					impar = !impar;
+		}
+		return impar;
 	}
 }

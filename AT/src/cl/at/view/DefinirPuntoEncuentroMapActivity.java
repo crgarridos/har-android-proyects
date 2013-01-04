@@ -61,7 +61,10 @@ public class DefinirPuntoEncuentroMapActivity extends MapActivity {
 			Double latitud = ((double) p.getLatitudeE6()) / 1000000;
 			Double longitud = ((double) p.getLongitudeE6()) / 1000000;
 			coordenada = new Coordenada(latitud, longitud);
-			dialog.show();
+			if(!ciudad.estaDentro(coordenada))
+				dialog.show();
+			else
+				Toast.makeText(getApplicationContext(), "Debe ingresar el punto de encuentro en la zona segura", Toast.LENGTH_SHORT).show();
 			return false;
 		}
 	}

@@ -82,7 +82,6 @@ public class GrupoFamiliar {
 	}
 
 	public ArrayList<Comentario> getComentarios() {
-		// if (comentarios == null || comentarios.size() == 0)
 		comentarios = new ComentarioSQL().cargarComentarios(this);
 		return comentarios;
 	}

@@ -383,7 +383,7 @@ public class GMapsAPI {
 		dibujarPunto(new Punto(puntoSeguroMasCercano.getCoordenada()), compararPunto(origen,puntoSeguroMasCercano.getCoordenada()));
 		Log.d(TAG, puntoSeguroMasCercano.getCoordenada().toString());
 
-		if(!estaDentro(origen,ciudad.getAreaInundacion())){
+		if(!ciudad.estaDentro(origen)){
 			ciudad.setEstadoRiesgo(true);
 			Log.i(TAG, "usuario seguro...");
 		}
@@ -424,20 +424,6 @@ public class GMapsAPI {
 
 	private static Double productoPunto(Coordenada a, Coordenada b) {
 		return a.getLongitud() * b.getLongitud() + a.getLatitud() * b.getLatitud();
-	}
-	
-	public boolean estaDentro(Coordenada c, List<Coordenada> poligono) {
-		double x = c.getLongitud();
-		double y = c.getLatitud();
-		poligono.add(poligono.get(0));
-		boolean impar = false;
-		for (int i = 0, j = poligono.size() - 1; i < poligono.size(); j = i++){
-			if ((poligono.get(i).getLatitud() < y && poligono.get(j).getLatitud() >= y) || (poligono.get(j).getLatitud() < y && poligono.get(i).getLatitud() >= y))
-				if (poligono.get(i).getLongitud() + (y - poligono.get(i).getLatitud()) / (poligono.get(j).getLatitud() - poligono.get(i).getLatitud())
-						* (poligono.get(j).getLongitud() - poligono.get(i).getLongitud()) < x) 
-					impar = !impar;
-		}
-		return impar;
 	}
 //
 //	public void invalidate() {

@@ -6,9 +6,9 @@
 
     <EditText
         android:id="@+id/ingresar_comentario"
-        android:layout_width="250px"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
+        android:layout_margin="10dip"
         android:inputType="text"
         android:singleLine="true" />
 
