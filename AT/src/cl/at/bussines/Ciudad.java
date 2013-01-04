@@ -180,9 +180,12 @@ public class Ciudad {
 		}
 	}
 	
-
 	class AsyncMapa extends AsyncTask<String, String, String> {
 
+		GrupoFamiliar grupoFamiliar;
+		PuntoEncuentro puntoEncuentro;
+		ArrayList<Usuario> integrantes;
+		
 		@Override
 		protected void onPreExecute() {
 //			gMapsAPI.invalidate();
@@ -192,22 +195,20 @@ public class Ciudad {
 		@Override
 		protected String doInBackground(String... params) {
 			try{
-				GrupoFamiliar grupoFamiliar = dispositivo.getUsuario().getGrupoFamiliar();
-				PuntoEncuentro puntoEncuentro = null;
+				grupoFamiliar = dispositivo.getUsuario().getGrupoFamiliar();
+				puntoEncuentro = null;
 				//TODO solo lo comente para poder hacer la parte de punto de seguridad sin cargar tanta wea....
 				dispositivo.actualizarPosicion();
-//				if(grupoFamiliar != null){
-//					puntoEncuentro = grupoFamiliar.getPuntoEncuentro();
-//					gMapsAPI.dibujarPunto(grupoFamiliar.getIntegrantes(), dispositivo.getUsuario());
-//					gMapsAPI.dibujarPunto(puntoEncuentro);
-//					if(gMapsAPI.compararPunto(dispositivo.getPosicion(), puntoEncuentro.getCoordenada()) < 5000){
-//						int intentos = 0;
-//						while(!dispositivo.getUsuario().setEstadoLlegada(true)&&intentos++ < 5);
-//					}
-//				}
+				if(grupoFamiliar != null){
+					puntoEncuentro = grupoFamiliar.getPuntoEncuentro();
+					integrantes = grupoFamiliar.getIntegrantes();
+					if(gMapsAPI.compararPunto(dispositivo.getPosicion(), puntoEncuentro.getCoordenada()) < 5000){
+						int intentos = 0;
+						while(!dispositivo.getUsuario().setEstadoLlegada(true)&&intentos++ < 5);
+					}
+				}
 //				gMapsAPI.dibujarPolilinea(areaInundacion);
-//				puntosRiesgo = getPuntosRiesgo();
-//				gMapsAPI.dibujarPunto(puntosRiesgo);
+				puntosRiesgo = getPuntosRiesgo();
 				DispositivoSQL dSQL = new DispositivoSQL();
 				dSQL.actualizarPosicion(dispositivo);
 			}catch(Exception e){
@@ -221,6 +222,11 @@ public class Ciudad {
 			super.onPostExecute(result);
 //			dispositivo.inicializar(Ciudad.this.getLocationListener());
 			gMapsAPI.borrarPuntos(Ciudad.this);
+			gMapsAPI.dibujarPunto(puntosRiesgo);
+			if(grupoFamiliar != null){
+				gMapsAPI.dibujarPunto(puntoEncuentro);
+				gMapsAPI.dibujarPunto(integrantes, dispositivo.getUsuario());
+			}
 			gMapsAPI.getCoordenadaMasCercana(Ciudad.this);
 			Ciudad.this.ejecutando = false;
 			Log.i(TAG, "terminando de dibujar...");
