@@ -71,7 +71,6 @@ public class DispositivoSQL {
 			Parametros postParametersToSend = new Parametros();
 			Usuario usuario = dispositivo.getUsuario();
 			postParametersToSend.add("usuario", usuario!=null ? usuario.getNombreUsuario() : null);
-//			postParametersToSend.add("usuario", dispositivo.getUsuario().getNombreUsuario());
 			postParametersToSend.add("latitud", dispositivo.getPosicion().getLatitud().toString());
 			postParametersToSend.add("longitud", dispositivo.getPosicion().getLongitud().toString());
 			JSONArray jdata = null;
