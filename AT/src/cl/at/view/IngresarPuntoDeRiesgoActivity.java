@@ -87,7 +87,7 @@ public class IngresarPuntoDeRiesgoActivity extends MapActivity {
 		alert.setMessage("Ingrese una descripcion del punto de riesgo");
 		alert.setView(viewComentario);
 		editTextComentario = (EditText) viewComentario.findViewById(R.id.ingresar_comentario_riesgo);
-		editTextComentario.setInputType(InputType.TYPE_CLASS_NUMBER);
+		editTextComentario.setInputType(InputType.TYPE_CLASS_TEXT);
 		LayoutInflater factory1 = LayoutInflater.from(this);
 		final View viewCategoria = factory1.inflate(R.layout.ingresar_categoria_riesgo, null);
 		AlertDialog.Builder alert1 = new AlertDialog.Builder(this);
