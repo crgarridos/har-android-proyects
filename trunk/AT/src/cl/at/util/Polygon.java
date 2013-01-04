@@ -34,14 +34,13 @@ public class Polygon {
 
 	public Polygon(List<Coordenada> poly) {
 
-		polySides = poly.size()+1;
+		polySides = poly.size() + 1;
 		polyX = new double[polySides];
 		polyY = new double[polySides];
 		for (int i = 0; i < polySides; i++) {
-			polyX[i] = poly.get(i % (polySides-1)).getLongitud();
-			polyY[i] = poly.get(i % (polySides-1)).getLatitud();
+			polyX[i] = poly.get(i % (polySides - 1)).getLongitud();
+			polyY[i] = poly.get(i % (polySides - 1)).getLatitud();
 		}
-//		System.out.println("lala");
 	}
 
 	/**
@@ -54,7 +53,9 @@ public class Polygon {
 	 *            Point vertical pos.
 	 * @return Point is in Poly flag.
 	 */
+	
 	public boolean contains(double x, double y) {
+
 		boolean oddTransitions = false;
 		for (int i = 0, j = polySides - 1; i < polySides; j = i++) {
 			if ((polyY[i] < y && polyY[j] >= y) || (polyY[j] < y && polyY[i] >= y)) {

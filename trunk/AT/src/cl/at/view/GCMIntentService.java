@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 import cl.at.bussines.Alerta;
 import cl.at.bussines.Dispositivo;
 import cl.at.util.AlertTsunamiApplication;
@@ -23,7 +22,6 @@ public class GCMIntentService extends GCMBaseIntentService {
 	private Dispositivo dispositivo;
 	private Comunicador com;
 
-	// private String regId;
 
 	public GCMIntentService() {
 		super("42760762845");

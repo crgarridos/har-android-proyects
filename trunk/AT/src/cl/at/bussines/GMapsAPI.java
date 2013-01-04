@@ -12,7 +12,6 @@ import android.location.Location;
 import android.util.Log;
 import cl.at.data.CiudadSQL;
 import cl.at.data.PuntoSQL;
-import cl.at.util.Polygon;
 import cl.at.view.MarkItemizedOverlay;
 import cl.at.view.R;
 import cl.at.view.RouteSegmentOverlay;
@@ -31,7 +30,6 @@ public class GMapsAPI {
 	private transient MapView mapView;
 	private transient MapController mapController;
 	private transient List<Overlay> mapOverlays;
-	private boolean dibujando = false;
 	private RouteSegmentOverlay route;
 
 	public GMapsAPI(MapView m, Coordenada centro, float zoom) {
@@ -394,20 +392,19 @@ public class GMapsAPI {
 		dibujarPunto(new Punto(puntoSeguroMasCercano.getCoordenada()), compararPunto(origen,puntoSeguroMasCercano.getCoordenada()));
 		Log.d(TAG, puntoSeguroMasCercano.getCoordenada().toString());
 
-		  final Polygon polygon = new Polygon(ciudad.getAreaInundacion());
-		if(!polygon.contains(origen.getLongitud(),origen.getLatitud())){
+		if(!estaDentro(origen,ciudad.getAreaInundacion())){
 			ciudad.setEstadoRiesgo(true);
 			Log.i(TAG, "usuario seguro...");
 		}
 		else
 			Log.i(TAG, "usuario inseguro...");
 	}
-
-	private void intercambiar(Coordenada punto2, Coordenada punto1) {
-		Coordenada aux = punto1;
-		punto2 = aux;
-		punto1 = punto2;
-	}
+//
+//	private void intercambiar(Coordenada punto2, Coordenada punto1) {
+//		Coordenada aux = punto1;
+//		punto2 = aux;
+//		punto1 = punto2;
+//	}
 
 	public void setMapView(MapView mapView) {
 		this.mapView = mapView;
@@ -430,6 +427,20 @@ public class GMapsAPI {
 
 	private static Double productoPunto(Coordenada a, Coordenada b) {
 		return a.getLongitud() * b.getLongitud() + a.getLatitud() * b.getLatitud();
+	}
+	
+	public boolean estaDentro(Coordenada c, List<Coordenada> poligono) {
+		double x = c.getLongitud();
+		double y = c.getLatitud();
+		poligono.add(poligono.get(0));
+		boolean impar = false;
+		for (int i = 0, j = poligono.size() - 1; i < poligono.size(); j = i++){
+			if ((poligono.get(i).getLatitud() < y && poligono.get(j).getLatitud() >= y) || (poligono.get(j).getLatitud() < y && poligono.get(i).getLatitud() >= y))
+				if (poligono.get(i).getLongitud() + (y - poligono.get(i).getLatitud()) / (poligono.get(j).getLatitud() - poligono.get(i).getLatitud())
+						* (poligono.get(j).getLongitud() - poligono.get(i).getLongitud()) < x) 
+					impar = !impar;
+		}
+		return impar;
 	}
 //
 //	public void invalidate() {

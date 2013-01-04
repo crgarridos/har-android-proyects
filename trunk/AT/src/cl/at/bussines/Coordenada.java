@@ -39,6 +39,10 @@ public class Coordenada{
 	@Override
 	public String toString(){
 		return "Longitud: "+this.longitud+", Latitud: "+this.latitud;
-	}	
+	}
+	
+	public boolean equals(Coordenada c){
+		return this.latitud == c.latitud && this.longitud == c.longitud;
+	}
 
 }
