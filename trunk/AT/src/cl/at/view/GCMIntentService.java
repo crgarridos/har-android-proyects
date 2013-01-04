@@ -44,7 +44,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 		if (tipo.equalsIgnoreCase("alerta")) {
 			Integer categoria = 1;// intent.getExtras().getInt("categoria");
 			alerta.consultaSHOA(fecha, categoria, msg);
-		} else if (tipo.equalsIgnoreCase("invitacion") || tipo.equalsIgnoreCase("comentario")) {
+		} else if (tipo.equalsIgnoreCase("invitacion") || tipo.equalsIgnoreCase("comentario") || tipo.equalsIgnoreCase("puntoEncuentro")) {
 			context = AlertTsunamiApplication.getAppContext();
 			NotificationManager notManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 			int icono = R.drawable.ic_launcher;
@@ -59,6 +59,10 @@ public class GCMIntentService extends GCMBaseIntentService {
 //				icono = R.drawable.grupo_familiar;
 				titulo = "Nuevo Comentario";
 				notIntent = new Intent("at.LISTA_COMENTARIOS");
+			}
+			else if(tipo.equalsIgnoreCase("puntoEncuentro")){
+//				icono = R.drawable.grupo_familiar;
+				titulo = "Cambio en el punto de encuentro";
 			}
 			long hora = System.currentTimeMillis();
 			Notification notif = new Notification(icono, titulo, hora);
