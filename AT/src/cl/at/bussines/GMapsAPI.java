@@ -338,32 +338,8 @@ public class GMapsAPI {
 
 		Float distanciaPunto1 = compararPunto(origen, puntoSeguro1);
 		Float distanciaPunto2 = compararPunto(origen, puntoSeguro2);
-//<<<<<<< .mine
-//
-//		if (estaAlMedio(punto1, punto2, puntoSeguro1) && estaAlMedio(punto2, punto3, puntoSeguro2)) {
-//			if (distanciaPunto1 < distanciaPunto2)
-//				dibujarPunto(new Punto(puntoSeguro1), "punto seguro 1");
-//			else
-//				dibujarPunto(new Punto(puntoSeguro2), "punto seguro 2");
-//		} else if (estaAlMedio(punto1, punto2, puntoSeguro1) && (!estaAlMedio(punto2, punto3, puntoSeguro2)))
-//			dibujarPunto(new Punto(puntoSeguro1), "punto seguro 1");
-//		else if (!estaAlMedio(punto1, punto2, puntoSeguro1) && (estaAlMedio(punto2, punto3, puntoSeguro2)))
-//			dibujarPunto(new Punto(puntoSeguro2), "punto seguro 2");
-//		else
-//			dibujarPunto(new Punto(punto2), "esquina");
-//		dibujarPunto(new Punto(puntoSeguro1), "punto seguro 1");
-//		dibujarPunto(new Punto(puntoSeguro2), "punto seguro 2");
-//			
-//		refresh();
-//		return null;
-//=======		
+
 		Punto puntoSeguroMasCercano;
-		
-//		if (distanciaPunto1.isNaN() || distanciaPunto2.isNaN())
-//			puntoSeguroMasCercano = distanciaPunto1.isNaN() ? new Punto(puntoSeguro2) : new Punto(puntoSeguro1);
-//		else if (distanciaPunto1 < distanciaPunto2 || angulo(puntoSeguro2, punto1, punto3) < angulo(puntoSeguro1, punto1, punto3))
-//			puntoSeguroMasCercano = new Punto(puntoSeguro1);
-//		else puntoSeguroMasCercano = new Punto(puntoSeguro2);
 		
 		if (distanciaPunto1.isNaN() || distanciaPunto2.isNaN())
 			puntoSeguroMasCercano = distanciaPunto1.isNaN() ? new Punto(puntoSeguro2) : new Punto(puntoSeguro1);
@@ -377,32 +353,20 @@ public class GMapsAPI {
 			puntoSeguroMasCercano = new Punto((distanciaPunto1 < distanciaPunto2)? puntoSeguro1: puntoSeguro2);
 		
 		Log.d(TAG, angulo(puntoSeguroMasCercano.getCoordenada(), punto1, punto3)+" "+ angulo(punto2, punto1, punto3));
-//		if (angulo(puntoSeguroMasCercano.getCoordenada(), punto1, punto3) < angulo(punto2, punto1, punto3))
-//			puntoSeguroMasCercano = new Punto(punto2);
 
 		dibujarPunto(new Punto(puntoSeguroMasCercano.getCoordenada()), compararPunto(origen,puntoSeguroMasCercano.getCoordenada()));
 		Log.d(TAG, puntoSeguroMasCercano.getCoordenada().toString());
 
 		if(!ciudad.estaDentro(origen)){
 			ciudad.setEstadoRiesgo(true);
+			ciudad.getDispositivo().setEstadoDeRiesgo(false);
 			Log.i(TAG, "usuario seguro...");
 		}
 		else
+			ciudad.getDispositivo().setEstadoDeRiesgo(true);
 			Log.i(TAG, "usuario inseguro...");
 	}
-//
-//	private void intercambiar(Coordenada punto2, Coordenada punto1) {
-//		Coordenada aux = punto1;
-//		punto2 = aux;
-//		punto1 = punto2;
-//	}
-
-	public Boolean estaAlMedio(Coordenada px, Coordenada py, Coordenada puntoSeguro) {
-		if (compararPunto(px, py) == compararPunto(puntoSeguro, px) + compararPunto(puntoSeguro, py))
-			return true;
-		return false;
-	}
-
+	
 	public void setMapView(MapView mapView) {
 		this.mapView = mapView;
 	}
@@ -425,9 +389,4 @@ public class GMapsAPI {
 	private static Double productoPunto(Coordenada a, Coordenada b) {
 		return a.getLongitud() * b.getLongitud() + a.getLatitud() * b.getLatitud();
 	}
-//
-//	public void invalidate() {
-//		mapView.invalidate();
-//	}
-
 }

@@ -50,8 +50,8 @@ public class ListInvitacionesActivity extends Activity {
 				AlertDialog.Builder alert = new AlertDialog.Builder(ListInvitacionesActivity.this);
 				alert.setTitle("Aceptar Invitacion");
 				String nombre = usuario.getInvitaciones().get(position).getRemitente().getNombreUsuario();
-				String mensaje = "Que desea hacer con la invitacin  de " + nombre + "?"
-						+ "\nAl aceptar la invitacion se eliminaran las otras y ser�s incluido en el grupo familiar de " + nombre
+				String mensaje = "Que desea hacer con la invitacion  de " + nombre + "?"
+						+ "\nAl aceptar la invitacion se eliminaran las otras y sera incluido en el grupo familiar de " + nombre
 						+ ".\nSi la rechaza, se eliminara la invitacion y ya no volvera a estar disponible.";
 				alert.setMessage(mensaje);
 				posicionSeleccionada = position;

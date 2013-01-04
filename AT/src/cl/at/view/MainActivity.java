@@ -207,6 +207,7 @@ public class MainActivity extends MapActivity {
 		case 26:
 			Util.reiniciarPreferencias(context);
 			finish();
+			desuscribirDispositivo();
 			return true;
 		case 31:
 			startActivity(new Intent("at.INVITAR_FAMILIAR"));
