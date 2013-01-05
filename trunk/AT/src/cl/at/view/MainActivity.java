@@ -51,6 +51,7 @@ public class MainActivity extends MapActivity {
 	private Usuario usuario;
 	private Dispositivo dispositivo;
 	private GrupoFamiliar gf;
+	private boolean conservar = true;
 
 	private static final int MNU_OPC1 = 1;
 	private static final int SMNU_OPC11 = 11;
@@ -89,7 +90,7 @@ public class MainActivity extends MapActivity {
 		} else {
 			Toast.makeText(context, "Ha ocurrido un error inesperado al iniciar la aplicacion", Toast.LENGTH_LONG).show();
 			Util.reiniciarPreferencias(context);
-			finish();
+			salir();
 		}
 
 		mapView = (MapView) findViewById(R.id.mapview);
@@ -104,7 +105,8 @@ public class MainActivity extends MapActivity {
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
 		alert.setTitle("GPS desactivado");
 		String mensaje = "Hemos detectado que el GPS se encuentra actualmente desactivado.\n" + "La aplicacion necesita de el para ejecutarse correctamente.\n"
-				+ "Presione \"Aceptar\" para ir a la configuracion y activarlo (Marque \"Utilizar satelites GPS\" o similar).\n" + "Si selecciona \"Cancelar\" se cerrara la aplicacion";
+				+ "Presione \"Aceptar\" para ir a la configuracion y activarlo (Marque \"Utilizar satelites GPS\" o similar).\n"
+				+ "Si selecciona \"Cancelar\" se cerrara la aplicacion";
 		alert.setMessage(mensaje);
 		alert.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
@@ -113,7 +115,7 @@ public class MainActivity extends MapActivity {
 		});
 		alert.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
-				finish();
+				salir();
 			}
 		});
 		alert.setCancelable(false);
@@ -145,41 +147,41 @@ public class MainActivity extends MapActivity {
 	}
 
 	protected void centrarEnMiPosicion() {
-		if(mOverlayLocation.getLastFix()!=null){
+		if (mOverlayLocation.getLastFix() != null) {
 			mapView.getController().animateTo(mOverlayLocation.getMyLocation());
-			while(mapView.getZoomLevel()<15){
+			while (mapView.getZoomLevel() < 15) {
 				mapView.getController().zoomIn();
 				SystemClock.sleep(200);
 			}
-		}
-		else Toast.makeText(getApplicationContext(), "Espere a obtener la posicion...", Toast.LENGTH_LONG).show();
+		} else
+			Toast.makeText(getApplicationContext(), "Espere a obtener la posicion...", Toast.LENGTH_LONG).show();
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
 		SubMenu smnu1 = menu.addSubMenu(Menu.NONE, MNU_OPC1, Menu.NONE, "Capas").setIcon(R.drawable.capas);
 		int i = 0;
-		if (gf != null){
+		if (gf != null) {
 			smnu1.add(Menu.NONE, SMNU_OPC11, Menu.NONE, "Grupo familiar");
-			smnu1.getItem(i++).setCheckable(true);
+			smnu1.getItem(i).setCheckable(true);
 			smnu1.getItem(i++).setChecked(Boolean.parseBoolean(Util.getPreferencia(Util.CAPA_GRUPO_FAMILIAR)));
 		}
 		smnu1.add(Menu.NONE, SMNU_OPC12, Menu.NONE, "Puntos de riesgo");
 		smnu1.getItem(i).setCheckable(true);
 		smnu1.getItem(i).setChecked(Boolean.parseBoolean(Util.getPreferencia(Util.CAPA_PUNTO_DE_RIESGO)));
-		
+
 		SubMenu smnu2 = menu.addSubMenu(Menu.NONE, MNU_OPC2, Menu.NONE, "Usuario").setIcon(R.drawable.user);
 		smnu2.add(Menu.NONE, SMNU_OPC21, Menu.NONE, "Ingresar punto de riesgo");
 		smnu2.add(Menu.NONE, SMNU_OPC22, Menu.NONE, "Actualizar datos");
 		smnu2.add(Menu.NONE, SMNU_OPC23, Menu.NONE, "Ver invitaciones");
 		if (gf == null)
-			smnu2.add(Menu.NONE, SMNU_OPC24, Menu.NONE, "Crear grupo familiar");
 		smnu2.add(Menu.NONE, SMNU_OPC25, Menu.NONE, "Eliminar cuenta");
 		smnu2.add(Menu.NONE, SMNU_OPC26, Menu.NONE, "Cerrar sesion");
 
+		SubMenu smnu3 = menu.addSubMenu(Menu.NONE, MNU_OPC3, Menu.NONE, "Grupo familiar").setIcon(R.drawable.grupo_familiar);
+		smnu3.add(Menu.NONE, SMNU_OPC24, Menu.NONE, "Crear grupo familiar");
 		if (gf != null) {
-			SubMenu smnu3 = menu.addSubMenu(Menu.NONE, MNU_OPC3, Menu.NONE, "Grupo familiar").setIcon(R.drawable.grupo_familiar);
 			smnu3.add(Menu.NONE, SMNU_OPC31, Menu.NONE, "Invitar familiar");
-			if(usuario.esLider())
+			if (usuario.esLider())
 				smnu3.add(Menu.NONE, SMNU_OPC32, Menu.NONE, "Definir punto de encuentro");
 			smnu3.add(Menu.NONE, SMNU_OPC34, Menu.NONE, "Visualizar comentarios");
 			smnu3.add(Menu.NONE, SMNU_OPC35, Menu.NONE, "Abandonar grupo");
@@ -218,10 +220,10 @@ public class MainActivity extends MapActivity {
 		case 25:
 			confirmarEliminarCuenta();
 			return true;
-		case 26://Cerrando sesion
+		case 26:// Cerrando sesion
 			Util.reiniciarPreferencias(context);
-			finish();
 			desuscribirDispositivo();
+			salir();
 			return true;
 		case 31:
 			startActivity(new Intent("at.INVITAR_FAMILIAR"));
@@ -291,7 +293,7 @@ public class MainActivity extends MapActivity {
 
 			@Override
 			public void onClick(DialogInterface arg0, int arg1) {
-				
+
 			}
 
 		});
@@ -305,15 +307,16 @@ public class MainActivity extends MapActivity {
 
 	private void mostrarInvitaciones() {
 		Intent intent = new Intent("at.LISTA_INVITACIONES");
-		startActivityForResult(intent,999);
+		startActivityForResult(intent, 999);
 		// ArrayList<Invitacion> invitaciones = usuario.getInvitaciones();
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-//		Toast.makeText(getApplicationContext(), "onResume", Toast.LENGTH_SHORT).show();
-		if(ciudad!= null){
+		// Toast.makeText(getApplicationContext(), "onResume",
+		// Toast.LENGTH_SHORT).show();
+		if (ciudad != null) {
 			mOverlayLocation.enableMyLocation();
 			ciudad.mostrarCapas();
 		}
@@ -324,10 +327,11 @@ public class MainActivity extends MapActivity {
 		mOverlayLocation.disableMyLocation();
 		super.onPause();
 	}
-	
+
 	@Override
 	protected void onDestroy() {
-		Process.killProcess(Process.myPid());
+		if(!conservar)
+			Process.killProcess(Process.myPid());
 		Log.d(TAG, "onDestroy, y murio...");
 		super.onDestroy();
 	}
@@ -373,34 +377,43 @@ public class MainActivity extends MapActivity {
 	}
 
 	public void validarGrupoFamiliar() {
-		startActivityForResult(new Intent("at.CREAR_GRUPO_FAMILIAR"),999);
+		startActivityForResult(new Intent("at.CREAR_GRUPO_FAMILIAR"), 999);
 	}
 
 	private boolean estadoGPS() {
 		LocationManager servicio = (LocationManager) getSystemService(LOCATION_SERVICE);
 		return servicio.isProviderEnabled(LocationManager.GPS_PROVIDER);
-	}	
+	}
 
 	public void abrirConfigGPS() {
 		Intent actividad = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-		startActivityForResult(actividad,777);
+		startActivityForResult(actividad, 777);
 	}
-	
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		if(requestCode == 777 && resultCode == Activity.RESULT_CANCELED){
+		if (requestCode == 777 && resultCode == Activity.RESULT_CANCELED) {
 			if (!estadoGPS()) {
 				validarGPS();
 			} else
 				comenzar();
-		}
-		else if(requestCode == 999 && resultCode == Activity.RESULT_OK){
-			finish();
-			startActivity(getIntent());
+		} else if (requestCode == 999 && resultCode == Activity.RESULT_OK) {
+			this.recargar();
 		}
 	}
+
+	private void recargar() {
+		startActivity(new Intent(MainActivity.this,MainActivity.class));
+		conservar = true;
+		finish();
+	}
 	
+	private void salir() {
+		conservar = false;
+		finish();
+	}
+
 	class AsyncDelete extends AsyncTask<String, String, String> {
 
 		ProgressDialog pDialog = new ProgressDialog(MainActivity.this);
@@ -428,11 +441,11 @@ public class MainActivity extends MapActivity {
 			Util.reiniciarPreferencias(context);
 			Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
 			pDialog.dismiss();
-			finish();
+			salir();
 		}
 
 	}
-	
+
 	class AsyncCargar extends AsyncTask<String, String, Boolean> {
 
 		ProgressDialog pDialog = new ProgressDialog(MainActivity.this);
@@ -471,7 +484,7 @@ public class MainActivity extends MapActivity {
 				pDialog.dismiss();
 			else {
 				Toast.makeText(context, "Ha ocurrido un error inesperado al iniciar la aplicacion", Toast.LENGTH_LONG).show();
-				finish();
+				salir();
 			}
 
 			com.setUsuario(usuario);
@@ -498,11 +511,8 @@ public class MainActivity extends MapActivity {
 		}
 
 		protected void onPostExecute(Boolean exito) {
-			if (exito) {
-//				Util.reiniciarPreferencias(context);
-				finish();
-				startActivity(getIntent());
-			}
+			if (exito)
+				MainActivity.this.recargar();
 			Toast.makeText(getApplicationContext(), exito ? "Se ha abandonado el grupo" : "No se ha podido abandonar, intentelo mas tarde.", Toast.LENGTH_SHORT).show();
 			pDialog.dismiss();
 		}

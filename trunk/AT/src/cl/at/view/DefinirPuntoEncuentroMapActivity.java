@@ -147,11 +147,11 @@ public class DefinirPuntoEncuentroMapActivity extends MapActivity {
 					grupoFamiliar = new GrupoFamiliar(nombreGrupo, null, lider);
 					existe = false;
 				}
-				definirPuntoEncuentro();
+				//TODO definirPuntoEncuentro(); bugeao :B se hace todo afuera parece, bastaria con eliminarlo
 				Log.d("dispositivo", "" + ciudad.getDispositivo());
 				PuntoEncuentro puntoEncuentro = ciudad.ingresar(editTextComentario.getText().toString(), coordenada);
 				if (puntoEncuentro != null) {
-					if (!existe) {
+					if (!existe){
 						puntoEncuentro.setGrupoFamiliar(grupoFamiliar);
 						grupoFamiliar.setPuntoEncuentro(puntoEncuentro);
 						grupoFamiliar.persistir();

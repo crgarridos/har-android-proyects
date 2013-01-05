@@ -1,7 +1,5 @@
 package cl.at.data;
 
-import java.util.ArrayList;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -9,14 +7,13 @@ import android.util.Log;
 import cl.at.bussines.Coordenada;
 import cl.at.bussines.GrupoFamiliar;
 import cl.at.bussines.PuntoEncuentro;
-import cl.at.bussines.Usuario;
 import cl.at.util.Parametros;
 
 public class PuntoEncuentroSQL {
 	private static final String TAG = PuntoEncuentroSQL.class.getName();
-	private static final String CAMPO_ID = "ID_PUNTO";
-	private static final String CAMPO_FK_FAMILIA = "ID_FAMILIAR";
-	private static final String CAMPO_FK_CIUDAD = "ID_CIUDAD";
+//	private static final String CAMPO_ID = "ID_PUNTO";
+//	private static final String CAMPO_FK_FAMILIA = "ID_FAMILIAR";
+//	private static final String CAMPO_FK_CIUDAD = "ID_CIUDAD";
 	private static final String CAMPO_LATITUD = "LATITUD_PUNTO";
 	private static final String CAMPO_LONGITUD = "LONGITUD_PUNTO";
 	private static final String CAMPO_REFERENCIA = "REFERENCIA_ENCUENTRO";
@@ -58,9 +55,7 @@ public class PuntoEncuentroSQL {
 			postParametersToSend.add("longitud", puntoEncuentro.getCoordenada().getLongitud().toString());
 			JSONArray jdata = null;
 			jdata = post.getServerData(postParametersToSend, ConexionHttp.URL_CONNECT + "actualizarPuntoEncuentro.php");
-			if (jdata != null) {
-				return true;
-			}
+			return jdata != null;
 		} catch (Exception e) {
 			Log.e(TAG, "persistir, " + e.toString());
 		}
