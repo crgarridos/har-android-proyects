@@ -53,6 +53,7 @@ public class CrearGrupoFamiliarActivity extends MapActivity {
 	
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if ((resultCode != Activity.RESULT_CANCELED) && (requestCode == 777)) {
+			setResult(RESULT_OK);
 			finish();
 		}
 	}

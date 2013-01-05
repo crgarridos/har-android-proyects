@@ -159,7 +159,7 @@ public class Dispositivo {
 		// long[] vibrate = {100,100,200,300};
 		// notif.vibrate = vibrate;
 		notif.sound = Uri.parse("android.resource://" + contexto.getPackageName() + "/" + R.raw.alerta);
-		notif.audioStreamType = AudioManager.STREAM_NOTIFICATION;
+		notif.audioStreamType = AudioManager.MODE_RINGTONE;
 		notif.defaults = Notification.DEFAULT_LIGHTS | Notification.DEFAULT_VIBRATE;
 		// Configuramos el Intent
 

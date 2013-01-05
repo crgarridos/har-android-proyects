@@ -13,24 +13,25 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.widget.Toast;
 import cl.at.bussines.Dispositivo;
 import cl.at.bussines.Usuario;
 
 public abstract class Util {
 
-	public static final String CAPA_PUNTO_DE_RIESGO= "capa_puntos_de_riesgo";
-	public static final String CAPA_GRUPO_FAMILIAR= "capa_grupo_familiar";
-	
+	public static final String CAPA_PUNTO_DE_RIESGO = "capa_puntos_de_riesgo";
+	public static final String CAPA_GRUPO_FAMILIAR = "capa_grupo_familiar";
+
 	private static final char[] CONSTS_HEX = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
 
 	public static void guardarUsuario(Usuario u, Context context) {
 		SharedPreferences prefs = context.getSharedPreferences("Prefs", Context.MODE_PRIVATE);
 		SharedPreferences.Editor editar = prefs.edit();
 		editar.putString("usuario", u.getNombreUsuario());
-		editar.putString("login", encriptaEnMD5(u.getNombreUsuario()+u.getPassword()));
+		editar.putString("login", encriptaEnMD5(u.getNombreUsuario() + u.getPassword()));
 		editar.commit();
 	}
-	
+
 	public static void setIntervalo(Integer intervalo, Context context) {
 		SharedPreferences prefs = context.getSharedPreferences("Prefs", Context.MODE_PRIVATE);
 		SharedPreferences.Editor editar = prefs.edit();
@@ -58,109 +59,108 @@ public abstract class Util {
 	public static String getPreferencia(String preferencia) {
 		return AlertTsunamiApplication.getAppContext().getSharedPreferences("Prefs", Context.MODE_PRIVATE).getString(preferencia, null);
 	}
-	
+
 	public static void reiniciarPreferencias(Context context) {
 		SharedPreferences prefs = context.getSharedPreferences("Prefs", Context.MODE_PRIVATE);
 		SharedPreferences.Editor editar = prefs.edit();
-		final String[] titlePrefs ={"usuario","login","intervalo","dispositivo"};
-		for(int i=0; i<titlePrefs.length; i++)
-			if(prefs.getString(titlePrefs[i],null)!=null)
+		final String[] titlePrefs = { "usuario", "login", "intervalo", "dispositivo","capa_grupo_familiar","capa_puntos_de_riesgo"};
+		for (int i = 0; i < titlePrefs.length; i++)
+			if (prefs.getString(titlePrefs[i], null) != null)
 				editar.remove(titlePrefs[i]);
 		editar.commit();
 	}
 
-	public static Date StringDBToDate(String date){
-        try{
-            return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date);
-        }catch(ParseException ex){
-            Logger.getLogger(Util.class.getName()).log(Level.SEVERE, "Utils.StringToHour: ", ex);
-            return null;
-        }
-    }   	
-	
-	public static Date StringToDate(String date){
-        try{
-            return new SimpleDateFormat("dd/MM/yyyy").parse(date);
-        }catch(ParseException ex){
-            Logger.getLogger(Util.class.getName()).log(Level.SEVERE, "Utils.StringToHour: ", ex);
-            return null;
-        }
-    }   
+	public static Date StringDBToDate(String date) {
+		try {
+			return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date);
+		} catch (ParseException ex) {
+			Logger.getLogger(Util.class.getName()).log(Level.SEVERE, "Utils.StringToHour: ", ex);
+			return null;
+		}
+	}
 
-    public static String DateToString(Date date){
-        return new SimpleDateFormat("dd/MM/yyyy").format(date);
-    }
+	public static Date StringToDate(String date) {
+		try {
+			return new SimpleDateFormat("dd/MM/yyyy").parse(date);
+		} catch (ParseException ex) {
+			Logger.getLogger(Util.class.getName()).log(Level.SEVERE, "Utils.StringToHour: ", ex);
+			return null;
+		}
+	}
 
-    public static String HourToString(Date date){
-        return new SimpleDateFormat("HH:mm").format(date);
-    }
+	public static String DateToString(Date date) {
+		return new SimpleDateFormat("dd/MM/yyyy").format(date);
+	}
 
-    public static Date StringToHour(String date){
-        try {
-            return new SimpleDateFormat("HH:mm").parse(date);
-        } catch (ParseException ex) {
-            Logger.getLogger(Util.class.getName()).log(Level.SEVERE, "Utils.StringToHour: ", ex);
-            return null;
-        }
-    }
+	public static String HourToString(Date date) {
+		return new SimpleDateFormat("HH:mm").format(date);
+	}
 
-    /**
-     * Metodo encargado de verificar si existe una conexion a internet
-     * @param a Activity o contexto de donde se llama al metodo
-     * @return retorna true si existe alguna conexion a internet, Wifi o Datos
-     */
-    public final static boolean verificarInternet(Activity a) { 
-        //Variables de estado
-        boolean hasConnectedWifi = false; 
-        boolean hasConnectedMobile = false;
-        //Instanciamos un objeto de conexion y verificamos si en wifi o datos hay conexion 
-        ConnectivityManager cm = (ConnectivityManager) a.getSystemService(Context.CONNECTIVITY_SERVICE); 
-        NetworkInfo[] netInfo = cm.getAllNetworkInfo(); 
-        //Recorremos la informacion de la red en busqueda de una conexion
-        for (NetworkInfo ni : netInfo) { 
-            //Si el tipo de red es Wifi
-            if (ni.getTypeName().equalsIgnoreCase("wifi")){
-                //Si wifi esta conectado
-                if (ni.isConnected()){
-                    hasConnectedWifi = true;
-                }                    
-            }
-            //Si el tipo de red es mobile (datos)
-            if (ni.getTypeName().equalsIgnoreCase("mobile")){
-                //si datos o mobile esta conectado
-                if (ni.isConnected()){
-                    hasConnectedMobile = true;
-                }    
-            }
-        }
-        return hasConnectedWifi || hasConnectedMobile; 
-    }
+	public static Date StringToHour(String date) {
+		try {
+			return new SimpleDateFormat("HH:mm").parse(date);
+		} catch (ParseException ex) {
+			Logger.getLogger(Util.class.getName()).log(Level.SEVERE, "Utils.StringToHour: ", ex);
+			return null;
+		}
+	}
 
-	
-    public static void guardar(Dispositivo dispositivo) {
+	public final static boolean hayInternet(Activity a) {
+		// Variables de estado
+		boolean hasConnectedWifi = false;
+		boolean hasConnectedMobile = false;
+		// Instanciamos un objeto de conexion y verificamos si en wifi o datos
+		// hay conexion
+		ConnectivityManager cm = (ConnectivityManager) a.getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo[] netInfo = cm.getAllNetworkInfo();
+		// Recorremos la informacion de la red en busqueda de una conexion
+		for (NetworkInfo ni : netInfo) {
+			// Si el tipo de red es Wifi
+			if (ni.getTypeName().equalsIgnoreCase("wifi")) {
+				// Si wifi esta conectado
+				if (ni.isConnected()) {
+					hasConnectedWifi = true;
+				}
+			}
+			// Si el tipo de red es mobile (datos)
+			if (ni.getTypeName().equalsIgnoreCase("mobile")) {
+				// si datos o mobile esta conectado
+				if (ni.isConnected()) {
+					hasConnectedMobile = true;
+				}
+			}
+		}
+		return hasConnectedWifi || hasConnectedMobile;
+
+	}
+
+	public static void toast(String mensaje){
+		Toast.makeText(AlertTsunamiApplication.getAppContext(), mensaje, Toast.LENGTH_SHORT).show();
+	}
+
+
+	public static void guardar(Dispositivo dispositivo) {
 		SharedPreferences prefs = AlertTsunamiApplication.getAppContext().getSharedPreferences("Prefs", Context.MODE_PRIVATE);
 		SharedPreferences.Editor editar = prefs.edit();
 		editar.putString("dispositivo", dispositivo.getId().toString());
 		editar.commit();
 	}
 
-	
-    public static void guardarIntervalo(String intervalo) {
+	public static void guardarIntervalo(String intervalo) {
 		SharedPreferences prefs = AlertTsunamiApplication.getAppContext().getSharedPreferences("Prefs", Context.MODE_PRIVATE);
 		SharedPreferences.Editor editar = prefs.edit();
 		editar.putString("intervalo", intervalo);
-		editar.commit();		
+		editar.commit();
 	}
 
-
-    public static void guardarEstadoCapaGrupoFamiliar(Boolean b) {
+	public static void guardarEstadoCapaGrupoFamiliar(Boolean b) {
 		SharedPreferences prefs = AlertTsunamiApplication.getAppContext().getSharedPreferences("Prefs", Context.MODE_PRIVATE);
 		SharedPreferences.Editor editar = prefs.edit();
 		editar.putString("capa_grupo_familiar", b.toString());
 		editar.commit();
 	}
-    
-    public static void guardarEstadoCapaPuntosDeRiesgo(Boolean b) {
+
+	public static void guardarEstadoCapaPuntosDeRiesgo(Boolean b) {
 		SharedPreferences prefs = AlertTsunamiApplication.getAppContext().getSharedPreferences("Prefs", Context.MODE_PRIVATE);
 		SharedPreferences.Editor editar = prefs.edit();
 		editar.putString("capa_puntos_de_riesgo", b.toString());

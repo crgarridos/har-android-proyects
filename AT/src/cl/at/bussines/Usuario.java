@@ -246,7 +246,7 @@ public class Usuario {
 		return externo;
 	}
 
-	public boolean getEsLider() {
+	public boolean esLider() {
 		return this.esLider;
 	}
 	

@@ -157,31 +157,33 @@ public class MainActivity extends MapActivity {
 
 	public boolean onCreateOptionsMenu(Menu menu) {
 		SubMenu smnu1 = menu.addSubMenu(Menu.NONE, MNU_OPC1, Menu.NONE, "Capas").setIcon(R.drawable.capas);
-//		if (usuario.getGrupoFamiliar() != null)
-		smnu1.add(Menu.NONE, SMNU_OPC11, Menu.NONE, "Grupo familiar");
-		smnu1.getItem(0).setCheckable(true);
-		smnu1.getItem(0).setChecked(Boolean.parseBoolean(Util.getPreferencia(Util.CAPA_GRUPO_FAMILIAR)));
+		int i = 0;
+		if (gf != null){
+			smnu1.add(Menu.NONE, SMNU_OPC11, Menu.NONE, "Grupo familiar");
+			smnu1.getItem(i++).setCheckable(true);
+			smnu1.getItem(i++).setChecked(Boolean.parseBoolean(Util.getPreferencia(Util.CAPA_GRUPO_FAMILIAR)));
+		}
 		smnu1.add(Menu.NONE, SMNU_OPC12, Menu.NONE, "Puntos de riesgo");
-		smnu1.getItem(1).setCheckable(true);
-		smnu1.getItem(1).setChecked(Boolean.parseBoolean(Util.getPreferencia(Util.CAPA_PUNTO_DE_RIESGO)));
-
+		smnu1.getItem(i).setCheckable(true);
+		smnu1.getItem(i).setChecked(Boolean.parseBoolean(Util.getPreferencia(Util.CAPA_PUNTO_DE_RIESGO)));
+		
 		SubMenu smnu2 = menu.addSubMenu(Menu.NONE, MNU_OPC2, Menu.NONE, "Usuario").setIcon(R.drawable.user);
 		smnu2.add(Menu.NONE, SMNU_OPC21, Menu.NONE, "Ingresar punto de riesgo");
 		smnu2.add(Menu.NONE, SMNU_OPC22, Menu.NONE, "Actualizar datos");
 		smnu2.add(Menu.NONE, SMNU_OPC23, Menu.NONE, "Ver invitaciones");
-//		if (usuario.getGrupoFamiliar() == null)
+		if (gf == null)
 			smnu2.add(Menu.NONE, SMNU_OPC24, Menu.NONE, "Crear grupo familiar");
 		smnu2.add(Menu.NONE, SMNU_OPC25, Menu.NONE, "Eliminar cuenta");
 		smnu2.add(Menu.NONE, SMNU_OPC26, Menu.NONE, "Cerrar sesion");
 
-//		if (usuario.getGrupoFamiliar() != null) {
+		if (gf != null) {
 			SubMenu smnu3 = menu.addSubMenu(Menu.NONE, MNU_OPC3, Menu.NONE, "Grupo familiar").setIcon(R.drawable.grupo_familiar);
 			smnu3.add(Menu.NONE, SMNU_OPC31, Menu.NONE, "Invitar familiar");
-			if(usuario.getEsLider() == true)
-			smnu3.add(Menu.NONE, SMNU_OPC32, Menu.NONE, "Definir punto de encuentro");
+			if(usuario.esLider())
+				smnu3.add(Menu.NONE, SMNU_OPC32, Menu.NONE, "Definir punto de encuentro");
 			smnu3.add(Menu.NONE, SMNU_OPC34, Menu.NONE, "Visualizar comentarios");
 			smnu3.add(Menu.NONE, SMNU_OPC35, Menu.NONE, "Abandonar grupo");
-//		}
+		}
 
 		SubMenu smnu4 = menu.addSubMenu(Menu.NONE, MNU_OPC4, Menu.NONE, "Ajustes").setIcon(R.drawable.ajustes);
 		smnu4.add(Menu.NONE, SMNU_OPC41, Menu.NONE, "Configurar geolocalizacion");
@@ -322,6 +324,7 @@ public class MainActivity extends MapActivity {
 		mOverlayLocation.disableMyLocation();
 		super.onPause();
 	}
+	
 	@Override
 	protected void onDestroy() {
 		Process.killProcess(Process.myPid());
@@ -370,7 +373,7 @@ public class MainActivity extends MapActivity {
 	}
 
 	public void validarGrupoFamiliar() {
-		startActivity(new Intent("at.CREAR_GRUPO_FAMILIAR"));
+		startActivityForResult(new Intent("at.CREAR_GRUPO_FAMILIAR"),999);
 	}
 
 	private boolean estadoGPS() {
@@ -426,7 +429,6 @@ public class MainActivity extends MapActivity {
 			Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
 			pDialog.dismiss();
 			finish();
-
 		}
 
 	}
@@ -495,16 +497,14 @@ public class MainActivity extends MapActivity {
 			return usuario.setGrupoFamiliar(null);
 		}
 
-		protected void onPostExecute(Boolean s) {
-			if (s) {
+		protected void onPostExecute(Boolean exito) {
+			if (exito) {
 //				Util.reiniciarPreferencias(context);
 				finish();
 				startActivity(getIntent());
 			}
-			Toast.makeText(getApplicationContext(), s ? "Se ha abandonado el grupo" : "No se ha podido abandonar, intentelo mas tarde.", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getApplicationContext(), exito ? "Se ha abandonado el grupo" : "No se ha podido abandonar, intentelo mas tarde.", Toast.LENGTH_SHORT).show();
 			pDialog.dismiss();
-			mOverlayLocation.onTap(mOverlayLocation.getMyLocation(), mapView);
-
 		}
 
 	}
