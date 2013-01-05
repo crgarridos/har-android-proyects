@@ -85,6 +85,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 	@Override
 	protected void onUnregistered(Context context, String regId) {
 		Log.d("GCMTest", "REGISTRATION: Desregistrado OK.");
+		new AsyncRegister().execute("");
 	}
 
 	class AsyncRegister extends AsyncTask<String, String, Boolean> {
