@@ -189,6 +189,7 @@ public class Ciudad {
 		@Override
 		protected void onPreExecute() {
 			// gMapsAPI.invalidate();
+			puntoSeguridad = new Punto(gMapsAPI.getCoordenadaMasCercana(Ciudad.this));
 			Toast.makeText(AlertTsunamiApplication.getAppContext(), "Actualizando...", Toast.LENGTH_SHORT).show();
 		}
 
@@ -207,6 +208,13 @@ public class Ciudad {
 					}
 				}
 				puntosRiesgo = getPuntosRiesgo();
+				if(!estaDentro(dispositivo.getPosicion())){
+					getDispositivo().setEstadoDeRiesgo(false);
+					Log.i(TAG, "usuario seguro...");
+				}
+				else
+					getDispositivo().setEstadoDeRiesgo(true);
+					Log.i(TAG, "usuario inseguro...");
 			} catch (Exception e) {
 				Log.e(TAG, "Error en dibujando " + e);
 			}
@@ -237,8 +245,8 @@ public class Ciudad {
 			gMapsAPI.borrarPuntos(Ciudad.this);
 			if (capaPuntoRiesgoVisible)
 				gMapsAPI.dibujarPunto(puntosRiesgo);
-			if(!dispositivo.estaSeguro())
-				gMapsAPI.getCoordenadaMasCercana(Ciudad.this);
+			if(dispositivo.estaEnRiesgo())
+				gMapsAPI.dibujarPunto(new Punto(puntoSeguridad.getCoordenada()), gMapsAPI.compararPunto(dispositivo.getPosicion(),puntoSeguridad.getCoordenada()));
 			if (grupoFamiliar != null) {
 				if (capaGrupoFamiliarVisible)
 					gMapsAPI.dibujarPunto(grupoFamiliar.getIntegrantes(), dispositivo.getUsuario());

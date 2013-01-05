@@ -309,7 +309,7 @@ public class GMapsAPI {
 		return impar;
 	}
 
-	public void getCoordenadaMasCercana(Ciudad ciudad) {
+	public Coordenada getCoordenadaMasCercana(Ciudad ciudad) {
 
 		Coordenada origen = ciudad.getDispositivo().getPosicion();
 		ArrayList<Coordenada> polilinea = ciudad.getAreaInundacion();
@@ -366,17 +366,7 @@ public class GMapsAPI {
 		
 		Log.d(TAG, angulo(puntoSeguroMasCercano.getCoordenada(), punto1, punto3)+" "+ angulo(punto2, punto1, punto3));
 
-		dibujarPunto(new Punto(puntoSeguroMasCercano.getCoordenada()), compararPunto(origen,puntoSeguroMasCercano.getCoordenada()));
-		Log.d(TAG, puntoSeguroMasCercano.getCoordenada().toString());
-
-		if(!ciudad.estaDentro(origen)){
-			ciudad.getDispositivo().setEstadoDeRiesgo(false);
-			Log.i(TAG, "usuario seguro...");
-			
-		}
-		else
-			ciudad.getDispositivo().setEstadoDeRiesgo(true);
-			Log.i(TAG, "usuario inseguro...");
+		return puntoSeguroMasCercano.getCoordenada();
 	}
 	
 	public void setMapView(MapView mapView) {
