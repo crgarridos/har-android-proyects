@@ -20,7 +20,6 @@ public class BienvenidaActivity extends Activity {
 			AlertDialog.Builder alert = new AlertDialog.Builder(this);
 			alert.setTitle("No hay conexion a internet");
 			alert.setMessage("Debe haber una conexion a internet para el uso correcto de la aplicacion, pruebe activando la conexion de datos (Puede causar gastos adicionales), o conectandose a una red wi-fi.");
-
 			alert.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
 					finish();

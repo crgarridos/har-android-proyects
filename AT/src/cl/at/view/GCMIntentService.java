@@ -50,15 +50,16 @@ public class GCMIntentService extends GCMBaseIntentService {
 			int icono = R.drawable.ic_launcher;
 			CharSequence titulo = "Notificacion";
 			Intent notIntent = new Intent("at.MAPA");
+			notIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 			if(tipo.equalsIgnoreCase("invitacion")){
 				icono = R.drawable.grupo_familiar;
 				titulo = "Invitacion recibida";
-				notIntent = new Intent("at.LISTA_INVITACIONES");
+				notIntent.setAction("at.LISTA_INVITACIONES");
 			}
 			else if(tipo.equalsIgnoreCase("comentario")){
 //				icono = R.drawable.grupo_familiar;
 				titulo = "Nuevo Comentario";
-				notIntent = new Intent("at.LISTA_COMENTARIOS");
+				notIntent.setAction("at.LISTA_COMENTARIOS");
 			}
 			else if(tipo.equalsIgnoreCase("puntoEncuentro")){
 //				icono = R.drawable.grupo_familiar;

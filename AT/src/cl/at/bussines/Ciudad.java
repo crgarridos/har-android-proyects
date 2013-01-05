@@ -12,6 +12,7 @@ import android.widget.Toast;
 import cl.at.data.DispositivoSQL;
 import cl.at.data.PuntoRiesgoSQL;
 import cl.at.util.AlertTsunamiApplication;
+import cl.at.util.Util;
 
 import com.google.android.maps.MapView;
 
@@ -35,6 +36,8 @@ public class Ciudad {
 
 	public Ciudad(MapView mapView, Dispositivo disp, PuntoEncuentro ptoEncuentro) {
 		dispositivo = disp;
+		capaPuntoRiesgoVisible = Boolean.parseBoolean(Util.getPreferencia(Util.CAPA_PUNTO_DE_RIESGO));
+		capaGrupoFamiliarVisible = Boolean.parseBoolean(Util.getPreferencia(Util.CAPA_GRUPO_FAMILIAR));
 
 		puntoSeguridad = new Punto();// TODO Calcular punto seguridad???
 		areaInundacion = new ArrayList<Coordenada>();// cargar desde la bd

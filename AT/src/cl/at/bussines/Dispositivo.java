@@ -165,13 +165,11 @@ public class Dispositivo {
 
 		CharSequence titulo = "Alerta de Tsunami";
 		CharSequence descripcion = a.getDescripcion();
-		Intent notIntent = new Intent("at.MAPA");// contexto,
-													// GCMIntentService.class);
+		Intent notIntent = new Intent("at.MAPA");
+		notIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 		PendingIntent contIntent = PendingIntent.getActivity(contexto, 0, notIntent, 0);
 		notif.setLatestEventInfo(contexto, titulo, descripcion, contIntent);
-		// AutoCancel: cuando se pulsa la notificai�n �sta desaparece
 		notif.flags |= Notification.FLAG_AUTO_CANCEL;
-		// Enviar notificaci�n
 		notManager.notify(1, notif);
 	}
 
