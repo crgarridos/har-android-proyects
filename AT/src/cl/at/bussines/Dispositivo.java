@@ -113,7 +113,7 @@ public class Dispositivo {
 		}
 		else dSQL.getUltimaPosicion(this);
 		dSQL.actualizarPosicion(this);
-		if (!estaSeguro()) {
+		if (estaEnRiesgo()) {
 			// TODO comprobar estado de dispositivoa
 			
 		}
@@ -123,7 +123,7 @@ public class Dispositivo {
 		return Comunicador.getInstancia().getPosition();
 	}
 
-	public Boolean estaSeguro() {
+	public Boolean estaEnRiesgo() {
 		return estadoDeRiesgo;
 		// podria tener un setter para que la ciudad lo haga cambiar de estado,
 		// asi evitarnos la relacion.
@@ -191,7 +191,6 @@ public class Dispositivo {
 
 	public void estadoRiesgo(boolean b) {
 		this.estadoDeRiesgo = b;
-		
 	}
 
 }
