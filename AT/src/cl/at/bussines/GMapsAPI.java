@@ -224,7 +224,7 @@ public class GMapsAPI {
 			// Evitamos que se dibuje el usuario interno
 			for (int i = 0; i < integrantes.size(); i++) {
 				if (!usuario.getNombreUsuario().equalsIgnoreCase(integrantes.get(i).getNombreUsuario())) {
-					if (integrantes.get(i).getDispositivo().getEstadoDeRiesgo())
+					if (!integrantes.get(i).getDispositivo().getEstadoDeRiesgo())
 						integrantesRiesgo.add(integrantes.get(i));
 					else
 						integrantesSeguros.add(integrantes.get(i));
@@ -292,9 +292,10 @@ public class GMapsAPI {
 		}
 	}
 
-	public boolean estaEnElMedio(Coordenada c, ArrayList<Coordenada> zona) {
+	public boolean estaEnElMedio(Coordenada c, ArrayList<Coordenada> lista) {
 		double x = c.getLongitud();
 		double y = c.getLatitud();
+		ArrayList<Coordenada> zona = new ArrayList<Coordenada>(lista);
 		zona.add(zona.get(0));
 		boolean impar = false;
 		for (int i = 0, j = zona.size() - 1; i < zona.size(); j = i++) {
@@ -369,9 +370,9 @@ public class GMapsAPI {
 		Log.d(TAG, puntoSeguroMasCercano.getCoordenada().toString());
 
 		if(!ciudad.estaDentro(origen)){
-			ciudad.setEstadoRiesgo(true);
 			ciudad.getDispositivo().setEstadoDeRiesgo(false);
 			Log.i(TAG, "usuario seguro...");
+			
 		}
 		else
 			ciudad.getDispositivo().setEstadoDeRiesgo(true);

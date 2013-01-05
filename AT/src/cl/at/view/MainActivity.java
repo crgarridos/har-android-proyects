@@ -132,6 +132,7 @@ public class MainActivity extends MapActivity {
 		mOverlayLocation.runOnFirstFix(new Runnable() {
 			public void run() {
 				centrarEnMiPosicion();
+				com.notifyPosition(mOverlayLocation.getMyLocation());
 			}
 		});
 

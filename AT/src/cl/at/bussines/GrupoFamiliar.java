@@ -91,10 +91,7 @@ public class GrupoFamiliar {
 	}
 
 	public PuntoEncuentro getPuntoEncuentro() {
-		if (puntoEncuentro == null){
-			PuntoEncuentroSQL ptoEncuentro = new PuntoEncuentroSQL();
-			puntoEncuentro = ptoEncuentro.cargarPtoEncuentro(this);
-		}
+			puntoEncuentro = new PuntoEncuentroSQL().cargarPtoEncuentro(this);
 		return puntoEncuentro;
 	}
 
@@ -104,11 +101,11 @@ public class GrupoFamiliar {
 	}
 
 	public ArrayList<Usuario> getIntegrantes() {
-		if (integrantes == null || integrantes.size() == 0) {
-			integrantes = new UsuarioSQL().cargarIntegrantes(this);
-			PuntoEncuentroSQL ptoEncuentro = new PuntoEncuentroSQL();
-			puntoEncuentro = ptoEncuentro.cargarPtoEncuentro(this);
-		}
+		return this.integrantes;
+	}
+	
+	public ArrayList<Usuario> obtenerIntegrantes() {
+		integrantes = new UsuarioSQL().cargarIntegrantes(this);
 		return integrantes;
 	}
 

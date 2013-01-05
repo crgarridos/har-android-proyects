@@ -64,6 +64,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 			else if(tipo.equalsIgnoreCase("puntoEncuentro")){
 //				icono = R.drawable.grupo_familiar;
 				titulo = "Cambio en el punto de encuentro";
+				dispositivo.getUsuario().setEstadoLlegada(false);
 			}
 			long hora = System.currentTimeMillis();
 			Notification notif = new Notification(icono, titulo, hora);

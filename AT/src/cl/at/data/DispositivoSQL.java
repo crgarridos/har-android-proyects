@@ -21,6 +21,7 @@ public class DispositivoSQL {
 	private static final String CAMPO_COD_GCM = "COD_GCM";
 	private static final String CAMPO_ULTIMA_LATITUD = "ULTIMA_LATITUD_DISPOSITIVO";
 	private static final String CAMPO_ULTIMA_LONGITUD = "ULTIMA_LONGITUD_DISPOSITIVO";
+	private static final String CAMPO_SEGURO = "SEGURO";
 	
 	ConexionHttp post;
 
@@ -38,6 +39,7 @@ public class DispositivoSQL {
 				JSONObject json_data = jdata.getJSONObject(0);
 				try {
 					dispositivo.setPosicion(new Coordenada(json_data.getDouble(CAMPO_ULTIMA_LATITUD), json_data.getDouble(CAMPO_ULTIMA_LONGITUD)));
+					dispositivo.estadoRiesgo(json_data.getInt(CAMPO_SEGURO) == 1);
 					return true;
 				} catch (Exception e) {
 					Log.e(TAG, "getUltimaPosicion, " + e.toString());
@@ -56,6 +58,7 @@ public class DispositivoSQL {
 			postParametersToSend.add("nombreUsuario", usuario!=null ? usuario.getNombreUsuario() : null);
 			postParametersToSend.add("latitudDispositivo", dispositivo.getPosicion().getLatitud().toString());
 			postParametersToSend.add("longitudDispositivo", dispositivo.getPosicion().getLongitud().toString());
+			postParametersToSend.add("seguro", dispositivo.getEstadoDeRiesgo().toString());
 			JSONArray jdata = post.getServerData(postParametersToSend, ConexionHttp.URL_CONNECT + "actualizarPosicion.php");
 			if (jdata != null) {
 				return true;
@@ -114,6 +117,7 @@ public class DispositivoSQL {
 				Coordenada coordenada = new Coordenada(jsonData.getDouble(CAMPO_ULTIMA_LATITUD), jsonData.getDouble(CAMPO_ULTIMA_LONGITUD));
 				dispositivo.setPosicion(coordenada);
 				dispositivo.setRegGCM(jsonData.getString(CAMPO_COD_GCM));
+				dispositivo.estadoRiesgo(jsonData.getInt(CAMPO_SEGURO) == 1);
 				return true;
 			}
 		} catch (Exception e) {

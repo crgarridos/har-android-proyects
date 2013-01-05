@@ -5,7 +5,6 @@ import org.json.JSONObject;
 
 import android.util.Log;
 import cl.at.bussines.GrupoFamiliar;
-import cl.at.bussines.Lider;
 import cl.at.bussines.Usuario;
 import cl.at.util.Parametros;
 
