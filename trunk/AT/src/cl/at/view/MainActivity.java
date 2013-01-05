@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Process;
 import android.os.SystemClock;
 import android.provider.Settings;
 import android.text.InputType;
@@ -144,11 +145,14 @@ public class MainActivity extends MapActivity {
 	}
 
 	protected void centrarEnMiPosicion() {
-		mapView.getController().animateTo(mOverlayLocation.getMyLocation());
-		while(mapView.getZoomLevel()<15){
-			mapView.getController().zoomIn();
-			SystemClock.sleep(50);
+		if(mOverlayLocation.getLastFix()!=null){
+			mapView.getController().animateTo(mOverlayLocation.getMyLocation());
+			while(mapView.getZoomLevel()<15){
+				mapView.getController().zoomIn();
+				SystemClock.sleep(200);
+			}
 		}
+		else Toast.makeText(getApplicationContext(), "Espere a obtener la posicion...", Toast.LENGTH_LONG).show();
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -156,10 +160,10 @@ public class MainActivity extends MapActivity {
 //		if (usuario.getGrupoFamiliar() != null)
 		smnu1.add(Menu.NONE, SMNU_OPC11, Menu.NONE, "Grupo familiar");
 		smnu1.getItem(0).setCheckable(true);
-		smnu1.getItem(0).setChecked(true);
+		smnu1.getItem(0).setChecked(Boolean.parseBoolean(Util.getPreferencia(Util.CAPA_GRUPO_FAMILIAR)));
 		smnu1.add(Menu.NONE, SMNU_OPC12, Menu.NONE, "Puntos de riesgo");
 		smnu1.getItem(1).setCheckable(true);
-		smnu1.getItem(1).setChecked(true);
+		smnu1.getItem(1).setChecked(Boolean.parseBoolean(Util.getPreferencia(Util.CAPA_PUNTO_DE_RIESGO)));
 
 		SubMenu smnu2 = menu.addSubMenu(Menu.NONE, MNU_OPC2, Menu.NONE, "Usuario").setIcon(R.drawable.user);
 		smnu2.add(Menu.NONE, SMNU_OPC21, Menu.NONE, "Ingresar punto de riesgo");
@@ -188,18 +192,14 @@ public class MainActivity extends MapActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case 11:
-			ciudad.mostrarCapas(0); // Grupo Familiar
-			if(item.isChecked()) 
-				item.setChecked(false);
-			else
-				item.setChecked(true);
-			return true;		    
+			ciudad.mostrarCapas(Ciudad.CAPA_GRUPO_FAMILIAR); // Grupo Familiar
+			Util.guardarEstadoCapaGrupoFamiliar(!item.isChecked());
+			item.setChecked(!item.isChecked());
+			return true;
 		case 12:
-			ciudad.mostrarCapas(1); // Puntos de riesgo
-			if(item.isChecked()) 
-				item.setChecked(false);
-			else
-				item.setChecked(true);
+			ciudad.mostrarCapas(Ciudad.CAPA_PUNTO_RIESGO); // Puntos de riesgo
+			Util.guardarEstadoCapaPuntosDeRiesgo(!item.isChecked());
+			item.setChecked(!item.isChecked());
 			return true;
 		case 21:
 			startActivity(new Intent("at.INGRESAR_PUNTO_DE_RIESGO"));
@@ -214,9 +214,9 @@ public class MainActivity extends MapActivity {
 			validarGrupoFamiliar();
 			return true;
 		case 25:
-			mostrarMensajeConfirmacion();
+			confirmarEliminarCuenta();
 			return true;
-		case 26:
+		case 26://Cerrando sesion
 			Util.reiniciarPreferencias(context);
 			finish();
 			desuscribirDispositivo();
@@ -289,6 +289,7 @@ public class MainActivity extends MapActivity {
 
 			@Override
 			public void onClick(DialogInterface arg0, int arg1) {
+				
 			}
 
 		});
@@ -309,7 +310,23 @@ public class MainActivity extends MapActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-//		if (!estadoGPS()) validarGPS();
+//		Toast.makeText(getApplicationContext(), "onResume", Toast.LENGTH_SHORT).show();
+		if(ciudad!= null){
+			mOverlayLocation.enableMyLocation();
+			ciudad.mostrarCapas();
+		}
+	}
+
+	@Override
+	protected void onPause() {
+		mOverlayLocation.disableMyLocation();
+		super.onPause();
+	}
+	@Override
+	protected void onDestroy() {
+		Process.killProcess(Process.myPid());
+		Log.d(TAG, "onDestroy, y murio...");
+		super.onDestroy();
 	}
 
 	@Override
@@ -320,8 +337,7 @@ public class MainActivity extends MapActivity {
 	protected void registrarDispositivo() {
 		final String regId = GCMRegistrar.getRegistrationId(MainActivity.this);
 		if (regId.equals("")) {
-			GCMRegistrar.register(MainActivity.this, "42760762845"); // Sender
-																		// ID
+			GCMRegistrar.register(MainActivity.this, "42760762845");
 		} else {
 			Log.v("GCMTest", "Ya registrado");
 		}
@@ -336,7 +352,7 @@ public class MainActivity extends MapActivity {
 		}
 	}
 
-	public void mostrarMensajeConfirmacion() {
+	public void confirmarEliminarCuenta() {
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
 		alert.setTitle("Eliminar cuenta");
 		alert.setMessage("Estas seguro que desea eliminar su cuenta?");

@@ -1,6 +1,5 @@
 package cl.at.bussines;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -294,7 +293,19 @@ public class GMapsAPI {
 	}
 
 	public boolean estaEnElMedio(Coordenada c, ArrayList<Coordenada> zona) {
-		return false;
+		double x = c.getLongitud();
+		double y = c.getLatitud();
+		zona.add(zona.get(0));
+		boolean impar = false;
+		for (int i = 0, j = zona.size() - 1; i < zona.size(); j = i++) {
+			if ((zona.get(i).getLatitud() < y && zona.get(j).getLatitud() >= y)
+					|| (zona.get(j).getLatitud() < y && zona.get(i).getLatitud() >= y))
+				if (zona.get(i).getLongitud() + (y - zona.get(i).getLatitud())
+						/ (zona.get(j).getLatitud() - zona.get(i).getLatitud())
+						* (zona.get(j).getLongitud() - zona.get(i).getLongitud()) < x)
+					impar = !impar;
+		}
+		return impar;
 	}
 
 	public void getCoordenadaMasCercana(Ciudad ciudad) {

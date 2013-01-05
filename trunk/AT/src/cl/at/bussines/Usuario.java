@@ -115,15 +115,19 @@ public class Usuario {
 	}
 
 	public Boolean setEstadoLlegada(boolean llego) {
-		Comentario comentario = new Comentario(this.nombreUsuario+" ha llegado al punto de encuentro", this);
-		try{
-			comentario.persistir();
-			this.estadoDeLlegada = llego;
-			return true;
-		}catch(Exception e){
-			Log.e(TAG, "setEstadoLlegada"+e.toString());
-			return false;
+		if(!estadoDeLlegada && llego){//(Comunicador.getInstancia().getAlerta()!=null){
+			//Comunicador.getInstancia().setAlerta(null);
+			Comentario comentario = new Comentario(this.nombreUsuario+" ha llegado al punto de encuentro", this);
+			try{
+				comentario.persistir();
+				this.estadoDeLlegada = llego;
+				return true;
+			}catch(Exception e){
+				Log.e(TAG, "setEstadoLlegada, "+e.toString());
+			}
 		}
+		this.estadoDeLlegada = llego;
+		return false;
 	}
 
 	public Boolean isEstadoLlegada() {
