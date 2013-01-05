@@ -184,7 +184,6 @@ public class Ciudad {
 	class AsyncMapa extends AsyncTask<String, String, String> {
 
 		GrupoFamiliar grupoFamiliar;
-		PuntoEncuentro puntoEncuentro;
 		ArrayList<Usuario> integrantes;
 
 		@Override
@@ -201,15 +200,13 @@ public class Ciudad {
 				dispositivo.actualizarPosicion();
 				if (grupoFamiliar != null) {
 					puntoEncuentro = grupoFamiliar.getPuntoEncuentro();
-					integrantes = grupoFamiliar.getIntegrantes();
+					integrantes = grupoFamiliar.obtenerIntegrantes();
 					if (gMapsAPI.compararPunto(dispositivo.getPosicion(), puntoEncuentro.getCoordenada()) < 50) {
 						int intentos = 0;
 						while (!dispositivo.getUsuario().setEstadoLlegada(true) && intentos++ < 5);
 					}
 				}
 				puntosRiesgo = getPuntosRiesgo();
-				DispositivoSQL dSQL = new DispositivoSQL();
-				dSQL.actualizarPosicion(dispositivo);
 			} catch (Exception e) {
 				Log.e(TAG, "Error en dibujando " + e);
 			}
@@ -220,12 +217,6 @@ public class Ciudad {
 		protected void onPostExecute(String result) {
 			super.onPostExecute(result);
 			dispositivo.inicializar(Ciudad.this.getLocationListener());
-//			gMapsAPI.borrarPuntos(Ciudad.this);
-//			gMapsAPI.dibujarPunto(puntosRiesgo);
-//			if (grupoFamiliar != null) {
-//				gMapsAPI.dibujarPunto(puntoEncuentro);
-//				gMapsAPI.dibujarPunto(integrantes, dispositivo.getUsuario());
-//			}
 			Ciudad.this.mostrarCapas();
 			Ciudad.this.ejecutando = false;
 			Log.i(TAG, "terminando de dibujar...");
@@ -233,7 +224,7 @@ public class Ciudad {
 	}
 
 	public void mostrarCapas(){
-		mostrarCapas(null);
+		mostrarCapas(-1);
 	}
 	
 	public void mostrarCapas(Integer capa) {
@@ -244,23 +235,19 @@ public class Ciudad {
 				capaPuntoRiesgoVisible = !capaPuntoRiesgoVisible;
 			GrupoFamiliar grupoFamiliar = dispositivo.getUsuario().getGrupoFamiliar();
 			gMapsAPI.borrarPuntos(Ciudad.this);
-			if (grupoFamiliar != null) {
-				if (capaGrupoFamiliarVisible)
-					gMapsAPI.dibujarPunto(grupoFamiliar.getIntegrantes(), dispositivo.getUsuario());
-				gMapsAPI.dibujarPunto(puntoEncuentro);
-			}
 			if (capaPuntoRiesgoVisible)
 				gMapsAPI.dibujarPunto(puntosRiesgo);
 			if(!dispositivo.estaSeguro())
 				gMapsAPI.getCoordenadaMasCercana(Ciudad.this);
+			if (grupoFamiliar != null) {
+				if (capaGrupoFamiliarVisible)
+					gMapsAPI.dibujarPunto(grupoFamiliar.getIntegrantes(), dispositivo.getUsuario());
+				gMapsAPI.dibujarPunto(this.puntoEncuentro);
+			}
 			gMapsAPI.refresh();
 		} catch (Exception e) {
 			Log.e(TAG, "Error en dibujando " + e);
 		}
-	}
-
-	public void setEstadoRiesgo(Boolean estadoRiesgo) {
-		this.getDispositivo().setEstadoDeRiesgo(estadoRiesgo);
 	}
 
 	public boolean ejecutando() {

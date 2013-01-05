@@ -83,7 +83,7 @@ public class DefinirPuntoEncuentroMapActivity extends MapActivity {
 		if (grupoFamiliar == null && bundle != null && bundle.containsKey("nombreGrupo"))
 			nombreGrupo = bundle.getString("nombreGrupo");
 		else
-			gMapsAPI.dibujarPunto(grupoFamiliar.getPuntoEncuentro());
+			gMapsAPI.dibujarPunto(ciudad.getPuntoEncuentro());
 
 		prepararDialogoDescripcion();
 	}
@@ -160,6 +160,7 @@ public class DefinirPuntoEncuentroMapActivity extends MapActivity {
 						return "Grupo familiar creado exitosamente";
 					} else
 						puntoEncuentro.setGrupoFamiliar(grupoFamiliar);
+					ciudad.setPuntoEncuentro(puntoEncuentro);
 					grupoFamiliar.setPuntoEncuentro(puntoEncuentro);
 					puntoEncuentro.persistir();
 					salir = true;

@@ -10,7 +10,7 @@ public class Usuario {
 
 	private static final String TAG = Usuario.class.getName();
 	protected String email;
-	protected Boolean estadoDeLlegada;
+	protected Boolean estadoDeLlegada = false;
 	protected String nombreCompleto;
 	protected String nombreUsuario;
 	protected String password;
@@ -115,8 +115,7 @@ public class Usuario {
 	}
 
 	public Boolean setEstadoLlegada(boolean llego) {
-		if(!estadoDeLlegada && llego){//(Comunicador.getInstancia().getAlerta()!=null){
-			//Comunicador.getInstancia().setAlerta(null);
+		if(!estadoDeLlegada && llego){
 			Comentario comentario = new Comentario(this.nombreUsuario+" ha llegado al punto de encuentro", this);
 			try{
 				comentario.persistir();

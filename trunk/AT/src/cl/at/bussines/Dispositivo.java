@@ -2,6 +2,8 @@ package cl.at.bussines;
 
 import java.util.ArrayList;
 
+import com.google.android.maps.GeoPoint;
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -15,6 +17,7 @@ import android.net.Uri;
 import android.util.Log;
 import cl.at.data.DispositivoSQL;
 import cl.at.util.AlertTsunamiApplication;
+import cl.at.util.Comunicador;
 import cl.at.util.Util;
 import cl.at.view.R;
 
@@ -23,7 +26,7 @@ public class Dispositivo {
 
 	private static final String TAG = Dispositivo.class.getName();
 	private Integer id;
-	private Boolean estadoDeRiesgo;
+	private Boolean estadoDeRiesgo = true;
 	private Usuario usuario;
 	private Coordenada posicion;
 	private Integer intervalo;
@@ -35,8 +38,6 @@ public class Dispositivo {
 
 	public Dispositivo(Usuario usuario) {
 		DispositivoSQL dSQL = new DispositivoSQL();
-		this.estadoDeRiesgo = false;// TODO Calcular la posicion e indicar si
-									// hay estado de riesgo
 		this.context = AlertTsunamiApplication.getAppContext();
 		setUsuario(usuario);
 		if(!usuario.esExterno()){
@@ -106,22 +107,20 @@ public class Dispositivo {
 		this.location = this.locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 		if(this.location!=null)
 			setPosicion(new Coordenada(this.location.getLatitude(), this.location.getLongitude()));
-		else 
-			dSQL.getUltimaPosicion(this);
-		if(this.getUsuario()!=null&&this.getUsuario().getGrupoFamiliar()!=null)
-			try{
-				ArrayList<Usuario> grupoFamiliar = new ArrayList<Usuario>();
-				grupoFamiliar = getUsuario().getGrupoFamiliar().getIntegrantes();
-				for(int i = 0; i < grupoFamiliar.size(); i++)
-					dSQL.getUltimaPosicion(grupoFamiliar.get(i).getDispositivo());
-			} catch (Exception e) {
-				Log.e(TAG, "actualizarPosicion: "+e.toString());
-			}
-		
+		else if(getOverlayPosition() != null) {
+			GeoPoint posicion = getOverlayPosition();
+			setPosicion(new Coordenada((double)(posicion.getLatitudeE6() /1E6), (double)(posicion.getLongitudeE6() /1E6)));
+		}
+		else dSQL.getUltimaPosicion(this);
+		dSQL.actualizarPosicion(this);
 		if (!estaSeguro()) {
 			// TODO comprobar estado de dispositivoa
 			
 		}
+	}
+
+	private GeoPoint getOverlayPosition() {
+		return Comunicador.getInstancia().getPosition();
 	}
 
 	public Boolean estaSeguro() {
@@ -179,7 +178,20 @@ public class Dispositivo {
 	}
 
 	public void setEstadoDeRiesgo(Boolean estadoRiesgo) {
+		if(this.estadoDeRiesgo && !estadoRiesgo) {
+			Comentario comentario = new Comentario(this.usuario.getNombreUsuario()+" se encuentra en zona de seguridad", this.usuario);
+			try{
+				comentario.persistir();
+			}catch(Exception e){
+				Log.e(TAG, "setEstadoDeRiesgo, "+e.toString());
+			}
+		}
 		this.estadoDeRiesgo = estadoRiesgo;
+	}
+
+	public void estadoRiesgo(boolean b) {
+		this.estadoDeRiesgo = b;
+		
 	}
 
 }

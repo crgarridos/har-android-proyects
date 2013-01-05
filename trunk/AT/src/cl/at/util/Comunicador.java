@@ -1,5 +1,7 @@
 package cl.at.util;
 
+import com.google.android.maps.GeoPoint;
+
 import cl.at.bussines.Alerta;
 import cl.at.bussines.Ciudad;
 import cl.at.bussines.Dispositivo;
@@ -12,6 +14,7 @@ public class Comunicador {
 	private Dispositivo dispositivo;
 	private Alerta alerta;
 	private Ciudad ciudad;
+	private GeoPoint posicion;
 
 	private Comunicador() {
 	}
@@ -52,6 +55,14 @@ public class Comunicador {
 
 	public void setCiudad(Ciudad ciudad) {
 		this.ciudad = ciudad;
+	}
+	
+	public GeoPoint getPosition() {
+		return posicion;
+	}
+	
+	public void notifyPosition(GeoPoint posicion) {
+		this.posicion = posicion;
 	}
 
 }
