@@ -73,7 +73,7 @@ public class IngresarPuntoDeRiesgoActivity extends MapActivity {
 		ciudad = com.getCiudad();
 
 		mapView = (MapView) findViewById(R.id.ingresar_punto_de_riesgo_mapView);
-		this.setTitle("Seleccione un punto de riesgo en el mapa");
+		this.setTitle("Seleccione un punto de riesgo");
 
 		MapOverlay mapOverlay = new MapOverlay();
 		List<Overlay> listOfOverlays = mapView.getOverlays();

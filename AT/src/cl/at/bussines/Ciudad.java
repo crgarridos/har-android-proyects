@@ -2,7 +2,6 @@ package cl.at.bussines;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import android.location.Location;
 import android.location.LocationListener;
@@ -11,7 +10,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 import cl.at.data.DispositivoSQL;
-import cl.at.data.PuntoEncuentroSQL;
 import cl.at.data.PuntoRiesgoSQL;
 import cl.at.util.AlertTsunamiApplication;
 
@@ -19,8 +17,8 @@ import com.google.android.maps.MapView;
 
 public class Ciudad {
 
-	private static final int CAPA_GRUPO_FAMILIAR = 0;
-	private static final int CAPA_PUNTO_RIESGO = 1;
+	public static final int CAPA_GRUPO_FAMILIAR = 0;
+	public static final int CAPA_PUNTO_RIESGO = 1;
 	private static final String TAG = Ciudad.class.getName();
 	private Integer id;
 	private Dispositivo dispositivo;
@@ -177,6 +175,7 @@ public class Ciudad {
 			Log.i(TAG, "dibujando...");
 			new AsyncMapa().execute();
 		}
+		else Log.i(TAG, "ya dibujando...");
 	}
 
 	class AsyncMapa extends AsyncTask<String, String, String> {
@@ -188,7 +187,7 @@ public class Ciudad {
 		@Override
 		protected void onPreExecute() {
 			// gMapsAPI.invalidate();
-			Toast.makeText(AlertTsunamiApplication.getAppContext(), "Actualizando...", Toast.LENGTH_LONG).show();
+			Toast.makeText(AlertTsunamiApplication.getAppContext(), "Actualizando...", Toast.LENGTH_SHORT).show();
 		}
 
 		@Override
@@ -202,8 +201,7 @@ public class Ciudad {
 					integrantes = grupoFamiliar.getIntegrantes();
 					if (gMapsAPI.compararPunto(dispositivo.getPosicion(), puntoEncuentro.getCoordenada()) < 50) {
 						int intentos = 0;
-						while (!dispositivo.getUsuario().setEstadoLlegada(true) && intentos++ < 5)
-							;
+						while (!dispositivo.getUsuario().setEstadoLlegada(true) && intentos++ < 5);
 					}
 				}
 				puntosRiesgo = getPuntosRiesgo();
@@ -219,20 +217,23 @@ public class Ciudad {
 		protected void onPostExecute(String result) {
 			super.onPostExecute(result);
 			dispositivo.inicializar(Ciudad.this.getLocationListener());
-			gMapsAPI.borrarPuntos(Ciudad.this);
-			gMapsAPI.dibujarPunto(puntosRiesgo);
-			if (grupoFamiliar != null) {
-				gMapsAPI.dibujarPunto(puntoEncuentro);
-				gMapsAPI.dibujarPunto(integrantes, dispositivo.getUsuario());
-			}
-			gMapsAPI.getCoordenadaMasCercana(Ciudad.this);
-			gMapsAPI.refresh();
+//			gMapsAPI.borrarPuntos(Ciudad.this);
+//			gMapsAPI.dibujarPunto(puntosRiesgo);
+//			if (grupoFamiliar != null) {
+//				gMapsAPI.dibujarPunto(puntoEncuentro);
+//				gMapsAPI.dibujarPunto(integrantes, dispositivo.getUsuario());
+//			}
+			Ciudad.this.mostrarCapas();
 			Ciudad.this.ejecutando = false;
 			Log.i(TAG, "terminando de dibujar...");
 		}
 	}
 
-	public void mostrarCapas(int capa) {
+	public void mostrarCapas(){
+		mostrarCapas(null);
+	}
+	
+	public void mostrarCapas(Integer capa) {
 		try {
 			if (capa == CAPA_GRUPO_FAMILIAR)
 				capaGrupoFamiliarVisible = !capaGrupoFamiliarVisible;
@@ -245,9 +246,10 @@ public class Ciudad {
 					gMapsAPI.dibujarPunto(grupoFamiliar.getIntegrantes(), dispositivo.getUsuario());
 				gMapsAPI.dibujarPunto(puntoEncuentro);
 			}
-			gMapsAPI.dibujarPolilinea(areaInundacion);
 			if (capaPuntoRiesgoVisible)
 				gMapsAPI.dibujarPunto(puntosRiesgo);
+			if(!dispositivo.estaSeguro())
+				gMapsAPI.getCoordenadaMasCercana(Ciudad.this);
 			gMapsAPI.refresh();
 		} catch (Exception e) {
 			Log.e(TAG, "Error en dibujando " + e);
@@ -263,18 +265,6 @@ public class Ciudad {
 	}
 
 	public boolean estaDentro(Coordenada c) {
-		double x = c.getLongitud();
-		double y = c.getLatitud();
-		this.getAreaInundacion().add(this.getAreaInundacion().get(0));
-		boolean impar = false;
-		for (int i = 0, j = this.getAreaInundacion().size() - 1; i < this.getAreaInundacion().size(); j = i++) {
-			if ((this.getAreaInundacion().get(i).getLatitud() < y && this.getAreaInundacion().get(j).getLatitud() >= y)
-					|| (this.getAreaInundacion().get(j).getLatitud() < y && this.getAreaInundacion().get(i).getLatitud() >= y))
-				if (this.getAreaInundacion().get(i).getLongitud() + (y - this.getAreaInundacion().get(i).getLatitud())
-						/ (this.getAreaInundacion().get(j).getLatitud() - this.getAreaInundacion().get(i).getLatitud())
-						* (this.getAreaInundacion().get(j).getLongitud() - this.getAreaInundacion().get(i).getLongitud()) < x)
-					impar = !impar;
-		}
-		return impar;
+		return gMapsAPI.estaEnElMedio(c, getAreaInundacion());
 	}
 }

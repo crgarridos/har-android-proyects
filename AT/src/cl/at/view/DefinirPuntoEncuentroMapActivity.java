@@ -1,6 +1,5 @@
 package cl.at.view;
 
-import java.util.List;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -8,10 +7,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -22,15 +19,11 @@ import cl.at.bussines.GrupoFamiliar;
 import cl.at.bussines.Lider;
 import cl.at.bussines.PuntoEncuentro;
 import cl.at.bussines.Usuario;
-import cl.at.data.GrupoFamiliarSQL;
 import cl.at.util.Comunicador;
-import cl.at.view.MainActivity.AsyncCargar;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapView;
-import com.google.android.maps.Overlay;
-import com.google.android.maps.Projection;
 
 public class DefinirPuntoEncuentroMapActivity extends MapActivity {
 
@@ -61,7 +54,7 @@ public class DefinirPuntoEncuentroMapActivity extends MapActivity {
 			Double latitud = ((double) p.getLatitudeE6()) / 1000000;
 			Double longitud = ((double) p.getLongitudeE6()) / 1000000;
 			coordenada = new Coordenada(latitud, longitud);
-			if(!ciudad.estaDentro(coordenada))
+			if (!ciudad.estaDentro(coordenada))
 				dialog.show();
 			else
 				Toast.makeText(getApplicationContext(), "Debe ingresar el punto de encuentro en la zona segura", Toast.LENGTH_SHORT).show();
@@ -79,17 +72,23 @@ public class DefinirPuntoEncuentroMapActivity extends MapActivity {
 		grupoFamiliar = com.getUsuario().getGrupoFamiliar();
 		ciudad = com.getCiudad();
 
+		this.setTitle("Seleccione un punto de encuentro");
 		mapView = (MapView) findViewById(R.id.definir_punto_encuentro_mapView);
-		this.setTitle("Seleccione un punto de seguridad en el mapa");
+
 		GMapsAPI gMapsAPI = new GMapsAPI(mapView);
-		MapOverlay mapOverlay = new MapOverlay();
-		List<Overlay> listOfOverlays = mapView.getOverlays();
-		Bundle bundle = getIntent().getExtras();
-		if (grupoFamiliar == null)
-			nombreGrupo = bundle.getString("nombreGrupo");
-		else gMapsAPI.dibujarPunto(grupoFamiliar.getPuntoEncuentro());
-		listOfOverlays.add(mapOverlay);
+		mapView.getOverlays().add(new MapOverlay());
 		gMapsAPI.dibujarPolilinea(ciudad.getAreaInundacion());
+
+		Bundle bundle = getIntent().getExtras();
+		if (grupoFamiliar == null && bundle != null && bundle.containsKey("nombreGrupo"))
+			nombreGrupo = bundle.getString("nombreGrupo");
+		else
+			gMapsAPI.dibujarPunto(grupoFamiliar.getPuntoEncuentro());
+
+		prepararDialogoDescripcion();
+	}
+
+	private void prepararDialogoDescripcion() {
 		LayoutInflater factory = LayoutInflater.from(this);
 		final View viewComentario = factory.inflate(R.layout.ingresar_comentario, null);
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
@@ -97,6 +96,7 @@ public class DefinirPuntoEncuentroMapActivity extends MapActivity {
 		alert.setMessage("Ingrese una descripcion del punto de encuentro familiar");
 		alert.setView(viewComentario);
 		editTextComentario = (EditText) viewComentario.findViewById(R.id.ingresar_comentario);
+		
 		alert.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
 				new definirPuntoEncuentroAsync().execute();

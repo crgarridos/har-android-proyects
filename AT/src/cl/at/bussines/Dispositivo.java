@@ -138,7 +138,7 @@ public class Dispositivo {
 
 	public void inicializar(LocationListener locListener) {
 		if(!suscrito){
-			this.locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, this.intervalo, 0, locListener);
+			this.locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 15000/*this.intervalo*/, 0, locListener);
 			suscrito = true;
 		}
 	}

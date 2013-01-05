@@ -18,6 +18,9 @@ import cl.at.bussines.Usuario;
 
 public abstract class Util {
 
+	public static final String CAPA_PUNTO_DE_RIESGO= "capa_puntos_de_riesgo";
+	public static final String CAPA_GRUPO_FAMILIAR= "capa_grupo_familiar";
+	
 	private static final char[] CONSTS_HEX = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
 
 	public static void guardarUsuario(Usuario u, Context context) {
@@ -147,5 +150,20 @@ public abstract class Util {
 		SharedPreferences.Editor editar = prefs.edit();
 		editar.putString("intervalo", intervalo);
 		editar.commit();		
+	}
+
+
+    public static void guardarEstadoCapaGrupoFamiliar(Boolean b) {
+		SharedPreferences prefs = AlertTsunamiApplication.getAppContext().getSharedPreferences("Prefs", Context.MODE_PRIVATE);
+		SharedPreferences.Editor editar = prefs.edit();
+		editar.putString("capa_grupo_familiar", b.toString());
+		editar.commit();
+	}
+    
+    public static void guardarEstadoCapaPuntosDeRiesgo(Boolean b) {
+		SharedPreferences prefs = AlertTsunamiApplication.getAppContext().getSharedPreferences("Prefs", Context.MODE_PRIVATE);
+		SharedPreferences.Editor editar = prefs.edit();
+		editar.putString("capa_puntos_de_riesgo", b.toString());
+		editar.commit();
 	}
 }
