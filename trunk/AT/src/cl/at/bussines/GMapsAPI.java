@@ -281,7 +281,7 @@ public class GMapsAPI {
 
 	public void dibujarPunto(Punto puntoSeguro, Float punto) {
 		try {
-			Drawable drawable = mapView.getContext().getResources().getDrawable(R.drawable.ic_launcher);
+			Drawable drawable = mapView.getContext().getResources().getDrawable(R.drawable.zona_segura);
 			MarkItemizedOverlay itemizedoverlay = new MarkItemizedOverlay(drawable, mapView.getContext());
 			itemizedoverlay.addPuntoSeguro(puntoSeguro, punto);
 			itemizedoverlay.grabar();
