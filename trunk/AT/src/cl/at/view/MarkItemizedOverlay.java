@@ -44,7 +44,7 @@ public class MarkItemizedOverlay extends ItemizedOverlay<OverlayItem>{
 	
 	public void addPuntoEncuentro(PuntoEncuentro puntoEncuentro){
 		GeoPoint posicion = new GeoPoint((int)(puntoEncuentro.getCoordenada().getLatitud()*1E6), (int)(puntoEncuentro.getCoordenada().getLongitud()*1E6));
-		OverlayItem overlayItem = new OverlayItem(posicion, "Punto de encuentro", "distancia: "+puntoEncuentro.getReferencia());
+		OverlayItem overlayItem = new OverlayItem(posicion, "Punto de encuentro",puntoEncuentro.getReferencia());
 		addOverlay(overlayItem);
 	}
 

@@ -96,7 +96,6 @@ public class DispositivoSQL {
 		params.add(new BasicNameValuePair("regId", dispositivo.getRegGCM()));
 		JSONArray jdata = post.getServerData(params, ConexionHttp.URL_CONNECT + "registrarGCM.php");
 		try {
-//			JSONObject jsonData = jdata.getJSONObject(0);
 			Log.d(TAG, "Registro WS: OK.");
 		} catch (Exception e) {
 			Log.e(TAG, "Registro WS: NOK. " + e.getCause() + " || " + e.getMessage());

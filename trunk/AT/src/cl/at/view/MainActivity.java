@@ -334,8 +334,8 @@ public class MainActivity extends MapActivity {
 
 	@Override
 	protected void onDestroy() {
-		if(!conservar)
-			Process.killProcess(Process.myPid());
+//		if(!conservar)
+//			Process.killProcess(Process.myPid());
 		Log.d(TAG, "onDestroy, y murio...");
 		super.onDestroy();
 	}
@@ -437,6 +437,7 @@ public class MainActivity extends MapActivity {
 		}
 
 		protected void onPostExecute(String s) {
+			desuscribirDispositivo();
 			Util.reiniciarPreferencias(context);
 			Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
 			pDialog.dismiss();

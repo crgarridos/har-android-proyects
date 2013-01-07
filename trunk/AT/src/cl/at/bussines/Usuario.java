@@ -58,8 +58,6 @@ public class Usuario {
 		this.email = email;
 		this.password = password;
 		dispositivo = new Dispositivo(this);
-//			comentarios = new ArrayList<Comentario>();
-//			invitaciones = new ArrayList<Invitacion>();
 	}
 
 	protected Usuario(Usuario usuario){
@@ -207,6 +205,10 @@ public class Usuario {
 					grupoFamiliar = null;
 		}
  		return grupoFamiliar;
+	}
+	
+	public Boolean tieneFamilia(){
+		return (grupoFamiliar != null);
 	}
 
 	public Boolean setGrupoFamiliar(GrupoFamiliar grupoFamiliar) {

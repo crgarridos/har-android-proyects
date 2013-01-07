@@ -30,6 +30,7 @@ public class GMapsAPI {
 	private transient MapController mapController;
 	private transient List<Overlay> mapOverlays;
 	private RouteSegmentOverlay route;
+	private Boolean firtTime = false;
 
 	public GMapsAPI(MapView m, Coordenada centro, float zoom) {
 		this.mapView = m;
@@ -83,8 +84,6 @@ public class GMapsAPI {
 		ld.setLatitude(destino.getLatitud());
 		ld.setLongitude(destino.getLongitud());
 		Log.e(TAG, " " + l.distanceTo(ld));
-		// if (l.distanceTo(ld) <= 50000)
-		// return true;
 		return l.distanceTo(ld);
 	}
 
@@ -106,13 +105,12 @@ public class GMapsAPI {
 		CiudadSQL cSQL = new CiudadSQL();
 		cSQL.cargarCiudad(ciudad, nombreCiudad);
 		ciudad.setAreaInundacion(new PuntoSQL().cargarAreaInundacion(ciudad));
-		dibujarPolilinea(ciudad.getAreaInundacion());
+		firtTime = true;
 		GrupoFamiliar grupoFamiliar = ciudad.getDispositivo().getUsuario().getGrupoFamiliar();
 		if (grupoFamiliar != null) {
 			ciudad.setPuntoEncuentro(grupoFamiliar.getPuntoEncuentro());
 			dibujarPunto(ciudad.getPuntoEncuentro());
 		}
-		this.mapView.postInvalidate();
 	}
 
 	public void desplegarMapa(Coordenada coordenada) {
@@ -314,7 +312,7 @@ public class GMapsAPI {
 		Coordenada origen = ciudad.getDispositivo().getPosicion();
 		ArrayList<Coordenada> polilinea = ciudad.getAreaInundacion();
 		Float distancia = null;
-		Float distanciaPunto = 50000f;
+		Float distanciaPunto = Float.MAX_VALUE;
 		Coordenada punto1 = null;
 		Coordenada punto2 = null;
 		Coordenada punto3 = null;
@@ -390,5 +388,9 @@ public class GMapsAPI {
 
 	private static Double productoPunto(Coordenada a, Coordenada b) {
 		return a.getLongitud() * b.getLongitud() + a.getLatitud() * b.getLatitud();
+	}
+	
+	public Boolean getFirstTime(){
+		return this.firtTime;
 	}
 }

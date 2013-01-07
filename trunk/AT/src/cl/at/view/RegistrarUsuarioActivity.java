@@ -118,7 +118,7 @@ public class RegistrarUsuarioActivity extends Activity {
 				Comunicador.getInstancia().setUsuario(u);
 				startActivity(new Intent("at.MAPA"));
 				Util.guardarUsuario(u, getApplicationContext());
-				Util.guardarUsuario(u, getApplicationContext());
+				Util.guardar(u.getDispositivo());
 				setResult(Activity.RESULT_OK);
 				finish();
 			}
