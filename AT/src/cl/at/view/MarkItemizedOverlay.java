@@ -38,7 +38,7 @@ public class MarkItemizedOverlay extends ItemizedOverlay<OverlayItem>{
 	
 	public void addIntegrante(Usuario usuario){
 		GeoPoint posicion = new GeoPoint((int)(usuario.getDispositivo().getPosicion().getLatitud()*1E6), (int)(usuario.getDispositivo().getPosicion().getLongitud()*1E6));
-		OverlayItem overlayItem = new OverlayItem(posicion, usuario.getNombreUsuario(), "Posicion: "+usuario.getDispositivo().getPosicion().getLatitud()+" / "+usuario.getDispositivo().getPosicion().getLongitud());
+		OverlayItem overlayItem = new OverlayItem(posicion, usuario.getNombreUsuario(), "nombre: "+usuario.getNombreCompleto());
 		addOverlay(overlayItem);
 	}
 	
@@ -85,7 +85,7 @@ public class MarkItemizedOverlay extends ItemizedOverlay<OverlayItem>{
 	
 	public void addPuntoSeguro(Punto puntoSeguro, Float punto) {
 		GeoPoint posicion = new GeoPoint((int)(puntoSeguro.getCoordenada().getLatitud()*1E6), (int)(puntoSeguro.getCoordenada().getLongitud()*1E6));
-		OverlayItem overlayItem = new OverlayItem(posicion, ""+punto.toString(), ""+punto.toString());
+		OverlayItem overlayItem = new OverlayItem(posicion, "Dirigete a este punto", "distancia: "+punto.intValue()+" m");
 		addOverlay(overlayItem);
 	}
 	

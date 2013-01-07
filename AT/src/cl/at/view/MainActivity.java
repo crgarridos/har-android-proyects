@@ -387,7 +387,7 @@ public class MainActivity extends MapActivity {
 		if(gf == null)
 			startActivityForResult(new Intent("at.CREAR_GRUPO_FAMILIAR"), 999);
 		else
-			abandonarGrupo("Para crear un grupo familiar nuevo, primero debe abandonar su grupo familiar actual");
+			abandonarGrupo("Para crear un grupo familiar nuevo, primero debe abandonar su grupo familiar actual. ¿Desea abandonarlo?");
 	}
 
 	private boolean estadoGPS() {
