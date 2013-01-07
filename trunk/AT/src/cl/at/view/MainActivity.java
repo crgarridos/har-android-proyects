@@ -45,6 +45,7 @@ public class MainActivity extends MapActivity {
 	private EditText editText;
 	private Context context;
 	private Comunicador com;
+	private AlertDialog dialogGPS;
 	private boolean traerUsuario = false;
 
 	private Ciudad ciudad;
@@ -94,14 +95,10 @@ public class MainActivity extends MapActivity {
 		}
 
 		mapView = (MapView) findViewById(R.id.mapview);
-
-		if (!estadoGPS()) {
-			validarGPS();
-		} else
-			comenzar();
+		dialogGPS = validarGPS();
 	}
 
-	private void validarGPS() {
+	private AlertDialog validarGPS() {
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
 		alert.setTitle("GPS desactivado");
 		String mensaje = "Hemos detectado que el GPS se encuentra actualmente desactivado.\n" + "La aplicacion necesita de el para ejecutarse correctamente.\n"
@@ -119,9 +116,7 @@ public class MainActivity extends MapActivity {
 			}
 		});
 		alert.setCancelable(false);
-		final AlertDialog dialog = alert.create();
-		dialog.show();
-
+		return alert.create();
 	}
 
 	private void comenzar() {
@@ -317,6 +312,13 @@ public class MainActivity extends MapActivity {
 		super.onResume();
 		// Toast.makeText(getApplicationContext(), "onResume",
 		// Toast.LENGTH_SHORT).show();
+		if (!estadoGPS()) {
+			dialogGPS.show();
+		} else{
+			if(dialogGPS.isShowing())
+				dialogGPS.cancel();
+			comenzar();
+		}
 		if (ciudad != null) {
 			mOverlayLocation.enableMyLocation();
 			ciudad.mostrarCapas();
@@ -325,7 +327,8 @@ public class MainActivity extends MapActivity {
 
 	@Override
 	protected void onPause() {
-		mOverlayLocation.disableMyLocation();
+		if(mOverlayLocation!=null)
+			mOverlayLocation.disableMyLocation();
 		super.onPause();
 	}
 
@@ -394,20 +397,15 @@ public class MainActivity extends MapActivity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		if (requestCode == 777 && resultCode == Activity.RESULT_CANCELED) {
-			if (!estadoGPS()) {
-				validarGPS();
-			} else
-				comenzar();
-		} else if (requestCode == 999 && resultCode == Activity.RESULT_OK) {
+		if (requestCode == 999 && resultCode == Activity.RESULT_OK) {
 			this.recargar();
 		}
 	}
 
 	private void recargar() {
-		startActivity(new Intent(MainActivity.this,MainActivity.class));
 		conservar = true;
 		finish();
+		startActivity(new Intent(MainActivity.this,MainActivity.class));
 	}
 	
 	private void salir() {
@@ -459,7 +457,7 @@ public class MainActivity extends MapActivity {
 			pDialog.show();
 		}
 
-		protected Boolean doInBackground(String... params) {
+		protected Boolean doInBackground(String... params){
 			if (traerUsuario) {
 				usuario = new Usuario((String) Util.getPreferencia("usuario"));
 				if (!usuario.getExisteUsuario() || usuario.getPassword() == null

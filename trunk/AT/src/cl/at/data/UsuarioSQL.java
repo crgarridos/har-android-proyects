@@ -36,14 +36,13 @@ public class UsuarioSQL {
 			JSONArray jdata = null;
 			jdata = post.getServerData(postParametersToSend, ConexionHttp.URL_CONNECT + "getPersona.php");
 			if (jdata != null) {
-				JSONObject json_data = jdata.getJSONObject(0); // Se lee la
-																// respuesta
+				JSONObject json_data = jdata.getJSONObject(0);
 				try {
 					u.setNombreCompleto(u.getNombreCompleto() == null ? json_data.getString(CAMPO_NOMBRE_COMPLETO) : u.getNombreCompleto());
 					u.setEmail(u.getEmail() == null ? json_data.getString(CAMPO_EMAIL) : u.getEmail());
 					if (!u.getExterno())
 						u.setPassword(u.getPassword() == null ? json_data.getString(CAMPO_PASS) : u.getPassword());
-					u.esLider(json_data.getInt(CAMPO_ES_LIDER));
+					u.esLider(json_data.getInt(CAMPO_ES_LIDER) == 1);
 					return true;
 				} catch (Exception e) {
 					Log.e(TAG, "cargarUsuario, " + e.toString());

@@ -202,7 +202,7 @@ public class Ciudad {
 				if (grupoFamiliar != null) {
 					puntoEncuentro = grupoFamiliar.getPuntoEncuentro();
 					integrantes = grupoFamiliar.obtenerIntegrantes();
-					if (gMapsAPI.compararPunto(dispositivo.getPosicion(), puntoEncuentro.getCoordenada()) < 50) {
+					if (GMapsAPI.compararPunto(dispositivo.getPosicion(), puntoEncuentro.getCoordenada()) < 50) {
 						int intentos = 0;
 						while (!dispositivo.getUsuario().setEstadoLlegada(true) && intentos++ < 5);
 					}

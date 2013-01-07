@@ -32,7 +32,7 @@ public class Usuario {
 	public Usuario(String nombre){
 		this(nombre,null);
 	}
-	
+
 	public Usuario(String nombre, int num) {
 		this.nombreUsuario = nombre;
 		UsuarioSQL uSQL = new UsuarioSQL();
@@ -187,8 +187,8 @@ public class Usuario {
 			throw new Exception("Error");
 	}
 
-	public void esLider(int esLider) {
-		this.esLider = (esLider == 1);
+	public void esLider(boolean esLider) {
+		this.esLider = esLider;
 	}
 
 
