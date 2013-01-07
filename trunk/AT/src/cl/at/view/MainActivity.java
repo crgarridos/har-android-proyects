@@ -169,7 +169,6 @@ public class MainActivity extends MapActivity {
 		smnu2.add(Menu.NONE, SMNU_OPC21, Menu.NONE, "Ingresar punto de riesgo");
 		smnu2.add(Menu.NONE, SMNU_OPC22, Menu.NONE, "Actualizar datos");
 		smnu2.add(Menu.NONE, SMNU_OPC23, Menu.NONE, "Ver invitaciones");
-		if (gf == null)
 		smnu2.add(Menu.NONE, SMNU_OPC25, Menu.NONE, "Eliminar cuenta");
 		smnu2.add(Menu.NONE, SMNU_OPC26, Menu.NONE, "Cerrar sesion");
 
@@ -183,8 +182,8 @@ public class MainActivity extends MapActivity {
 			smnu3.add(Menu.NONE, SMNU_OPC35, Menu.NONE, "Abandonar grupo");
 		}
 
-		SubMenu smnu4 = menu.addSubMenu(Menu.NONE, MNU_OPC4, Menu.NONE, "Ajustes").setIcon(R.drawable.ajustes);
-		smnu4.add(Menu.NONE, SMNU_OPC41, Menu.NONE, "Configurar geolocalizacion");
+		SubMenu smnu4 = menu.addSubMenu(Menu.NONE, MNU_OPC4, Menu.NONE, "Configuracion").setIcon(R.drawable.ajustes);
+		smnu4.add(Menu.NONE, SMNU_OPC41, Menu.NONE, "Cambiar intervalo de actualizacion");
 		smnu4.add(Menu.NONE, SMNU_OPC42, Menu.NONE, "Actualizar posicion");
 		return true;
 	}
@@ -234,7 +233,7 @@ public class MainActivity extends MapActivity {
 			mostrarComentarios();
 			return true;
 		case 35:
-			abandonarGrupo();
+			abandonarGrupo("Esta seguro que desea abandonar su grupo familiar?");
 			return true;
 		case 41:
 			configGeolocalizacion();
@@ -247,10 +246,10 @@ public class MainActivity extends MapActivity {
 		}
 	}
 
-	private void abandonarGrupo() {
+	private void abandonarGrupo(String s) {
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
 		alert.setTitle("Abandonar grupo familiar");
-		alert.setMessage("Esta seguro que desea abandonar su grupo familiar?");
+		alert.setMessage(s);
 		alert.setPositiveButton("Si", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
 				new AsyncAbandonar().execute();
@@ -369,7 +368,11 @@ public class MainActivity extends MapActivity {
 		alert.setMessage("Estas seguro que desea eliminar su cuenta?");
 		alert.setPositiveButton("Si", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
-				new AsyncDelete().execute();
+				if(gf == null)
+					new AsyncDelete().execute();
+				else 
+					abandonarGrupo("Para eliminar su cuenta, antes debe abandonar su grupo familiar");
+					
 			}
 		});
 		alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -381,7 +384,10 @@ public class MainActivity extends MapActivity {
 	}
 
 	public void validarGrupoFamiliar() {
-		startActivityForResult(new Intent("at.CREAR_GRUPO_FAMILIAR"), 999);
+		if(gf == null)
+			startActivityForResult(new Intent("at.CREAR_GRUPO_FAMILIAR"), 999);
+		else
+			abandonarGrupo("Para crear un grupo familiar nuevo, primero debe abandonar su grupo familiar actual");
 	}
 
 	private boolean estadoGPS() {

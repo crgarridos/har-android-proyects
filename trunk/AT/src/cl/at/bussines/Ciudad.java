@@ -190,7 +190,7 @@ public class Ciudad {
 		protected void onPreExecute() {
 			// gMapsAPI.invalidate();
 			puntoSeguridad = new Punto(gMapsAPI.getCoordenadaMasCercana(Ciudad.this));
-			Toast.makeText(AlertTsunamiApplication.getAppContext(), "Actualizando...", Toast.LENGTH_SHORT).show();
+//			Toast.makeText(AlertTsunamiApplication.getAppContext(), "Actualizando...", Toast.LENGTH_SHORT).show();
 		}
 
 		@Override
