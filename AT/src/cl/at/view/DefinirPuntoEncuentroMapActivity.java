@@ -176,16 +176,12 @@ public class DefinirPuntoEncuentroMapActivity extends MapActivity {
 		}
 
 		protected void onPostExecute(String s) {
+			setResult(Activity.RESULT_OK);
 			Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
-			if (salir){
-				setResult(Activity.RESULT_OK);
-				finish();
-			}
-			if (exito) {
+			if (exito)
 				startActivityForResult(new Intent("at.INVITAR_FAMILIAR"), 777);
-//				finish();
-			}
-			pDialog.dismiss();// ocultamos progess dialog.
+			pDialog.dismiss();
+			finish();
 		}
 	}
 

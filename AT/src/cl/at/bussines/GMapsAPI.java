@@ -75,7 +75,7 @@ public class GMapsAPI {
 
 	}
 
-	public Float compararPunto(Coordenada origen, Coordenada destino) {
+	public static Float compararPunto(Coordenada origen, Coordenada destino) {
 		Location l = new Location("mi punto");
 		l.setLatitude(origen.getLatitud());
 		l.setLongitude(origen.getLongitud());

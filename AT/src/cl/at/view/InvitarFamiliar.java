@@ -52,6 +52,7 @@ public class InvitarFamiliar extends Activity {
 		btnSalir.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				setResult(RESULT_OK);
 				finish();
 			}
 		});
@@ -174,8 +175,10 @@ public class InvitarFamiliar extends Activity {
 		protected void onPostExecute(String s) {
 			Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
 			pDialog.dismiss();
-			if (exito)
+			if (exito){
+				setResult(RESULT_OK);
 				finish();
+			}
 		}
 	}
 

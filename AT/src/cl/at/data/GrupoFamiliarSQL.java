@@ -55,8 +55,7 @@ public class GrupoFamiliarSQL {
 			JSONArray jdata = null;
 			jdata = post.getServerData(postParametersToSend, ConexionHttp.URL_CONNECT + "ingresarGrupoFamiliar.php");
 			if (jdata != null) {
-				JSONObject json_data = jdata.getJSONObject(0);
-				grupoFamiliar.setId(json_data.getInt(CAMPO_ID));
+				grupoFamiliar.setId(jdata.getJSONObject(0).getInt(CAMPO_ID));
 				return true;
 			}
 		} catch (Exception e) {
