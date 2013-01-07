@@ -212,9 +212,10 @@ public class Ciudad {
 					getDispositivo().setEstadoDeRiesgo(false);
 					Log.i(TAG, "usuario seguro...");
 				}
-				else
+				else{
 					getDispositivo().setEstadoDeRiesgo(true);
 					Log.i(TAG, "usuario inseguro...");
+				}
 			} catch (Exception e) {
 				Log.e(TAG, "Error en dibujando " + e);
 			}
@@ -237,16 +238,20 @@ public class Ciudad {
 	
 	public void mostrarCapas(Integer capa) {
 		try {
+			if(gMapsAPI.getFirstTime())
+				gMapsAPI.dibujarPolilinea(getAreaInundacion());
 			if (capa == CAPA_GRUPO_FAMILIAR)
 				capaGrupoFamiliarVisible = !capaGrupoFamiliarVisible;
 			if (capa == CAPA_PUNTO_RIESGO)
 				capaPuntoRiesgoVisible = !capaPuntoRiesgoVisible;
-			GrupoFamiliar grupoFamiliar = dispositivo.getUsuario().getGrupoFamiliar();
+			GrupoFamiliar grupoFamiliar = null;
+			if(dispositivo.getUsuario().tieneFamilia())
+				grupoFamiliar = dispositivo.getUsuario().getGrupoFamiliar();
 			gMapsAPI.borrarPuntos(Ciudad.this);
 			if (capaPuntoRiesgoVisible)
 				gMapsAPI.dibujarPunto(puntosRiesgo);
 			if(dispositivo.estaEnRiesgo())
-				gMapsAPI.dibujarPunto(new Punto(puntoSeguridad.getCoordenada()), gMapsAPI.compararPunto(dispositivo.getPosicion(),puntoSeguridad.getCoordenada()));
+				gMapsAPI.dibujarPunto(new Punto(puntoSeguridad.getCoordenada()), GMapsAPI.compararPunto(dispositivo.getPosicion(),puntoSeguridad.getCoordenada()));
 			if (grupoFamiliar != null) {
 				if (capaGrupoFamiliarVisible)
 					gMapsAPI.dibujarPunto(grupoFamiliar.getIntegrantes(), dispositivo.getUsuario());

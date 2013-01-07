@@ -21,7 +21,6 @@ import cl.at.util.Comunicador;
 import cl.at.util.Util;
 import cl.at.view.R;
 
-
 public class Dispositivo {
 
 	private static final String TAG = Dispositivo.class.getName();
@@ -39,23 +38,32 @@ public class Dispositivo {
 	public Dispositivo(Usuario usuario) {
 		DispositivoSQL dSQL = new DispositivoSQL();
 		this.context = AlertTsunamiApplication.getAppContext();
-		setUsuario(usuario);
-		if(!usuario.esExterno()){
+		this.setUsuario(usuario);
+		if (!usuario.esExterno()) {
+			this.id = Integer.parseInt(Util.getPreferencia("dispositivo")!=null?Util.getPreferencia("dispositivo"):"-1");
 			this.intervalo = Util.getPreferencia("intervalo") != null ? Integer.parseInt(Util.getPreferencia("intervalo")) : 15000;
-			this.locManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
+			this.locManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 			this.location = this.locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-			if(this.location!=null){
-				setPosicion(new Coordenada(location.getLatitude(), location.getLongitude()));
-				dSQL.persistir(this);
-				Util.guardar(this);
-			}
-			else dSQL.cargarDispositivo(this);
-		}
-		else dSQL.cargarDispositivo(this);
+			this.determinarPosicion();
+			
+		} else
+			dSQL.cargarDispositivo(this);
+	}
+
+	private void determinarPosicion() {
+		DispositivoSQL dSQL = new DispositivoSQL();
+		if (this.location != null) {
+			setPosicion(new Coordenada(location.getLatitude(), location.getLongitude()));
+			dSQL.persistir(this);
+		} else if(getOverlayPosition()!=null){
+			setPosicion(new Coordenada(getOverlayPosition().getLatitudeE6()/1E6, getOverlayPosition().getLongitudeE6()/1E6));
+			dSQL.persistir(this);
+		} else if(dSQL.cargarDispositivo(this));
+		else setPosicion(new Coordenada(-20.2525, -70.1415));
 	}
 
 	public Dispositivo() {
-		
+
 	}
 
 	public Integer getId() {
@@ -81,7 +89,7 @@ public class Dispositivo {
 	public Coordenada getPosicion() {
 		return posicion;
 	}
-	
+
 	public void setPosicion(Coordenada posicion) {
 		this.posicion = posicion;
 	}
@@ -105,17 +113,17 @@ public class Dispositivo {
 	public void actualizarPosicion() {
 		DispositivoSQL dSQL = new DispositivoSQL();
 		this.location = this.locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-		if(this.location!=null)
+		if (this.location != null)
 			setPosicion(new Coordenada(this.location.getLatitude(), this.location.getLongitude()));
-		else if(getOverlayPosition() != null) {
+		else if (getOverlayPosition() != null) {
 			GeoPoint posicion = getOverlayPosition();
-			setPosicion(new Coordenada((double)(posicion.getLatitudeE6() /1E6), (double)(posicion.getLongitudeE6() /1E6)));
-		}
-		else dSQL.getUltimaPosicion(this);
+			setPosicion(new Coordenada((double) (posicion.getLatitudeE6() / 1E6), (double) (posicion.getLongitudeE6() / 1E6)));
+		} else
+			dSQL.getUltimaPosicion(this);
 		dSQL.actualizarPosicion(this);
 		if (estaEnRiesgo()) {
 			// TODO comprobar estado de dispositivoa
-			
+
 		}
 	}
 
@@ -125,19 +133,15 @@ public class Dispositivo {
 
 	public Boolean estaEnRiesgo() {
 		return estadoDeRiesgo;
-		// podria tener un setter para que la ciudad lo haga cambiar de estado,
-		// asi evitarnos la relacion.
-		// creo que para eso estaba :S, la relacion...
-		// if(this.posicion == this.ciudad.getPuntoSeguridad().coordenada){
-		// return true;
-		// }
-		// else
-		// return false;
 	}
 
 	public void inicializar(LocationListener locListener) {
-		if(!suscrito){
-			this.locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 15000/*this.intervalo*/, 0, locListener);
+		if (!suscrito) {
+			this.locManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 15000/*
+																					 * this
+																					 * .
+																					 * intervalo
+																					 */, 0, locListener);
 			suscrito = true;
 		}
 	}
@@ -178,12 +182,12 @@ public class Dispositivo {
 	}
 
 	public void setEstadoDeRiesgo(Boolean estadoRiesgo) {
-		if(this.estadoDeRiesgo && !estadoRiesgo) {
-			Comentario comentario = new Comentario(this.usuario.getNombreUsuario()+" se encuentra en zona de seguridad", this.usuario);
-			try{
+		if (this.estadoDeRiesgo && !estadoRiesgo) {
+			Comentario comentario = new Comentario(this.usuario.getNombreUsuario() + " se encuentra en zona de seguridad", this.usuario);
+			try {
 				comentario.persistir();
-			}catch(Exception e){
-				Log.e(TAG, "setEstadoDeRiesgo, "+e.toString());
+			} catch (Exception e) {
+				Log.e(TAG, "setEstadoDeRiesgo, " + e.toString());
 			}
 		}
 		this.estadoDeRiesgo = estadoRiesgo;

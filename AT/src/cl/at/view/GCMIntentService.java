@@ -87,6 +87,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 	@Override
 	protected void onUnregistered(Context context, String regId) {
 		Log.d("GCMTest", "REGISTRATION: Desregistrado OK.");
+		dispositivo = com.getDispositivo();
 		new AsyncRegister().execute("");
 	}
 

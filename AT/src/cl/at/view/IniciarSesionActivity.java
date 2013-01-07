@@ -68,6 +68,7 @@ public class IniciarSesionActivity extends Activity {
 				Intent intent = new Intent("at.MAPA");
 				startActivity(intent);
 				Util.guardarUsuario(u, getApplicationContext());
+				Util.guardar(u.getDispositivo());
 				setResult(Activity.RESULT_OK);
 				finish();
 			} else {
