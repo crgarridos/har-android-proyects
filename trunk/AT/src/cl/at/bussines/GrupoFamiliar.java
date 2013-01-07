@@ -94,6 +94,10 @@ public class GrupoFamiliar {
 			puntoEncuentro = new PuntoEncuentroSQL().cargarPtoEncuentro(this);
 		return puntoEncuentro;
 	}
+	
+	public PuntoEncuentro getPuntoDeEncuentro() {
+		return puntoEncuentro;
+}
 
 	public Boolean addIntegrante(Usuario usuario) {
 		this.integrantes.add(usuario);
