@@ -49,12 +49,14 @@ public class GrupoFamiliarSQL {
 			Parametros postParametersToSend = new Parametros();
 			postParametersToSend.add("nombreGrupo", grupoFamiliar.getNombre());
 			postParametersToSend.add("nombreUsuarioLider", grupoFamiliar.getLider().getNombreUsuario());
-			postParametersToSend.add("latitudPuntoEncuentro",grupoFamiliar.getPuntoEncuentro().getCoordenada().getLatitud().toString());
-			postParametersToSend.add("longitudPuntoEncuentro",grupoFamiliar.getPuntoEncuentro().getCoordenada().getLongitud().toString());
-			postParametersToSend.add("comentarioPuntoEncuentro", grupoFamiliar.getPuntoEncuentro().getReferencia());
+			postParametersToSend.add("latitudPuntoEncuentro",grupoFamiliar.getPuntoDeEncuentro().getCoordenada().getLatitud().toString());
+			postParametersToSend.add("longitudPuntoEncuentro",grupoFamiliar.getPuntoDeEncuentro().getCoordenada().getLongitud().toString());
+			postParametersToSend.add("comentarioPuntoEncuentro", grupoFamiliar.getPuntoDeEncuentro().getReferencia());
 			JSONArray jdata = null;
 			jdata = post.getServerData(postParametersToSend, ConexionHttp.URL_CONNECT + "ingresarGrupoFamiliar.php");
 			if (jdata != null) {
+				JSONObject json_data = jdata.getJSONObject(0);
+				grupoFamiliar.setId(json_data.getInt(CAMPO_ID));
 				return true;
 			}
 		} catch (Exception e) {
