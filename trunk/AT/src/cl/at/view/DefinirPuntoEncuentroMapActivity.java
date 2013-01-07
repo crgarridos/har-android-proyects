@@ -156,13 +156,15 @@ public class DefinirPuntoEncuentroMapActivity extends MapActivity {
 						grupoFamiliar.setPuntoEncuentro(puntoEncuentro);
 						grupoFamiliar.persistir();
 						com.getUsuario().setGrupoFamiliar(grupoFamiliar);
+						ciudad.setPuntoEncuentro(puntoEncuentro);
 						exito = true;
 						return "Grupo familiar creado exitosamente";
-					} else
+					} else{
+						grupoFamiliar.setPuntoEncuentro(puntoEncuentro);
 						puntoEncuentro.setGrupoFamiliar(grupoFamiliar);
+						puntoEncuentro.persistir();
+					}
 					ciudad.setPuntoEncuentro(puntoEncuentro);
-					grupoFamiliar.setPuntoEncuentro(puntoEncuentro);
-					puntoEncuentro.persistir();
 					salir = true;
 					return "Punto de encuentro definido exitosamente";
 				} else
@@ -175,12 +177,13 @@ public class DefinirPuntoEncuentroMapActivity extends MapActivity {
 
 		protected void onPostExecute(String s) {
 			Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
-			if (salir)
-				finish();
-			if (exito) {
-				startActivityForResult(new Intent("at.INVITAR_FAMILIAR"), 777);
+			if (salir){
 				setResult(Activity.RESULT_OK);
 				finish();
+			}
+			if (exito) {
+				startActivityForResult(new Intent("at.INVITAR_FAMILIAR"), 777);
+//				finish();
 			}
 			pDialog.dismiss();// ocultamos progess dialog.
 		}
