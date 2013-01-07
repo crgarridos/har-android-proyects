@@ -96,7 +96,7 @@ public class DefinirPuntoEncuentroMapActivity extends MapActivity {
 		alert.setMessage("Ingrese una descripcion del punto de encuentro familiar");
 		alert.setView(viewComentario);
 		editTextComentario = (EditText) viewComentario.findViewById(R.id.ingresar_comentario);
-		
+
 		alert.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
 				new definirPuntoEncuentroAsync().execute();
@@ -147,11 +147,12 @@ public class DefinirPuntoEncuentroMapActivity extends MapActivity {
 					grupoFamiliar = new GrupoFamiliar(nombreGrupo, null, lider);
 					existe = false;
 				}
-				//TODO definirPuntoEncuentro(); bugeao :B se hace todo afuera parece, bastaria con eliminarlo
+				// TODO definirPuntoEncuentro(); bugeao :B se hace todo afuera
+				// parece, bastaria con eliminarlo
 				Log.d("dispositivo", "" + ciudad.getDispositivo());
 				PuntoEncuentro puntoEncuentro = ciudad.ingresar(editTextComentario.getText().toString(), coordenada);
 				if (puntoEncuentro != null) {
-					if (!existe){
+					if (!existe) {
 						puntoEncuentro.setGrupoFamiliar(grupoFamiliar);
 						grupoFamiliar.setPuntoEncuentro(puntoEncuentro);
 						grupoFamiliar.persistir();
@@ -159,7 +160,7 @@ public class DefinirPuntoEncuentroMapActivity extends MapActivity {
 						ciudad.setPuntoEncuentro(puntoEncuentro);
 						exito = true;
 						return "Grupo familiar creado exitosamente";
-					} else{
+					} else {
 						grupoFamiliar.setPuntoEncuentro(puntoEncuentro);
 						puntoEncuentro.setGrupoFamiliar(grupoFamiliar);
 						puntoEncuentro.persistir();

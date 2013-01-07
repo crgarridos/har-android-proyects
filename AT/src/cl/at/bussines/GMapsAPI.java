@@ -107,9 +107,10 @@ public class GMapsAPI {
 		ciudad.setAreaInundacion(new PuntoSQL().cargarAreaInundacion(ciudad));
 		firtTime = true;
 		GrupoFamiliar grupoFamiliar = ciudad.getDispositivo().getUsuario().getGrupoFamiliar();
+		
 		if (grupoFamiliar != null) {
 			ciudad.setPuntoEncuentro(grupoFamiliar.getPuntoEncuentro());
-			dibujarPunto(ciudad.getPuntoEncuentro());
+//			dibujarPunto(ciudad.getPuntoEncuentro());
 		}
 	}
 
@@ -280,7 +281,7 @@ public class GMapsAPI {
 
 	public void dibujarPunto(Punto puntoSeguro, Float punto) {
 		try {
-			Drawable drawable = mapView.getContext().getResources().getDrawable(R.drawable.punto_seguro);
+			Drawable drawable = mapView.getContext().getResources().getDrawable(R.drawable.ic_launcher);
 			MarkItemizedOverlay itemizedoverlay = new MarkItemizedOverlay(drawable, mapView.getContext());
 			itemizedoverlay.addPuntoSeguro(puntoSeguro, punto);
 			itemizedoverlay.grabar();
