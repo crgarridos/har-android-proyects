@@ -1,0 +1,169 @@
+body{
+    padding: 0;
+    border: 0;
+    margin: 0;
+    text-align: center;
+    background-color: rgb(252,252,252);
+    font-family: 'Carrois Gothic SC', sans-serif;
+}
+
+.boton,.boton-form{
+    display: inline-block;
+    text-decoration: none;
+    color: black;
+    box-shadow: inset 0 0 2em #888888;
+    border-radius: 5%;   
+    text-align: center;
+    background: aliceblue;
+    background-size: 100% 100%;
+}
+
+.boton-form{
+    height: 48px;
+    /*width: 120px;*/
+}
+.boton-form img{
+    margin-top: 6px;
+    width: 32px;
+    height: 32px;
+    vertical-align: bottom  
+}
+.boton-form {
+    text-decoration: none;
+    cursor: pointer;
+    display: inline-block;
+    background-color: #FAFAFA;
+    background-image: -webkit-gradient(linear,0 0,0 100%,from(#FAFAFA),color-stop(25%,#FAFAFA),to(#E6E6E6));
+    background-image: -webkit-linear-gradient(#FAFAFA,#FAFAFA 25%,#E6E6E6);
+    background-image: -moz-linear-gradient(top,#FAFAFA,#FAFAFA 25%,#E6E6E6);
+    background-image: -ms-linear-gradient(#FAFAFA,#FAFAFA 25%,#E6E6E6);
+    background-image: -o-linear-gradient(#FAFAFA,#FAFAFA 25%,#E6E6E6);
+    background-image: linear-gradient(#FAFAFA,#FAFAFA 25%,#E6E6E6);
+    padding: 5px 14px 7px;
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+    color: #333;
+    font-size: 13px;
+    line-height: normal;
+    border: 1px solid #CCC;
+    border-bottom-color: #BBB;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2),0 1px 2px rgba(0, 0, 0, 0.05);
+    -moz-box-shadow: inset 0 1px 0 rgba(255,255,255,0.2),0 1px 2px rgba(0,0,0,0.05);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2),0 1px 2px rgba(0, 0, 0, 0.05);
+    -webkit-transition: .1s linear background-position;
+    -moz-transition: .1s linear background-position;
+    -ms-transition: .1s linear background-position;
+    -o-transition: .1s linear background-position;
+    transition: .1s linear background-position;
+}
+.boton-form:active{
+    background-image: -webkit-gradient(linear,0 0,0 100%,from(#E6E6E6),color-stop(25%,#E6E6E6),to(#FAFAFA));
+    background-image: -webkit-linear-gradient(#E6E6E6,#E6E6E6 25%,#FAFAFA);
+    background-image: -moz-linear-gradient(top,#E6E6E6,#E6E6E6 25%,#FAFAFA);
+    background-image: -ms-linear-gradient(#E6E6E6,#E6E6E6 25%,#FAFAFA);
+    background-image: -o-linear-gradient(#E6E6E6,#E6E6E6 25%,#FAFAFA);
+    background-image: linear-gradient(#E6E6E6,#E6E6E6 25%,#FAFAFA);
+}
+.boton-form>*{
+    cursor: pointer;
+}
+
+.mini{
+    width: 75px;
+    height: 75px;
+    font-size: 60%;
+}
+.big{
+    width: 250px;
+    height: 250px;
+}
+
+.agrandar > *{
+    width: 130%;
+    height: 130%;
+}
+
+.boton img{
+    margin-top: 10%;
+    width: 60%;
+    height: 60%;
+}
+.boton span{
+    display: block;
+}
+.boton:hover{
+    background-color:#CEECF5;
+    cursor: pointer;
+    color:coral;
+}
+.botonera{
+    margin: 1% auto;
+}
+
+.linea{
+    width: 100%;
+    background-color: #000;
+    height: 1px;
+}
+
+.like-excel input{
+    border: 0;
+    font-size: 1.5em;
+    /*padding: 5px;*/
+    width: 100%;
+    height: 100%;
+}
+.like-excel{
+    width: 100%; 
+    border-spacing: 0px;
+    border: 1px solid red;
+}
+.like-excel td{
+    padding: 5px;
+    background-color: #fff;
+}
+.like-excel th{
+    text-align: left;
+    font-size: 1.3em;
+    padding: 0;
+    font-weight: 400;
+    background-color:  rgb(94, 153, 206);
+    /*rgb(50, 159, 255);*/
+}
+.like-excel th span{
+    padding: 15px;
+    width: 30%;
+}
+table {
+    border-collapse: collapse;
+    border-style: hidden;
+}
+
+table td, table th {
+    border: 1px solid rgb(234, 243, 242);
+}
+.contenido{
+    padding: 2%;
+    width: 60%;
+    background-color: #f7f7f7;
+        /*rgb(234, 243, 242);*/
+    /*box-shadow: 0 0 10px #0f0f0f;*/
+    border-radius: 10px;
+    margin: 0 auto;
+}
+
+.icon48{
+    width: 48px;
+    height: 48px;
+}
+.icon32{
+    width: 32px;
+    height: 32px;
+}
+
+.checkbox{
+    width: 2.1em;
+    height: 2em;
+}
