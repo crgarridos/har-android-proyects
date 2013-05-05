@@ -3,7 +3,9 @@ body{
     border: 0;
     margin: 0;
     text-align: center;
-    background-color: rgb(252,252,252);
+    background-color: rgb(231, 255, 252);
+        /*rgb(160, 255, 244);*/
+    /*rgb(252,252,252);*/
     font-family: 'Carrois Gothic SC', sans-serif;
 }
 
@@ -11,8 +13,8 @@ body{
     display: inline-block;
     text-decoration: none;
     color: black;
-    box-shadow: inset 0 0 2em #888888;
-    border-radius: 5%;   
+    box-shadow: inset 0 0 2em .5em #888888;
+    border-radius: 15%;   
     text-align: center;
     background: aliceblue;
     background-size: 100% 100%;
@@ -28,6 +30,7 @@ body{
     height: 32px;
     vertical-align: bottom  
 }
+
 .boton-form {
     text-decoration: none;
     cursor: pointer;
@@ -118,13 +121,16 @@ body{
 .like-excel{
     width: 100%; 
     border-spacing: 0px;
-    border: 1px solid red;
+    border-collapse: collapse;
+    border-style: hidden;
 }
 .like-excel td{
     padding: 5px;
     background-color: #fff;
+    border: 1px solid rgb(234, 243, 242);
 }
 .like-excel th{
+    border: 1px solid rgb(234, 243, 242);
     text-align: left;
     font-size: 1.3em;
     padding: 0;
@@ -136,14 +142,7 @@ body{
     padding: 15px;
     width: 30%;
 }
-table {
-    border-collapse: collapse;
-    border-style: hidden;
-}
 
-table td, table th {
-    border: 1px solid rgb(234, 243, 242);
-}
 .contenido{
     padding: 2%;
     width: 60%;
@@ -166,4 +165,39 @@ table td, table th {
 .checkbox{
     width: 2.1em;
     height: 2em;
+}
+
+.header p:first-child > *{
+    display: inline-block;
+}
+
+.header p:first-child{
+    /*height: 40px;*/
+    background-color: rgb(94, 153, 206);
+    box-shadow: 0 5px 15px #ddd;
+    text-align: right;
+    font-style: italic;
+    padding: 20px;
+    margin: 0 auto;
+    font-size: 1.1em;
+}
+
+.header p .fecha{
+    vertical-align: top;
+    margin-top: 10px;
+}
+.header p a.logout{
+font-style: normal;
+margin-right: 57px;
+margin-top: -20px;
+vertical-align: top;
+}
+
+.pila > *{
+    display: block;
+}
+
+
+a > *{
+    cursor: pointer;
 }
