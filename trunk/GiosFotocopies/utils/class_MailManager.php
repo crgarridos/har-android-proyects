@@ -10,6 +10,21 @@ class MailManager {
     
     const HOTMAIL_POP3 = "{pop3.live.com:995/pop3}";
     
+    private static $instance;
+    private $mbox;
+    
+    private function __construct($host, $user, $pass) {
+        $this->mbox = imap_open ($host, $user, $pass);
+    }
+
+    public static function getInstance($host, $user, $pass){
+        if (!(self::$instance instanceof self)) {
+            self::$instance = new self($host, $user, $pass);
+        }
+        return self::$instance;
+    }
+
+
     public static function printStatus($host, $user, $pass) {
         $mbox = imap_open ($host, $user, $pass);//{".$host.":143}INBOX
         $estado = imap_status($mbox,$host, SA_ALL);
@@ -26,11 +41,14 @@ class MailManager {
     }
     
     public static function getTotalUnread($host, $user, $pass) {
-        $mbox = imap_open ($host, $user, $pass);//{".$host.":143}INBOX
-        $estado = imap_status($mbox,$host, SA_UNSEEN);
+        self::getInstance($host, $user, $pass);//{".$host.":143}INBOX
+        $estado = imap_status(self::$instance->getMailBox(),$host, SA_UNSEEN);
         if ($estado) return $estado->unseen;
         else echo "imap_status failed: " . imap_last_error() . "\n";
-        imap_close($mbox);
+    }
+    
+    public function getMailBox(){
+        return $this->mbox;
     }
 }
 

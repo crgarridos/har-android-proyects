@@ -23,7 +23,7 @@ $(document).ready(function() {
 
     setInterval(function() {
         checkMail();
-    }, 30000);
+    }, 5 * 60 * 1000);
     checkMail();
     if ($("#___inicio___").length === 0) {
         $(".header .botonera").show();
@@ -53,7 +53,7 @@ function checkMail() {
                 log("consulta correo exitosa", json);
             }
             catch (ex) {
-                log(ex);
+                log(ex,data);
             }
         },
         error: function(algo) {
