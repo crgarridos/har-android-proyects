@@ -20,6 +20,19 @@ $(document).ready(function() {
     }).attr("src", "images/checkbox.gif");
 
     $(".date").datepicker();
+    $(".deletable").append('<img class="cerrar" src="images/delete-minus.png">');
+    $(".deletable").hover(function() { 
+       $(this).find(".cerrar").css("display","block");
+    });
+    $(".deletable").mouseleave(function() {
+       $(this).find(".cerrar").css("display","none");
+    });
+    $(".deletable").click(function(){
+        $(this).closest(".boton").effect("fold");
+    });
+    $(".header .botonera .boton").hover(function(){$(this).animate({width:'90px',height:'90px'},100)});
+    $(".header .botonera .boton").mouseleave(function(){$(this).animate({width:'80px',height:'80px'},100)});
+
     if ($("#___inicio___").length === 0  && $("#___login___").length === 0) {
         $(".header .botonera").show();
     }
@@ -85,7 +98,7 @@ function login(){
     var pass = $(".login input[type=password]").val();
     $(".login .error").html("");
     $.ajax({
-       url:"../login.php",
+       url:"login.php",
        type: "post",
        dataType: "html",
        data: {
@@ -108,3 +121,4 @@ function login(){
       }
     });
 }
+

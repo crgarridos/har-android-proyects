@@ -11,6 +11,7 @@ body{
 
 .boton,.boton-form{
     display: inline-block;
+    position: relative;
     text-decoration: none;
     color: black;
     box-shadow: inset 0 0 2em .5em #888888;
@@ -182,6 +183,15 @@ font-size: .75em;
     height: 32px;
 }
 
+.cerrar{
+    position: absolute;
+    display: none;
+    right:0px;
+    top:-30px;
+    width: 48px!important;
+    height: 48px!important;
+}
+
 .checkbox{
     width: 2.1em;
     height: 2em;
@@ -221,3 +231,5 @@ vertical-align: top;
 a > *{
     cursor: pointer;
 }
+
+.deletable{}
