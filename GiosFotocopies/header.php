@@ -2,12 +2,14 @@
 <div class="header">
     <p>
         <span class="fecha"><?php echo Utils::obtenerFechaEnTexto();?></span>
-        <a class="pila" href="http://gmail.com" target="_blank">
-            <img class="icon48" src="images/mail.png"/>
-            <img class="icon48" src="images/mail-recibido.png" style="display: none"/>
-        </a>
-        <br/>
-        <a href="logout.php" class="logout">Cerrar sesion</a>
+        <?php if(isset($_SESSION["login"])){?>
+            <a class="pila" href="http://gmail.com" target="_blank">
+                <img class="icon48" src="images/mail.png"/>
+                <img class="icon48" src="images/mail-recibido.png" style="display: none"/>
+            </a>
+            <br/>
+            <a href="logout.php" class="logout">Cerrar sesion</a>
+        <?php }?>
     </p>
     <div class="botonera" style="margin-top: -40px;display: none">
         <a class="boton mini" href="/">
@@ -31,7 +33,7 @@
             <span>Libros</span>
         </a>
         <a href="?promos" class="boton mini">
-            <img src="images/promos.png" alt="Promociones" />
+            <img src="images/promos2.png" alt="Promociones" />
             <span>Promociones</span>
         </a>
         <a class="boton mini" href="?config">

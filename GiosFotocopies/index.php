@@ -1,3 +1,4 @@
+<?php session_start();?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -5,12 +6,10 @@
         <link href='http://fonts.googleapis.com/css?family=Carrois+Gothic+SC' rel='stylesheet' type='text/css'>
         <title></title>
         <link rel="stylesheet" href="css/style.css" />
-        <link rel="stylesheet" href="css/smoothness/jquery-ui-1.9.0.custom.min.css" />
+        <link rel="stylesheet" href="css/smoothness/jquery-ui-1.9.0.custom.min.css"/>
         <script src="javascript/jquery-1.9.1.js" type="text/javascript"></script>
-        <script src="javascript//jquery-ui.js" type="text/javascript"></script>
-        
+        <script src="javascript/jquery-ui.js" type="text/javascript"></script>
         <script type="text/javascript" src="javascript/utils.js"></script>
-        <!--<script type="text/javascript" src="javascript/gloss/gloss.1.0.js"></script>-->
         <script type="text/javascript" src="javascript/impresora.js"></script>
 		<!--setInterval(function(){$("img[src*=mail]").css({"box-shadow":"inset 0 0 15px 5px rgb(94, 153, 206)"})
 		.animate({backgroundColor:"rgb(241, 222, 0)"},500).delay(500)
@@ -31,7 +30,9 @@
     <body style="display: none">
         <?php
         include_once './header.php';
-        if(isset($_GET["impresora"]))
+        if(!isset($_SESSION["login"]))
+            include_once './login.php';
+        else if(isset($_GET["impresora"]))
             include_once './impresora.php';
         else if(isset($_GET["pedidos"]))
             include_once './pedidos.php';
@@ -45,6 +46,9 @@
             include_once './config.php';
         else include_once 'inicio.php';
         include_once 'footer.php';
-        ?>
+        
+        if(isset($_SESSION["login"])){
+            ?><script type="text/javascript">initCheckMail()</script><?php
+        }?>
     </body>
 </html>

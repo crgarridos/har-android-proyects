@@ -20,12 +20,7 @@ $(document).ready(function() {
     }).attr("src", "images/checkbox.gif");
 
     $(".date").datepicker();
-
-    setInterval(function() {
-        checkMail();
-    }, 5 * 60 * 1000);
-    checkMail();
-    if ($("#___inicio___").length === 0) {
+    if ($("#___inicio___").length === 0  && $("#___login___").length === 0) {
         $(".header .botonera").show();
     }
     $("body").fadeIn();
@@ -61,7 +56,17 @@ function checkMail() {
         }
     });
 }
-
+___checkMailIniciado = false;
+function initCheckMail(){
+    console.log("Servicio de correo iniciado");
+    if(!___checkMailIniciado){
+        setInterval(function() {
+            checkMail();
+        }, 5 * 60 * 1000);
+        checkMail();
+    }
+    ___checkMailIniciado = true
+}
 
 function correoNoLeido(cant) {
     $(".header img[src*=mail]:first").slideUp(200);
@@ -73,4 +78,33 @@ function correoLeido() {
     $(".header img[src*=mail]:last").slideUp(200);
     $(".header img[src*=mail]:first").slideDown(200);
     $(".pila").attr("title", "No hay correos por leer");
+}
+
+function login(){
+    var user = $(".login input[type=text].user").val();
+    var pass = $(".login input[type=password]").val();
+    $(".login .error").html("");
+    $.ajax({
+       url:"../login.php",
+       type: "post",
+       dataType: "html",
+       data: {
+           user: user,
+           pass: pass
+       },
+      complete: function(jqXHR,status){
+          if(status !== "success")
+              alert("Ha ocurrido un error en el servidor, intentelo mas tarde :C");
+          else{
+              log(jqXHR.responseText);
+              json = eval("("+jqXHR.responseText+")");
+              if(json.estado === "success"){
+                  location.href="?inicio";
+              }
+              else{
+                  $(".login .error").html(json.estado);
+              }
+          }
+      }
+    });
 }

@@ -24,6 +24,9 @@ body{
     height: 48px;
     /*width: 120px;*/
 }
+.boton-form:hover {
+box-shadow: 0 0 5px rgb(192, 243, 243);
+}
 .boton-form img{
     margin-top: 6px;
     width: 32px;
@@ -99,6 +102,12 @@ font-size: .75em;
     height: 130%;
 }
 
+.agrandar input{
+    font-size: 1.5em;
+}
+
+
+
 .boton img{
     margin-top: 10%;
     width: 60%;
@@ -154,9 +163,9 @@ font-size: .75em;
     width: 30%;
 }
 
-.contenido{
+.contenido, .login{
     padding: 2%;
-    width: 60%;
+    width: 70%;
     background-color: #f7f7f7;
         /*rgb(234, 243, 242);*/
     /*box-shadow: 0 0 10px #0f0f0f;*/
