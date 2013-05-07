@@ -4,13 +4,13 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link href='http://fonts.googleapis.com/css?family=Carrois+Gothic+SC' rel='stylesheet' type='text/css'>
         <title></title>
-        <link rel="stylesheet" href="style.css" />
-        <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
-        <script src="http://code.jquery.com/jquery-1.9.1.js" type="text/javascript"></script>
-        <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js" type="text/javascript"></script>
+        <link rel="stylesheet" href="css/style.css" />
+        <link rel="stylesheet" href="css/smoothness/jquery-ui-1.9.0.custom.min.css" />
+        <script src="javascript/jquery-1.9.1.js" type="text/javascript"></script>
+        <script src="javascript//jquery-ui.js" type="text/javascript"></script>
         
         <script type="text/javascript" src="javascript/utils.js"></script>
-        <script type="text/javascript" src="javascript/gloss/gloss.1.0.js"></script>
+        <!--<script type="text/javascript" src="javascript/gloss/gloss.1.0.js"></script>-->
         <script type="text/javascript" src="javascript/impresora.js"></script>
 		<!--setInterval(function(){$("img[src*=mail]").css({"box-shadow":"inset 0 0 15px 5px rgb(94, 153, 206)"})
 		.animate({backgroundColor:"rgb(241, 222, 0)"},500).delay(500)
