@@ -10,7 +10,11 @@
         <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js" type="text/javascript"></script>
         
         <script type="text/javascript" src="javascript/utils.js"></script>
+        <script type="text/javascript" src="javascript/gloss/gloss.1.0.js"></script>
         <script type="text/javascript" src="javascript/impresora.js"></script>
+		<!--setInterval(function(){$("img[src*=mail]").css({"box-shadow":"inset 0 0 15px 5px rgb(94, 153, 206)"})
+		.animate({backgroundColor:"rgb(241, 222, 0)"},500).delay(500)
+		.animate({backgroundColor:"rgb(94, 153, 206)"},500)},1500);-->
         <style type="text/css">
             #menu{
                 border-spacing:10px;
