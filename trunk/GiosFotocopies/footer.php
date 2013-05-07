@@ -2,6 +2,6 @@
     <p class="linea"></p>
     <p>
         Cristian Garrido & Juan-Francisco Vega Asociados®
-        (<a href="mailto:crgarrido.s@gmail.com" target="_blank">Contacto</a>)
+        (<a href="mailto:crgarrido.s@gmail.com;crusierr@gmail.com" target="_blank">Contacto</a>)
     </p>
 </div>

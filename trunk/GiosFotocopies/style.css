@@ -185,7 +185,7 @@ font-size: .75em;
 .header p:first-child{
     /*height: 40px;*/
     background-color: rgb(94, 153, 206);
-    box-shadow: 0 5px 15px #ddd;
+    box-shadow: 0 5px 15px #bbb;
     text-align: right;
     font-style: italic;
     padding: 20px;
