@@ -43,7 +43,7 @@ if(isset($_POST["user"]) && isset($_POST["pass"])){
     <table style="margin: 0 auto;border-spacing: 20px">
         <tr>
             <td class="agrandar"><span>Usuario: </span></td>
-            <td class="agrandar"><input class="user" type="text" placeholder="nombre de usuario"/></td>
+            <td class="agrandar"><input class="user" type="text" placeholder="Nombre de usuario"/></td>
         </tr>
         <tr>
             <td class="agrandar"><span>Contraseña:</span></td>

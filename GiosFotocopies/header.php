@@ -12,7 +12,7 @@
         <?php }?>
     </p>
     <div class="botonera" style="margin-top: -40px;display: none">
-        <a class="boton mini" href="/">
+        <a class="boton mini" href="/GiosFotocopies">
             <img src="images/go-home.png" alt="Inicio" />
             <span>Inicio</span>
         </a>
