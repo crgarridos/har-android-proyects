@@ -29,7 +29,7 @@
         </td>
         <td>
             <a href="?promos" class="boton big">
-                <img src="images/promos.png" alt="Promociones" />
+                <img src="images/promos2.png" alt="Promociones" />
                 <span>Promociones</span>
             </a>
         </td>
