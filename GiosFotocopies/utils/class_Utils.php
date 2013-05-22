@@ -1,15 +1,4 @@
 <?php
-
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * Description of class_Utils
- *
- * @author Har
- */
 class Utils {
     public static function obtenerFechaEnTexto() {
     $tiempo = getdate(time());
