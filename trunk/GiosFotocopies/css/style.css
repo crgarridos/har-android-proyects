@@ -1,3 +1,4 @@
+.ui-effects-transfer { border: 2px dotted gray; }
 body{
     padding: 0;
     border: 0;
@@ -10,6 +11,7 @@ body{
 }
 
 .boton,.boton-form{
+    vertical-align: top;
     display: inline-block;
     position: relative;
     text-decoration: none;
@@ -124,6 +126,8 @@ font-size: .75em;
 }
 .botonera{
     margin: 1% auto;
+    height: 90px;
+    vertical-align: top;
 }
 
 .linea{

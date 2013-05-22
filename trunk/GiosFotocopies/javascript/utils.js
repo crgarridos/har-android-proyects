@@ -18,7 +18,15 @@ $(document).ready(function() {
             $(this).attr("src", "images/checkbox.gif");
         }
     }).attr("src", "images/checkbox.gif");
-
+$(".pila").tooltip();
+//    show : { 
+//        effect:"transfer",
+//        options: { to: ".header img[src*=mail]", className: "ui-effects-transfer" }
+//    },
+//    hide:"transfer",
+//    positionLeft:true,
+//    tooltipClass:"toool"
+//});
     $(".date").datepicker();
     $(".deletable").append('<img class="cerrar" src="images/delete-minus.png">');
     $(".deletable").hover(function() { 
@@ -30,12 +38,13 @@ $(document).ready(function() {
     $(".deletable").click(function(){
         $(this).closest(".boton").effect("fold");
     });
-    $(".header .botonera .boton").hover(function(){$(this).animate({width:'90px',height:'90px'},100)});
-    $(".header .botonera .boton").mouseleave(function(){$(this).animate({width:'80px',height:'80px'},100)});
+    $(".header .botonera .boton").hover(function(){$(this).stop().animate({width:'90px',height:'90px'},100)});
+    $(".header .botonera .boton").mouseleave(function(){$(this).stop().animate({width:'80px',height:'80px'},100)});
 
     if ($("#___inicio___").length === 0  && $("#___login___").length === 0) {
         $(".header .botonera").show();
     }
+    $(".pila img").eq(0).tooltip({content:"No hay correos por leer"});
     $("body").fadeIn();
 });
 function log() {
@@ -84,13 +93,15 @@ function initCheckMail(){
 function correoNoLeido(cant) {
     $(".header img[src*=mail]:first").slideUp(200);
     $(".header img[src*=mail]:last").slideDown(200);
-    $(".pila").attr("title", "Hay " + cant + " correos no leidos");
+    $(".pila img").eq(1)
+        .tooltip({content:"Hay " + cant + " correos no leidos"})
+        .tooltip("open");
 }
 
 function correoLeido() {
     $(".header img[src*=mail]:last").slideUp(200);
     $(".header img[src*=mail]:first").slideDown(200);
-    $(".pila").attr("title", "No hay correos por leer");
+    $(".pila img").eq(0).tooltip({content:"No hay correos por leer"})
 }
 
 function login(){
